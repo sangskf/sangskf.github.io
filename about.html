@@ -139,6 +139,8 @@
 min-height="800" onload="setIframeHeight(this)"></iframe>
 
 <script>
+document.domain = "books.sangkf.cn";
+
 function setIframeHeight(iframe) {
 if (iframe) {
 var iframeWin = iframe.contentWindow || iframe.contentDocument.parentWindow;
