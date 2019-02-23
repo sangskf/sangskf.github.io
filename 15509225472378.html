@@ -634,7 +634,21 @@ select name from B
       </div>
       <div class="comments-wrap">
         <div class="share-comments">
-          
+          <div id="container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+var gitment = new Gitment({
+  id: location.href, // 可选。默认为 location.href
+  owner: 'sangskf',
+  repo: 'https://books.sangkf.cn',
+  oauth: {
+    client_id: '14d87c9522298bd378c3',
+    client_secret: '6639fcb9eef53d63c3f1c983313fafaa790e9e5f',
+  },
+})
+gitment.render('container')
+</script>
 
           
 
@@ -708,6 +722,12 @@ select name from B
 	      
 		      
 			      <li class="post">
+			        <a href="15509294487927.html">Gitment：使用 GitHub Issues 搭建评论系统</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
 			        <a href="15509249440186.html">如何使用“发布脚本”功能发布静态网站</a>
 			      </li>
 		     
@@ -731,10 +751,6 @@ select name from B
 		     
 		  
 		      
-			      <li class="post">
-			        <a href="15509183306420.html">Springcloud各层框架注解含义</a>
-			      </li>
-		     
 		  
 		      
 		  
