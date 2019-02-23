@@ -4,7 +4,7 @@
   <title><![CDATA[见课就上的小婊砸]]></title>
   <link href="http://books.sangkf.cn/atom.xml" rel="self"/>
   <link href="http://books.sangkf.cn/"/>
-  <updated>2019-02-23T21:22:54+08:00</updated>
+  <updated>2019-02-23T21:25:55+08:00</updated>
   <id>http://books.sangkf.cn/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -19,6 +19,8 @@
     <id>http://books.sangkf.cn/15509249440186.html</id>
     <content type="html"><![CDATA[
 <p>“发布脚本”这个功能 MWeb for Mac 2.2.3 版新增的，是为了让 MWeb 中的静态网站体验能达到 “新增文档并编辑” - “右键并选择执行发布脚本” 这样一个简单的流程。避免之前那样，生成网站后还要去敲命令进行发布。</p>
+
+<span id="more"></span><!-- more -->
 
 <h2 id="toc_0">1. 开始前的准备</h2>
 
@@ -132,9 +134,9 @@ fi
     <updated>2019-02-23T20:27:51+08:00</updated>
     <id>http://books.sangkf.cn/15509248711452.html</id>
     <content type="html"><![CDATA[
-<p>之前 MWeb 2.0 说要支持 PlantUML，后来又否定了，因为我发现大部分朋友只需要自定义预览样式就可以做到的这种 PlantUML 支持，而早在 MWeb 1.2 版都支持了自我增加这功能了，介绍文章为：<a href="http://zh.mweb.im/mweb-v1.2-release-zh.html">自定预览 CSS</a>。2.0 中的自定预览功能有所变化，这也是今天要介绍的内容。</p>
-
-<p>今天要说的是一步到位，做一个支持 ECharts、mermaid、PlantUML 这三个常用的画图库的预览样式。如果你不想看到制作方法，只想使用，可以直接下载 ([&gt;&gt;点此下载 <code>偏好设置</code> - <code>主题&amp;样式</code> 中点一下 <code>预览样式</code> 右边的编辑按钮来打开预览样式所以文件夹。这个预览样式中还包含了一个测试的 Markdown 文档，用 MWeb 打开这个文档，然后选择这个预览样式并预览就可以看到效果。</p>
+<p>之前 MWeb 2.0 说要支持 PlantUML，后来又否定了，因为我发现大部分朋友只需要自定义预览样式就可以做到的这种 PlantUML 支持，而早在 MWeb 1.2 版都支持了自我增加这功能了，介绍文章为：<a href="http://zh.mweb.im/mweb-v1.2-release-zh.html">自定预览 CSS</a>。2.0 中的自定预览功能有所变化，这也是今天要介绍的内容。<br/>
+<span id="more"></span><!-- more --><br/>
+今天要说的是一步到位，做一个支持 ECharts、mermaid、PlantUML 这三个常用的画图库的预览样式。如果你不想看到制作方法，只想使用，可以直接下载 ([&gt;&gt;点此下载 <code>偏好设置</code> - <code>主题&amp;样式</code> 中点一下 <code>预览样式</code> 右边的编辑按钮来打开预览样式所以文件夹。这个预览样式中还包含了一个测试的 Markdown 文档，用 MWeb 打开这个文档，然后选择这个预览样式并预览就可以看到效果。</p>
 
 <h2 id="toc_0">自定义预览样式流程</h2>
 
