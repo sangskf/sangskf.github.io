@@ -4,7 +4,7 @@
   <title><![CDATA[见课就上的小婊砸]]></title>
   <link href="http://books.sangkf.cn/atom.xml" rel="self"/>
   <link href="http://books.sangkf.cn/"/>
-  <updated>2019-02-23T16:32:31+08:00</updated>
+  <updated>2019-02-23T19:51:40+08:00</updated>
   <id>http://books.sangkf.cn/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -13,655 +13,1483 @@
   <generator uri="http://www.mweb.im/">MWeb</generator>
   
   <entry>
-    <title type="html"><![CDATA[Github Pages 搭建笔记]]></title>
-    <link href="http://books.sangkf.cn/15509007032026.html"/>
-    <updated>2019-02-23T13:45:03+08:00</updated>
-    <id>http://books.sangkf.cn/15509007032026.html</id>
+    <title type="html"><![CDATA[MySQL基础]]></title>
+    <link href="http://books.sangkf.cn/15509225472378.html"/>
+    <updated>2019-02-23T19:49:07+08:00</updated>
+    <id>http://books.sangkf.cn/15509225472378.html</id>
     <content type="html"><![CDATA[
-<p>记录GitHub Page搭建过程</p>
+<p>一、MySQL概述</p>
 
-<h2 id="toc_0">Github Pages</h2>
+<p>1、什么是数据库 ？<br/>
+　答：数据的仓库，如：在ATM的示例中我们创建了一个 db 目录，称其为数据库</p>
 
-<p>前往<a href="https://link.jianshu.com?t=https%3A%2F%2Fgithub.com%2F">GitHub</a>并且创建一个新的repository，命名规则是：username.github.io（username是Github用户名，蓝色线部分相同）<br/>
-<span id="more"></span><!-- more --><br/>
-<img src="media/15509007032026/15509106715104.jpg" alt=""/></p>
-
-<p>blog-github-create</p>
-
-<p>clone项目到本地</p>
-
-<pre><code class="language-text">git clone https://github.com/username/username.github.io
-
-</code></pre>
-
-<p>制作Hello World 页面</p>
-
-<pre><code class="language-text">cd username.github.io
-echo &quot;Hello World&quot; &gt; index.html
-
-</code></pre>
-
-<p>提交到GitHub，需要配置SSH免密码登录</p>
-
-<pre><code class="language-text">git add --all
-git commit -m &quot;Initial commit&quot;
-git push -u origin master
-
-</code></pre>
-
-<p>访问：<a href="https://link.jianshu.com?t=https%3A%2F%2Fusername">https://username</a>（GitHub用户名）<a href="https://link.jianshu.com?t=http%3A%2F%2F.github.io">.github.io</a> ，可以看见个人主页。</p>
-
-<h2 id="toc_1">Jekyll</h2>
-
-<p>Jekyll是一个简单的免费的Blog生成工具，类似WordPress。但是和WordPress又有很大的不同，原因是jekyll只是一个生成静态网页的工具，不需要数据库支持。但是可以配合第三方服务,例如Disqus。最关键的是jekyll可以免费部署在Github上，而且可以绑定自己的域名。</p>
-
-<p><strong>安装过程</strong></p>
-
-<p>1.安装Ruby</p>
-
-<p>Mac有默认的Ruby环境，根据如下命令确认是否正常工作及版本</p>
-
-<pre><code class="language-text">ruby -v
-
-</code></pre>
-
-<p>2.安装Jekyll</p>
-
-<pre><code class="language-text">sudo gem install jekyll bundler
-
-</code></pre>
-
-<p>3.<strong>使用模板安装直接进入下一节，如果不使用模板</strong>，可以进行如下方法安装</p>
-
-<pre><code class="language-text">jekyll new my-awesome-site
-cd my-awesome-site
-cp -R * path/username.github.io/
-
-</code></pre>
-
-<p>注：path/username.github.io 为GitHub本地目录</p>
-
-<p>4.开启Jekyll环境</p>
-
-<p>在path/username.github.io目录下，执行</p>
-
-<pre><code class="language-text">bundle exec jekyll serve
-
-</code></pre>
-
-<p>5.本地调试</p>
-
-<p>通过<a href="https://link.jianshu.com?t=http%3A%2F%2Flocalhost%3A4000">http://localhost:4000</a> ，访问页面。</p>
-
-<p><img src="media/15509007032026/15509107259701.jpg" alt=""/></p>
-
-<p>blog-jekyll-new</p>
-
-<h2 id="toc_2">Jekyll 模板</h2>
-
-<p>替换Jekyll模板，根据知乎黄玄回答找到<a href="https://link.jianshu.com?t=https%3A%2F%2Fgithub.com%2FBlackrockDigital%2Fstartbootstrap-clean-blog-jekyll">startbootstrap-clean-blog-jekyll</a>模板BlackrockDigital，其他模板根据说明进行安装。</p>
-
-<p>效果页面可以访问： <a href="https://link.jianshu.com?t=http%3A%2F%2Fblackrockdigital.github.io%2Fstartbootstrap-clean-blog-jekyll%2F">Clean Blog</a></p>
-
-<p><img src="//upload-images.jianshu.io/upload_images/725534-11bc97cf319b407e.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000/format/webp" alt=""/></p>
-
-<p>blog-github-clean-blog</p>
-
-<p><strong>安装过程</strong></p>
-
-<p>安装过程可以使用两种方式。</p>
-
-<ol>
-<li>命令方式：详见startbootstrap-clean-blog-jekyll的GitHub页面</li>
-<li>覆盖方式：本文采用方式，详细说明如下</li>
-</ol>
-
-<p>下载或者Clone项目startbootstrap-clean-blog-jekyll到本地，覆盖到GitHub.io的本地工程。</p>
-
-<p>修改 _config.yml 文件，下述为需要修改部分，其他保持不变即可。</p>
-
-<table>
-<thead>
-<tr>
-<th>参数</th>
-<th>说明</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td>title</td>
-<td>名称</td>
-</tr>
-<tr>
-<td>email</td>
-<td>通讯方式</td>
-</tr>
-<tr>
-<td>description</td>
-<td>描述</td>
-</tr>
-<tr>
-<td>github_username</td>
-<td>GitHub用户名</td>
-</tr>
-<tr>
-<td>baserul</td>
-<td>二级路径，可以为&#39;&#39;</td>
-</tr>
-<tr>
-<td>url</td>
-<td>GitHub.io的URL路径</td>
-</tr>
-</tbody>
-</table>
-
-<p>用过命令</p>
-
-<pre><code class="language-text">bundle exec jekyll serve
-
-</code></pre>
-
-<p>启动本地环境，通过 <a href="https://link.jianshu.com?t=http%3A%2F%2Flocalhost%3A4000">http://localhost:4000</a> 访问页面。变动提交到GitHub后，可以在 <a href="https://link.jianshu.com?t=https%3A%2F%2Fusername">https://username</a>（GitHub用户名）<a href="https://link.jianshu.com?t=http%3A%2F%2F.github.io">.github.io</a> 看到修改变化。</p>
-
-<p><strong>创建文档</strong></p>
-
-<p>在_post文件下，新建md文件，文件书写格式如下</p>
-
-<pre><code class="language-text">---
-layout: post
-title:  &quot;标题&quot;
-subtitle: &quot;副标题&quot;
-date:   2018-01-08 00:00:01
-background: &#39;/img/posts/01.jpg&#39;
----
-
-</code></pre>
-
-<p>jekyll可以自动检测并识别文档，并添加到博客首页中。</p>
-
-<h2 id="toc_3">域名</h2>
-
-<p><strong>GitHub部分配置</strong></p>
-
-<p>在GitHub工程根目录添加CNAME文件，如下图所示。域名部分仅为域名名称，不添加http等关键字。</p>
-
-<p><img src="//upload-images.jianshu.io/upload_images/725534-19049ac8c2014c95.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000/format/webp" alt=""/></p>
-
-<p>blog-github-cname</p>
-
-<p><strong>域名提供商部分</strong></p>
-
-<p>本文使用的是阿里云提供的云解析DNS，添加记录如下图所示。</p>
-
-<p><img src="//upload-images.jianshu.io/upload_images/725534-c5dfc17ab81c9f4a.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000/format/webp" alt=""/></p>
-
-<p>blog-aliyun-cname</p>
-
-<p>记录A部分，添加IP地址：192.30.252.153和192.30.252.154。（IP地址为GitHub提供，详见<a href="https://link.jianshu.com?t=https%3A%2F%2Fhelp.github.com%2Farticles%2Fsetting-up-an-apex-domain%2F">setting-up-an-apex-domain</a>）</p>
-
-<p>记录CNAME部分，添加username（GitHub用户名）<a href="https://link.jianshu.com?t=http%3A%2F%2F.github.io">.github.io</a>，主机记录为www。</p>
-
-<p>10分钟后访问域名，查看是否生效。</p>
-
-<h2 id="toc_4">七牛云</h2>
-
-<p>Jekyll的图片可以使用相对路径，图片放在img文件夹下，在markdown文本中，通过如下方式显示图片。</p>
-
-<pre><code class="language-text">![a](/img/some-name.jpg)
-
-</code></pre>
-
-<p>同样可以使用七牛云存储，存放图片，个人博客的访问量一般在免费额度范围内。结合图床工具，可以方便的把本地图片上传到七牛云中。</p>
-
-<p>申请账号后，在个人中心-密钥管理中，查看<strong>Access Key</strong>和<strong>Secret Key</strong></p>
-
-<p><img src="//upload-images.jianshu.io/upload_images/725534-d6b1ea6a9150a70b.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000/format/webp" alt=""/></p>
-
-<p>blog-qiniu-new</p>
-
-<p>申请存储空间，本文存储空间为mweb（即为BucketName），申请成功后管理界面如下：</p>
-
-<p><img src="//upload-images.jianshu.io/upload_images/725534-28ec2c27974834b9.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000/format/webp" alt=""/></p>
-
-<p>blog-qiniu-bucket</p>
-
-<p>区域分华东、华北、华南和北美，需要记录，后续使用。</p>
-
-<p>测试域名需要记录，如果配置了CDN加速可以使用正式域名。</p>
-
-<h2 id="toc_5">MWeb</h2>
-
-<p>MWeb是一款Markdown笔记工具，主页：<a href="https://link.jianshu.com?t=http%3A%2F%2Fzh.mweb.im">http://zh.mweb.im</a> 。如果使用其他Markdown工具，可以使用<a href="https://link.jianshu.com?t=http%3A%2F%2Fjiantuku.com%2F">极简图床</a>或者类似工具上传图片。</p>
-
-<p>在MWeb-Preferences-Publishing中配置七牛插件，把本地文件上传到七牛中。</p>
-
-<p><img src="//upload-images.jianshu.io/upload_images/725534-a428747fe7fcbd8d.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000/format/webp" alt=""/></p>
-
-<p>blog-qiniu-mweb</p>
-
-<p>填写说明如下：</p>
-
-<table>
-<thead>
-<tr>
-<th style="text-align: left">填写项</th>
-<th style="text-align: left">填写内容</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td style="text-align: left">Name</td>
-<td style="text-align: left">个人喜好填写</td>
-</tr>
-<tr>
-<td style="text-align: left">API URL</td>
-<td style="text-align: left">本文以华北为例，其他参看备注</td>
-</tr>
-<tr>
-<td style="text-align: left">Bucket Name</td>
-<td style="text-align: left">存储空间名称</td>
-</tr>
-<tr>
-<td style="text-align: left">Access Key</td>
-<td style="text-align: left">上一小节提到</td>
-</tr>
-<tr>
-<td style="text-align: left">Secret Key</td>
-<td style="text-align: left">上一小节提到</td>
-</tr>
-<tr>
-<td style="text-align: left">Image URL Prefix</td>
-<td style="text-align: left">测试域名或者正式域名地址</td>
-</tr>
-<tr>
-<td style="text-align: left">Image URL Suffix</td>
-<td style="text-align: left">可以不填写</td>
-</tr>
-</tbody>
-</table>
-
-<p>注： <a href="https://link.jianshu.com?t=https%3A%2F%2Fdeveloper.qiniu.com%2Fkodo%2Fmanual%2F1671%2Fregion-endpoint">存储区域上传域名</a></p>
-
-<p>配置成功后，通过工具栏按钮选取本地文件，生成Markdown图片标签的同时上传到七牛云。</p>
-
-<h2 id="toc_6">参考资源</h2>
+<p>2、什么是 MySQL、Oracle、SQLite、Access、MS SQL Server等 ？<br/>
+　答：他们均是一个软件，都有两个主要的功能：</p>
 
 <ul>
-<li><a href="https://link.jianshu.com?t=https%3A%2F%2Fpages.github.com%2F">GitHub Page</a></li>
-<li><a href="https://link.jianshu.com?t=https%3A%2F%2Fwww.zhihu.com%2Fquestion%2F20223939">有哪些简洁明快的 Jekyll 模板</a></li>
-<li><a href="https://link.jianshu.com?t=https%3A%2F%2Fjekyllrb.com%2F">Jekyll Page</a></li>
-<li><a href="https://link.jianshu.com?t=https%3A%2F%2Fgithub.com%2FBlackrockDigital%2Fstartbootstrap-clean-blog-jekyll">startbootstrap-clean-blog-jekyll</a></li>
-<li><a href="https://www.jianshu.com/p/88c9e72978b4">用Jekyll搭建的Github Pages个人博客</a></li>
-<li><a href="https://link.jianshu.com?t=http%3A%2F%2Fplayingfingers.com%2F2016%2F03%2F26%2Fbuild-a-blog%2F">Github Pages + Jekyll 独立博客一小时快速搭建&amp;上线指南</a></li>
+<li>a. 将数据保存到文件或内存</li>
+<li>b. 接收特定的命令，然后对文件进行相应的操作
+<span id="more"></span><!-- more -->
+3、什么是SQL ？<br/>
+答：MySQL等软件可以接受命令，并做出相应的操作，由于命令中可以包含删除文件、获取文件内容等众多操作，对于编写的命令就是是SQL语句。</li>
+</ul>
+
+<p>二、MySQL安装</p>
+
+<p>      MySQL是一个关系型数据库管理系统，由瑞典MySQL AB 公司开发，目前属于 Oracle 旗下公司。MySQL 最流行的关系型数据库管理系统，在 WEB 应用方面MySQL是最好的 RDBMS (Relational Database Management System，关系数据库管理系统) 应用软件之一。</p>
+
+<p>想要使用MySQL来存储并操作数据，则需要做几件事情：<br/>
+　　a. 安装MySQL服务端<br/>
+　　b. 安装MySQL客户端<br/>
+　　b. 【客户端】连接【服务端】<br/>
+　　c. 【客户端】发送命令给【服务端MySQL】服务的接受命令并执行相应操作(增删改查等)</p>
+
+<p><a href="javascript:void(0);" title="复制代码"><img src="media/15509225472378/copycode.gif" alt="复制代码"/></a></p>
+
+<p>下载<br/>
+           <a href="http://dev.mysql.com/downloads/mysql/">http://dev.mysql.com/downloads/mysql/</a> 安装<br/>
+         windows：<br/><br/>
+              <a href="http://jingyan.baidu.com/article/f3ad7d0ffc061a09c3345bf0.html">http://jingyan.baidu.com/article/f3ad7d0ffc061a09c3345bf0.html</a></p>
+
+<pre><code class="language-text">      linux：
+           yum install mysql-server
+       mac：
+           一直点下一步
+</code></pre>
+
+<p><a href="javascript:void(0);" title="复制代码"><img src="media/15509225472378/copycode.gif" alt="复制代码"/></a></p>
+
+<p>客户端连接</p>
+
+<p><a href="javascript:void(0);" title="复制代码"><img src="media/15509225472378/copycode.gif" alt="复制代码"/></a></p>
+
+<p>连接： 1、mysql管理人默认为root，没有设置密码则直接登录<br/>
+               mysql -h host -u root  -p 不用输入密码按回车自动进入 2、如果想设置mysql密码<br/>
+               mysqladmin -u root password 123456<br/>
+      3、如果你的root现在有密码了（123456），那么修改密码为abcdef的命令是：<br/>
+              mysqladmin -u root -p password abcdef<br/>
+ 退出：<br/>
+       QUIT 或者 Control+D</p>
+
+<p><a href="javascript:void(0);" title="复制代码"><img src="media/15509225472378/copycode.gif" alt="复制代码"/></a></p>
+
+<p>三、数据库基础</p>
+
+<p> 分为两大部分：</p>
+
+<p>                  1、数据库和表的创建;</p>
+
+<p>                  2、数据库和表内容的操作</p>
+
+<p> 数据库操作-思路图</p>
+
+<p> <img src="media/15509225472378/875796-20160817223356796-2033052989.png" alt=""/></p>
+
+<p>1、数据库和表的创建</p>
+
+<p>     （一）数据库的创建</p>
+
+<p>  <strong>1.1、显示数据库</strong></p>
+
+<p>1 SHOW DATABASES;</p>
+
+<p>    默认数据库：<br/>
+　    　　　  mysql - 用户权限相关数据<br/>
+　　　　　　test - 用于用户测试数据<br/>
+　　　　　　information_schema - MySQL本身架构相关数据</p>
+
+<p>  <strong>1.2、创建数据库</strong></p>
+
+<p># utf-8 CREATE DATABASE 数据库名称 DEFAULT CHARSET utf8 COLLATE utf8_general_ci;</p>
+
+<p># gbk<br/>
+  CREATE DATABASE 数据库名称 DEFAULT CHARACTER SET gbk COLLATE gbk_chinese_ci;</p>
+
+<p>  <strong>1.3、打开数据库</strong></p>
+
+<p>USE db_name;<br/>
+ 注：每次使用数据库必须打开相应数据库</p>
+
+<p>显示当前使用的数据库中所有表：SHOW TABLES;</p>
+
+<p> <strong>1.4、用户管理</strong></p>
+
+<p>                  用户设置:</p>
+
+<p><a href="javascript:void(0);" title="复制代码"><img src="media/15509225472378/copycode.gif" alt="复制代码"/></a></p>
+
+<p>创建用户<br/>
+    create user &#39;用户名&#39;@&#39;IP地址&#39; identified by &#39;密码&#39;;<br/>
+删除用户<br/>
+    drop user &#39;用户名&#39;@&#39;IP地址&#39;;<br/>
+修改用户<br/>
+    rename user &#39;用户名&#39;@&#39;IP地址&#39;; to &#39;新用户名&#39;@&#39;IP地址&#39;;;<br/>
+修改密码<br/>
+    set password for &#39;用户名&#39;@&#39;IP地址&#39; = Password(&#39;新密码&#39;)</p>
+
+<p>PS：用户权限相关数据保存在mysql数据库的user表中，所以也可以直接对其进行操作（不建议）</p>
+
+<p><a href="javascript:void(0);" title="复制代码"><img src="media/15509225472378/copycode.gif" alt="复制代码"/></a></p>
+
+<p>                  用户权限设置:</p>
+
+<p>show grants for &#39;用户&#39;@&#39;IP地址&#39;                  -- 查看权限<br/>
+grant  权限 on 数据库.表 to &#39;用户&#39;@&#39;IP地址&#39;      -- 授权<br/>
+revoke 权限 on 数据库.表 from &#39;用户&#39;@&#39;IP地址&#39;      -- 取消权限</p>
+
+<p><img src="media/15509225472378/ContractedBlock.gif" alt=""/> 对于权限设置</p>
+
+<p><img src="media/15509225472378/ContractedBlock.gif" alt=""/> 对于数据库名的解释</p>
+
+<p><img src="media/15509225472378/ContractedBlock.gif" alt=""/> 对于ip地址的访问</p>
+
+<p><img src="media/15509225472378/ContractedBlock.gif" alt=""/> 实际例子</p>
+
+<p>1.4、备份库和恢复库</p>
+
+<p>         备份库：</p>
+
+<p>         MySQL备份和还原,都是利用mysqldump、mysql和source命令来完成。</p>
+
+<p><strong>  </strong>    1.在Windows下MySQL的备份与还原</p>
+
+<p><a href="javascript:void(0);" title="复制代码"><img src="media/15509225472378/copycode.gif" alt="复制代码"/></a></p>
+
+<p>备份 1、开始菜单 | 运行 | cmd |利用“cd /Program Files/MySQL/MySQL Server 5.0/bin”命令进入bin文件夹 2、利用“mysqldump  -u 用户名 -p databasename &gt;exportfilename”导出数据库到文件，如mysqldump -u root -p voice&gt;voice.sql，然后输入密码即可开始导出。 </p>
+
+<p>还原 1、进入MySQL Command Line Client，输入密码，进入到“mysql&gt;”。 2、输入命令&quot;show databases；&quot;，回车，看看有些什么数据库；建立你要还原的数据库，输入&quot;create database voice；&quot;，回车。 3、切换到刚建立的数据库，输入&quot;use voice；&quot;，回车；导入数据，输入&quot;source voice.sql；&quot;，回车，开始导入，再次出现&quot;mysql&gt;&quot;并且没有提示错误即还原成功。 </p>
+
+<p><a href="javascript:void(0);" title="复制代码"><img src="media/15509225472378/copycode.gif" alt="复制代码"/></a></p>
+
+<p>     2、在linux下MySQL的备份与还原</p>
+
+<p><a href="javascript:void(0);" title="复制代码"><img src="media/15509225472378/copycode.gif" alt="复制代码"/></a></p>
+
+<p>2.1 备份(利用命令mysqldump进行备份)  [root@localhost mysql]# mysqldump -u root -p voice&gt;voice.sql，输入密码即可。 2.2 还原<br/>
+方法一：  [root@localhost ~]# mysql -u root -p 回车，输入密码，进入MySQL的控制台&quot;mysql&gt;&quot;，同1.2还原。<br/>
+方法二：<br/>
+ [root@localhost mysql]# mysql -u root -p voicevoice.sql，输入密码即可。</p>
+
+<p><a href="javascript:void(0);" title="复制代码"><img src="media/15509225472378/copycode.gif" alt="复制代码"/></a></p>
+
+<p>    3、更多备份及还原命令</p>
+
+<p><img src="media/15509225472378/ContractedBlock.gif" alt=""/> 更多备份</p>
+
+<p>更多备份知识：</p>
+
+<p><a href="http://www.jb51.net/article/41570.htm">http://www.jb51.net/article/41570.htm</a></p>
+
+<p>（二）数据表的创建</p>
+
+<p> <strong>1.1、显示数据表</strong></p>
+
+<p>show tables;</p>
+
+<p> <strong>1.2、创建数据表</strong></p>
+
+<p>create table 表名(<br/>
+    列名  类型  是否可以为空，<br/>
+    列名  类型  是否可以为空<br/>
+)ENGINE=InnoDB DEFAULT CHARSET=utf8</p>
+
+<p><img src="media/15509225472378/ContractedBlock.gif" alt=""/> 设置是否为空</p>
+
+<p><img src="media/15509225472378/ContractedBlock.gif" alt=""/> 设置默认值</p>
+
+<p><img src="media/15509225472378/ContractedBlock.gif" alt=""/> 设置自增</p>
+
+<p><img src="media/15509225472378/ContractedBlock.gif" alt=""/> 设置主键</p>
+
+<p><img src="media/15509225472378/ContractedBlock.gif" alt=""/> 设置外键</p>
+
+<p>主键与外键关系(非常重要)</p>
+
+<p><a href="http://www.cnblogs.com/programmer-tlh/p/5782451.html">http://www.cnblogs.com/programmer-tlh/p/5782451.html</a></p>
+
+<p> 1.3删除表</p>
+
+<p>drop table 表名</p>
+
+<p>1.4、清空表</p>
+
+<p>delete from 表名<br/>
+truncate table 表名</p>
+
+<p>1.5、基本数据类型</p>
+
+<p>MySQL的数据类型大致分为：数值、时间和字符串</p>
+
+<p><a href="javascript:void(0);" title="复制代码"><img src="media/15509225472378/copycode.gif" alt="复制代码"/></a></p>
+
+<p>bit[(M)]<br/>
+            二进制位（101001），m表示二进制位的长度（1-64），默认m＝1 tinyint[(m)] [unsigned] [zerofill]</p>
+
+<pre><code class="language-text">        小整数，数据类型用于保存一些范围的整数数值范围：
+        有符号： -128 ～ 127.
+        无符号： 0 ～ 255 特别的： MySQL中无布尔值，使用tinyint(1)构造。 int[(m)][unsigned][zerofill]
+
+        整数，数据类型用于保存一些范围的整数数值范围：
+            有符号： -2147483648 ～ 2147483647 无符号： 0 ～ 4294967295 特别的：整数类型中的m仅用于显示，对存储范围无限制。例如： int(5),当插入数据2时，select 时数据显示为： 00002 bigint[(m)][unsigned][zerofill]
+        大整数，数据类型用于保存一些范围的整数数值范围：
+            有符号： -9223372036854775808 ～ 9223372036854775807 无符号： 0  ～  18446744073709551615
+
+    decimal[(m[,d])] [unsigned] [zerofill]
+        准确的小数值，m是数字总个数（负号不算），d是小数点后个数。 m最大值为65，d最大值为30。
+
+        特别的：对于精确数值计算时需要用此类型
+               decaimal能够存储精确值的原因在于其内部按照字符串存储。
+
+    FLOAT[(M,D)] [UNSIGNED] [ZEROFILL]
+        单精度浮点数（非准确小数值），m是数字总个数，d是小数点后个数。
+            无符号： -3.402823466E+38 to -1.175494351E-38, 0
+                1.175494351E-38 to 3.402823466E+38 有符号： 0
+                1.175494351E-38 to 3.402823466E+38
+
+        **** 数值越大，越不准确 **** DOUBLE[(M,D)] [UNSIGNED] [ZEROFILL]
+        双精度浮点数（非准确小数值），m是数字总个数，d是小数点后个数。
+
+            无符号： -1.7976931348623157E+308 to -2.2250738585072014E-308
+                0
+                2.2250738585072014E-308 to 1.7976931348623157E+308 有符号： 0
+                2.2250738585072014E-308 to 1.7976931348623157E+308
+        **** 数值越大，越不准确 ****
+
+    char (m)
+        char数据类型用于表示固定长度的字符串，可以包含最多达255个字符。其中m代表字符串的长度。
+        PS: 即使数据小于m长度，也会占用m长度
+    varchar(m)
+        varchars数据类型用于变长的字符串，可以包含最多达255个字符。其中m代表该数据类型所允许保存的字符串的最大长度，只要长度小于该最大值的字符串都可以被保存在该数据类型中。
+
+        注：虽然varchar使用起来较为灵活，但是从整个系统的性能角度来说，char数据类型的处理速度更快，有时甚至可以超出varchar处理速度的50%。因此，用户在设计数据库时应当综合考虑各方面的因素，以求达到最佳的平衡
+
+    text
+        text数据类型用于保存变长的大字符串，可以组多到65535 (2**16 − 1)个字符。
+
+    mediumtext
+        A TEXT column with a maximum length of 16,777,215 (2**24 − 1) characters.
+
+    longtext
+        A TEXT column with a maximum length of 4,294,967,295 or 4GB (2**32 − 1) characters. enum 枚举类型，
+        An ENUM column can have a maximum of 65,535 distinct elements. (The practical limit is less than 3000.)
+        示例：
+            CREATE TABLE shirts (
+                name VARCHAR(40),
+                size ENUM(&#39;x-small&#39;, &#39;small&#39;, &#39;medium&#39;, &#39;large&#39;, &#39;x-large&#39;)
+            );
+            INSERT INTO shirts (name, size) VALUES (&#39;dress shirt&#39;,&#39;large&#39;), (&#39;t-shirt&#39;,&#39;medium&#39;),(&#39;polo shirt&#39;,&#39;small&#39;); set 集合类型
+        A SET column can have a maximum of 64 distinct members.
+        示例：
+            CREATE TABLE myset (col SET(&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;));
+            INSERT INTO myset (col) VALUES (&#39;a,d&#39;), (&#39;d,a&#39;), (&#39;a,d,a&#39;), (&#39;a,d,d&#39;), (&#39;d,a,d&#39;);
+
+    DATE
+        YYYY-MM-DD（1000-01-01/9999-12-31）
+
+    TIME
+        HH:MM:SS（&#39;-838:59:59&#39;/&#39;838:59:59&#39;）
+
+    YEAR
+        YYYY（1901/2155）
+
+    DATETIME
+
+        YYYY-MM-DD HH:MM:SS（1000-01-01 00:00:00/9999-12-31 23:59:59 Y）
+
+    TIMESTAMP
+
+        YYYYMMDD HHMMSS（1970-01-01 00:00:00/2037 年某时）
+</code></pre>
+
+<p><a href="javascript:void(0);" title="复制代码"><img src="media/15509225472378/copycode.gif" alt="复制代码"/></a></p>
+
+<p>1.6、修改表(alter)   </p>
+
+<p><img src="media/15509225472378/ContractedBlock.gif" alt=""/> 修改表</p>
+
+<p>更多参考：</p>
+
+<ul>
+<li><a href="http://www.runoob.com/mysql/mysql-data-types.html">http://www.runoob.com/mysql/mysql-data-types.html</a></li>
+</ul>
+
+<p>1.7、数据表关系</p>
+
+<p>关联映射：一对多/多对一</p>
+
+<p> </p>
+
+<p>存在最普遍的映射关系，简单来讲就如球员与球队的关系；</p>
+
+<p> </p>
+
+<p>一对多：从球队角度来说一个球队拥有多个球员 即为一对多</p>
+
+<p> </p>
+
+<p>多对一：从球员角度来说多个球员属于一个球队 即为多对一</p>
+
+<p>数据表间一对多关系如下图：</p>
+
+<p><img src="media/15509225472378/875796-20160820142621515-232747436.png" alt=""/></p>
+
+<p>关联映射：一对一</p>
+
+<p> </p>
+
+<p>一对一关系就如球队与球队所在地址之间的关系，一支球队仅有一个地址，而一个地址区也仅有一支球队。</p>
+
+<p> </p>
+
+<p>数据表间一对一关系的表现有两种，一种是外键关联，一种是主键关联。图示如下：</p>
+
+<p> </p>
+
+<p>一对一外键关联：</p>
+
+<p><img src="media/15509225472378/875796-20160820142730312-2021124065.png" alt=""/></p>
+
+<p>一对一主键关联：要求两个表的主键必须完全一致，通过两个表的主键建立关联关系</p>
+
+<p><img src="media/15509225472378/875796-20160820142826187-1820882386.png" alt=""/></p>
+
+<p>关联映射：多对多</p>
+
+<p> </p>
+
+<p>多对多关系也很常见，例如学生与选修课之间的关系，一个学生可以选择多门选修课，而每个选修课又可以被多名学生选择。</p>
+
+<p> </p>
+
+<p>数据库中的多对多关联关系一般需采用中间表的方式处理，将多对多转化为两个一对多</p>
+
+<p><img src="media/15509225472378/875796-20160820142942312-1453486277.png" alt=""/></p>
+
+<p>1.8、数据表之间的约束</p>
+
+<p>约束是一种限制，它通过对表的行或列的数据做出限制，来确保表的数据的完整性、唯一性。</p>
+
+<p>MYSQL中，常用的几种约束：</p>
+
+<p><img src="media/15509225472378/875796-20160820144316703-1845529838.png" alt=""/></p>
+
+<h1 id="toc_0"></h1>
+
+<p>主键(PRIMARY KEY)是用于约束表中的一行，作为这一行的标识符，在一张表中通过主键就能准确定位到一行，因此主键十分重要。主键要求这一行的数据不能有重复且不能为空。</p>
+
+<p> 还有一种特殊的主键——复合主键。主键不仅可以是表中的一列，也可以由表中的两列或多列来共同标识</p>
+
+<h1 id="toc_1"></h1>
+
+<p>默认值约束(DEFAULT)规定，当有DEFAULT约束的列，插入数据为空时该怎么办。</p>
+
+<p>DEFAULT约束只会在使用INSERT语句（上一实验介绍过）时体现出来，INSERT语句中，如果被DEFAULT约束的位置没有值，那么这个位置将会被DEFAULT的值填充</p>
+
+<h1 id="toc_2"></h1>
+
+<p>唯一约束(UNIQUE)比较简单，它规定一张表中指定的一列的值必须不能有重复值，即这一列每个值都是唯一的。</p>
+
+<p>当INSERT语句新插入的数据和已有数据重复的时候，如果有UNIQUE约束，则INSERT失败.</p>
+
+<h1 id="toc_3"></h1>
+
+<p>外键(FOREIGN KEY)既能确保数据完整性，也能表现表之间的关系。</p>
+
+<p>一个表可以有多个外键，每个外键必须REFERENCES(参考)另一个表的主键，被外键约束的列，取值必须在它参考的列中有对应值。</p>
+
+<p>在INSERT时，如果被外键约束的值没有在参考列中有对应，比如以下命令，参考列(department表的dpt_name)中没有dpt3，则INSERT失败</p>
+
+<h1 id="toc_4"></h1>
+
+<p>非空约束(NOT NULL),听名字就能理解，被非空约束的列，在插入值时必须非空。</p>
+
+<p>在MySQL中违反非空约束，不会报错，只会有警告.</p>
+
+<p><img src="media/15509225472378/ContractedBlock.gif" alt=""/> 例子</p>
+
+<p>2、数据库和表内容的操作(增、删、改、查)</p>
+
+<p> 1、增</p>
+
+<p>insert into 表 (列名,列名...) values (值,值,值...) insert into 表 (列名,列名...) values (值,值,值...),(值,值,值...) insert into 表 (列名,列名...) select (列名,列名...) from 表</p>
+
+<p>2、删</p>
+
+<p>delete from 表 delete from 表 where id＝1 and name＝&#39;alex&#39;</p>
+
+<p>3、改</p>
+
+<p>update 表 set name ＝ &#39;alex&#39; where id&gt;1</p>
+
+<p>4、查</p>
+
+<p>　　4.1、普通查询</p>
+
+<p>select * from 表 select * from 表 where id &gt; 1<br/>
+select nid,name,gender as gg from 表 where id &gt; 1</p>
+
+<p><img src="media/15509225472378/ContractedBlock.gif" alt=""/> 更多选项查询</p>
+
+<p> 4.2、数据排序(查询)</p>
+
+<p>排序 select * from 表 order by 列 asc              - 根据 “列” 从小到大排列 select * from 表 order by 列 desc             - 根据 “列” 从大到小排列 select * from 表 order by 列1 desc,列2 asc    - 根据 “列1” 从大到小排列，如果相同则按列2从小到大排序</p>
+
+<p>     4.3、模糊查询</p>
+
+<p>通配符(模糊查询) select * from 表 where name like &#39;ale%&#39;  - ale开头的所有（多个字符串） select * from 表 where name like &#39;ale_&#39;  - ale开头的所有（一个字符）</p>
+
+<p>     4.4、聚集函数查询</p>
+
+<p><img src="media/15509225472378/ContractedBlock.gif" alt=""/> 聚集函数 </p>
+
+<p>     4.5、分组查询</p>
+
+<p><a href="javascript:void(0);" title="复制代码"><img src="media/15509225472378/copycode.gif" alt="复制代码"/></a></p>
+
+<p>分组 select num from 表 group by num select num,nid from 表 group by num,nid select num,nid from 表  where nid &gt; 10 group by num,nid order nid desc<br/>
+    select num,nid,count(*),sum(score),max(score),min(score) from 表 group by num,nid select num from 表 group by num having max(id) &gt; 10 特别的：group by 必须在where之后，order by之前</p>
+
+<p><a href="javascript:void(0);" title="复制代码"><img src="media/15509225472378/copycode.gif" alt="复制代码"/></a></p>
+
+<p>     4.6多表查询</p>
+
+<p><a href="javascript:void(0);" title="复制代码"><img src="media/15509225472378/copycode.gif" alt="复制代码"/></a></p>
+
+<p>a、连表<br/>
+    无对应关系则不显示 select A.num, A.name, B.name from A,B Where A.nid = B.nid</p>
+
+<pre><code class="language-text">无对应关系则不显示 select A.num, A.name, B.name from A inner join B on A.nid = B.nid
+
+A表所有显示，如果B中无对应关系，则值为null select A.num, A.name, B.name from A left join B on A.nid = B.nid
+
+B表所有显示，如果B中无对应关系，则值为null select A.num, A.name, B.name from A right join B on A.nid = B.nid
+</code></pre>
+
+<p>b、组合<br/>
+    组合，自动处理重合 select nickname from A union<br/>
+    select name from B</p>
+
+<pre><code class="language-text">组合，不处理重合 select nickname from A union all
+select name from B
+</code></pre>
+
+<p><a href="javascript:void(0);" title="复制代码"><img src="media/15509225472378/copycode.gif" alt="复制代码"/></a></p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[书籍列表]]></title>
+    <link href="http://books.sangkf.cn/15509185062441.html"/>
+    <updated>2019-02-23T18:41:46+08:00</updated>
+    <id>http://books.sangkf.cn/15509185062441.html</id>
+    <content type="html"><![CDATA[
+<p>【转载】<a href="https://blog.csdn.net/qq_37267015/article/details/79011859">https://blog.csdn.net/qq_37267015/article/details/79011859</a></p>
+
+<ul>
+<li>希望书单能在你想要进一步打怪升级的路上，给予些许帮助</li>
+<li>建议先收藏本书单，认真啃完一本再买下一本，扎实走完每一步 </li>
+<li>部分书籍关联相关博客和微信公众号，让你更嗨皮 </li>
+<li>如果对你略有帮助，烦请分享给你的基友 </li>
+<li>与君共勉，若有合适的书籍，请一定告诉我，谢谢 </li>
+<li>分类困难因而没分。大体顺序，编程开发 =&gt; 数据库 =&gt; 架构运维 =&gt; 算法 </li>
+<li>拒绝盗版，从你我做起 
+<span id="more"></span><!-- more -->
+##书籍列表 <br/>
+### 《Effective Java 中文版》 </li>
+<li>豆瓣评分：9.1【1235 人评价】 </li>
+<li>推荐理由：本书介绍了在Java编程中78条极具实用价值的经验规则，这些经验规则涵盖了大多数开发人员每天所面临的问题的解决方案。 </li>
+<li>友情提示：同推荐《重构 : 改善既有代码的设计》、《代码整洁之道》、《代码大全》，有一定的内容重叠。 </li>
+</ul>
+
+<h3 id="toc_0">《Spring揭秘》</h3>
+
+<ul>
+<li>豆瓣评分：9.0 【162 人评价】 </li>
+<li>推荐理由：Spring 使用者不得不读！ </li>
+<li>推荐博客：Spring4All社区 </li>
+<li>推荐公众号：Spring4All社区 </li>
+</ul>
+
+<h3 id="toc_1">《SpringBoot揭秘》</h3>
+
+<ul>
+<li>豆瓣评分：6.8 【44 人评价】 </li>
+<li>推荐理由：《Spring揭秘》相同作者。SpringBoot 入门书籍。 </li>
+<li>作者博客：扶墙老师说：一个架构士的思考与沉淀 </li>
+<li>作者公众号：扶墙老师说 </li>
+</ul>
+
+<h3 id="toc_2">《MyBatis技术内幕》</h3>
+
+<ul>
+<li>豆瓣评分：暂无 </li>
+<li>推荐理由：以MyBatis 3.4为基础，针对MyBatis的架构设计和实现细节进行了详细分析，其中穿插介绍了MyBatis源码中涉及的基础知识、设计模式以及笔者自己在实践中的思考。 </li>
+<li>作者博客：祖大俊的博客 </li>
+</ul>
+
+<h3 id="toc_3">《有效的单元测试》</h3>
+
+<ul>
+<li>豆瓣评分：7.4 【18 人评价】 </li>
+<li>推荐理由：Java 单元测试入门。 </li>
+</ul>
+
+<h3 id="toc_4">《Java并发编程实战》</h3>
+
+<ul>
+<li>豆瓣评分：9.0 【651 人评价】 </li>
+<li>推荐理由：本书深入浅出地介绍了Java线程和并发，是一本完美的Java并发参考手册。 </li>
+<li>推荐博客：并发编程网 </li>
+<li>推荐公众号：并发编程网 </li>
+</ul>
+
+<h3 id="toc_5">《Netty实战》</h3>
+
+<ul>
+<li>豆瓣评分：7.5【24 人评价】 </li>
+<li>豆瓣评分：8.1【83 人评价】 </li>
+</ul>
+
+<h3 id="toc_6">《Netty in Action》英文版</h3>
+
+<ul>
+<li>推荐理由：Netty之父”Trustin Lee作序推荐。 </li>
+<li>推荐公众号：Netty之家 </li>
+</ul>
+
+<h3 id="toc_7">《深入剖析Tomcat》</h3>
+
+<ul>
+<li>豆瓣评分：8.3【118 人评价】 </li>
+<li>豆瓣评分：8.9【73 人评价】 《How Tomcat Works》英文版 </li>
+<li>推荐理由：本书深入剖析Tomcat 4和Tomcat 5中的每个组件，并揭示其内部工作原理。通过学习本书，你将可以自行开发Tomcat组件，或者扩展已有的组件。 </li>
+</ul>
+
+<h3 id="toc_8">《Nginx 中文官方文档》</h3>
+
+<ul>
+<li>豆瓣评分：暂无 </li>
+<li>推荐理由：暂时未找到大家评价不错的 Nginx 实战相关书籍，先推荐看中文翻译的官方文档。如果你有合适的推荐，烦请告诉我。 </li>
+</ul>
+
+<h3 id="toc_9">《深入理解Nginx》</h3>
+
+<ul>
+<li>豆瓣评分：8.5【138 人评价】 </li>
+<li>推荐理由：书中首先通过介绍官方Nginx的基本用法和配置规则，帮助读者了解一般Nginx模块的用法，然后重点介绍了如何开发HTTP模块(含HTTP过滤模块)来得到定制化的Nginx，其中包括开发—个功能复杂的模块所需要了解的各种知识，并对内存池的实现细节及TCP协议进行了详细介绍；接着，综合Nginx框架代码分析了Nginx架构的设计理念和技巧，此外，还新增了如何在模块中支持HTTP变量，以及与slab共享内存等相关的内容，相信通过完善，可进一步帮助读者更好地开发出功能丰富、性能—流的Nginx模块。 友情提示：相对适用于 Nginx 开发者。Nginx 使用者可以了解。 </li>
+</ul>
+
+<h3 id="toc_10">《深入理解Java虚拟机：JVM高级特性与最佳实践》</h3>
+
+<ul>
+<li>豆瓣评分：8.9 【657 人评价】 </li>
+<li>推荐理由：不去了解 JVM 的工程师，和咸鱼有什么区别？ </li>
+<li>推荐公众号：你假笨 </li>
+<li>推荐博客：你假笨@JVM </li>
+<li>推荐小程序：JVMPocket </li>
+</ul>
+
+<h3 id="toc_11">《Java核心技术系列：Java虚拟机规范（Java SE 8版）》</h3>
+
+<ul>
+<li>豆瓣评分：暂无评价 </li>
+<li>豆瓣评分：8.3 【27 人评价】</li>
+</ul>
+
+<h3 id="toc_12">《Java虚拟机规范(Java SE 7版)》</h3>
+
+<ul>
+<li>推荐理由：基于Java SE 8,Oracle官方发布，Java虚拟机技术创建人撰写，国内Java技术专家翻译，是深度了解Java虚拟机和Java语言实现细节的必读之作 </li>
+<li>推荐博客：占小狼的简书 </li>
+<li>推荐公众号：占小狼的博客 </li>
+</ul>
+
+<h3 id="toc_13">《MySQL技术内幕——InnoDB存储引擎》</h3>
+
+<ul>
+<li>豆瓣评分：8.6 【104 人评价】 </li>
+<li>推荐理由：从源代码的角度深度解析了InnoDB的体系结构、实现原理、工作机制，并给出了大量最佳实践，能帮助你系统而深入地掌握InnoDB，更重要的是，它能为你设计管理高性能、高可用的数据库系统提供绝佳的指导。 </li>
+<li>推荐公众号：DBAplus社群 </li>
+</ul>
+
+<h3 id="toc_14">《高性能MySQL》</h3>
+
+<ul>
+<li>豆瓣评分：9.3 【245 人评价】 </li>
+<li>推荐理由：对于想要了解MySQL性能提升的人来说，这是一本不可多得的书。书中没有各种提升性能的秘籍，而是深入问题的核心，详细的解释了每种提升性能的原理，从而可以使你四两拨千斤。授之于鱼不如授之于渔，这本书做到了。 </li>
+<li>推荐公众号：老叶茶馆 </li>
+</ul>
+
+<h3 id="toc_15">《高可用MySQL》</h3>
+
+<ul>
+<li>豆瓣评分：8.0 【87 人评价】 </li>
+<li>推荐理由：《高性能MySQL》的姊妹篇。 </li>
+</ul>
+
+<h3 id="toc_16">《MongoDB权威指南》</h3>
+
+<ul>
+<li>豆瓣评分：8.0 【69 人评价】</li>
+<li>推荐理由：算是普通的参考书了，没有特别有深度的讲解。其实就是一本正常的介绍mongoDB是怎么用的，也可以作为nosql学习的入门。作为指南书，还是很合格的符合期望。 </li>
+<li>推荐博客：MongoDB 中文社区 </li>
+<li>推荐公众号：MongoDB 中文社区 </li>
+</ul>
+
+<h3 id="toc_17">《Redis开发与运维》</h3>
+
+<ul>
+<li>豆瓣评分：8.8 【41 人评价】 </li>
+<li>推荐理由：从开发、运维两个角度总结了Redis实战经验，深入浅出地剖析底层实现，包含大规模集群开发与运维的实际案例、应用技巧。全面覆盖Redis 基本功能及应用，图示丰富，讲解细腻。 </li>
+<li>推荐博客：Redis 中国用户组 </li>
+<li>推荐公众号：CRUG </li>
+</ul>
+
+<h3 id="toc_18">《Redis设计与实现》</h3>
+
+<ul>
+<li>豆瓣评分：8.5 【427 人评价】 </li>
+<li>推荐理由：系统而全面地描述了 Redis 内部运行机制。图示丰富，描述清晰，并给出大量参考信息，是NoSQL数据库开发人员案头必备。 </li>
+</ul>
+
+<h3 id="toc_19">《ElasticSearch 可扩展的开源弹性搜索解决方案》</h3>
+
+<ul>
+<li>豆瓣评分：7.3 【23 人评价】 </li>
+<li>推荐理由：基于ElasticSearch 的0.2 版本，覆盖了ElasticSearch 各种功能和命令的应用，全面、详细地介绍了开源、分布式、RESTful，具有全文检索功能的搜索引擎ElasticSearch。 </li>
+<li>友情提示：本书 ElasticSearch 比较旧，不忍推荐。仅适合入门，有其他合适的 ElasticSearch 书籍，烦请告诉我。</li>
+</ul>
+
+<h3 id="toc_20">《Elasticsearch权威指南》中文版，目前正在翻译中。</h3>
+
+<ul>
+<li>推荐博客：Elastic 中文社区 </li>
+</ul>
+
+<h3 id="toc_21">《ELK Stack权威指南》</h3>
+
+<ul>
+<li>豆瓣评分：7.0 【10 人评价】 </li>
+<li>推荐理由：ELK stack是以Elasticsearch、Logstash、Kibana三个开源软件为主的数据处理工具链，是目前开源界最流行的实时数据分析解决方案，成为实时日志处理领域开源界的第一选择。 </li>
+</ul>
+
+<h3 id="toc_22">《ZooKeeper：分布式过程协同技术详解》</h3>
+
+<ul>
+<li>豆瓣评分：7.6 【49 人评价】 </li>
+<li>推荐理由：Zookeeper 入门 友情提示：翻译可能略显尴尬。 </li>
+</ul>
+
+<h3 id="toc_23">《从Paxos到Zookeeper分布式一致性原理与实践》</h3>
+
+<ul>
+<li>豆瓣评分：8.1 【187 人评价】 </li>
+<li>推荐理由：从分布式一致性的理论出发，向读者简要介绍几种典型的分布式一致性协议，以及解决分布式一致性问题的思路，其中重点讲解了Paxos和ZAB协议。同时，本书深入介绍了分布式一致性问题的工业解决方案——ZooKeeper，并着重向读者展示这一分布式协调框架的使用方法、内部实现及运维技巧，旨在帮助读者全面了解ZooKeeper，并更好地使用和运维ZooKeeper。 </li>
+</ul>
+
+<h3 id="toc_24">《RabbitMQ实战：高效部署分布式消息队列》</h3>
+
+<ul>
+<li>豆瓣评分：6.9 【47 人评价】 推荐理由：本书对RabbitMQ做了全面、翔实的讲解，体现了两位专家的真知灼见。本书首先介绍了有关MQ的历史，然后从基本的消息通信原理讲起，带领读者一路探索RabbitMQ的消息通信世界。 </li>
+<li>友情提示：本书 RabbitMQ 版本较旧。消息队列中间件 RabbitMQ、ActiveMQ、RocketMQ、Kafka 可以选择了解一下。</li>
+</ul>
+
+<h3 id="toc_25">《Apache Kafka源码剖析》</h3>
+
+<ul>
+<li>豆瓣评分：7.8 【30 人评价】 </li>
+<li>推荐理由：以Kafka 0.10.0版本源码为基础，针对Kafka的架构设计到实现细节进行详细阐述。</li>
+</ul>
+
+<h3 id="toc_26">《作业调度系统 Quartz 中文文档》</h3>
+
+<ul>
+<li>豆瓣评分：暂无 </li>
+<li>推荐理由：暂时未找到大家评价不错的 Quartz 实战相关书籍，先推荐看中文翻译的官方文档。如果你有合适的推荐，烦请告诉我。 </li>
+<li>友情提示：国内开源项目 Elastic-Job，XXL-Job 都可以选择了解。 </li>
+</ul>
+
+<h3 id="toc_27">《微服务设计》</h3>
+
+<ul>
+<li>豆瓣评分：8.1 【273 人评价】 </li>
+<li>推荐理由：通过Netflix等多个业界案例，从微服务架构演进到原理剖析，全面讲解建模集成部署等微服务所涉及的各种主题，微服务架构与实践指南。 </li>
+</ul>
+
+<h3 id="toc_28">《Spring Cloud微服务实战》</h3>
+
+<ul>
+<li>豆瓣评分：7.9【20 人评价】 </li>
+<li>推荐理由：从时下流行的微服务架构概念出发，详细介绍了Spring Cloud针对微服务架构中几大核心要素的解决方案和基础组件。对于各个组件的介绍，主要以示例与源码结合的方式来帮助读者更好地理解这些组件的使用方法以及运行原理。同时，在介绍的过程中，还包含了作者在实践中所遇到的一些问题和解决思路，可供读者在实践中作为参考。 </li>
+<li>作者博客：blog.didispace.com/ </li>
+<li>作者公众号：didispace </li>
+</ul>
+
+<h3 id="toc_29">《亿级流量网站架构核心技术》</h3>
+
+<ul>
+<li>豆瓣评分：7.6【57 人评价】 </li>
+<li>推荐理由：总结并梳理了亿级流量网站高可用和高并发原则，通过实例详细介绍了如何落地这些原则。本书分为四部分：概述、高可用原则、高并发原则、案例实战。</li>
+<li>作者博客：开涛的博客 </li>
+<li>作者公众号：开涛的博客 </li>
+</ul>
+
+<h3 id="toc_30">《架构即未来：现代企业可扩展的Web架构、流程和组织》</h3>
+
+<ul>
+<li>豆瓣评分：8.7【77 人评价】 </li>
+<li>推荐理由：任何一个持续成长的公司最终都需要解决系统、组织和流程的扩展性问题。本书汇聚了作者从eBay、VISA、<a href="http://Salesforce.com%E5%88%B0Apple%E8%B6%85%E8%BF%8730%E5%B9%B4%E7%9A%84%E4%B8%B0%E5%AF%8C%E7%BB%8F%E9%AA%8C%EF%BC%8C">http://Salesforce.com到Apple超过30年的丰富经验，</a> 全面阐释了经过验证的信息技术扩展方法，对所需要掌握的产品和服务的平滑扩展做了详尽的论述，并在第1版的基础上更新了扩展的策略、技术和案例。 </li>
+</ul>
+
+<h3 id="toc_31">《Maven 实战》</h3>
+
+<ul>
+<li>豆瓣评分：8.1【563 人评价】 </li>
+<li>推荐理由：国内最权威的Maven专家的力作，唯一一本哦！ 《Jenkins权威指南》 </li>
+<li>豆瓣评分：暂无评分 </li>
+<li>推荐理由：Jenkins 唯一实体书。 </li>
+<li>友情提示：内容相对比较旧，大多是过时的案例。建议，快速过一遍。Jenkins 方面无特别好的选择推荐书籍。可以选择 Google 一些教程。 </li>
+</ul>
+
+<h3 id="toc_32">《鸟哥的Linux私房菜 （基础学习篇）》</h3>
+
+<ul>
+<li>豆瓣评分：9.1【2269 人评价】 </li>
+<li>推荐理由：本书是最具知名度的Linux入门书《鸟哥的Linux私房菜基础学习篇》的最新版，全面而详细地介绍了Linux操作系统。 </li>
+<li>友情提示：内容非常全面，建议挑选和自己实际工作相关度较高的，其他部分有需要再阅读。 </li>
+</ul>
+
+<h3 id="toc_33">《鸟哥的Linux私房菜 （服务器架设篇）》</h3>
+
+<ul>
+<li> 豆瓣评分：8.8 【198 人评价】 </li>
+<li> 推荐理由：您已有Linux基础，想要进一步学习服务器架设？还想了解如何维护与管理您的服务器？本书是您最佳的选择。 </li>
+</ul>
+
+<h3 id="toc_34">《Zabbix企业级分布式监控系统》</h3>
+
+<ul>
+<li> 豆瓣评分：7.6 【39 人评价】 </li>
+<li> 推荐理由：本书从运维（OPS）角度对Zabbix的各项功能进行了详细介绍，以自动化运维视角为出发点，对Zabbix的安装和配置、自动化功能、监控告警、性能调优、Zabbix API、Zabbix协议、RPM安装包定制，结合SaltStack实现自动化配置管理等内容进行了全方位的深入剖析。 </li>
+</ul>
+
+<h3 id="toc_35">《第一本Docker书》</h3>
+
+<ul>
+<li>豆瓣评分：8.8 【63 人评价】 </li>
+<li>推荐理由：本书由Docker公司前服务与支持副总裁James Turnbull编写，是Docker开发指南。本书专注于Docker 1.9及以上版本，指导读者完成Docker的安装、部署、管理和扩展，带领读者经历从测试到生产的整个开发生命周期，让读者了解Docker适用于什么场景。 </li>
+<li>推荐博客：DockerOne </li>
+<li>推荐公众号：DockerOne </li>
+</ul>
+
+<h3 id="toc_36">《Kubernetes权威指南》</h3>
+
+<ul>
+<li>豆瓣评分：7.7【15 人评价】 </li>
+<li>推荐理由：Kubernetes重磅开山之作，针对Kubernetes v1.6和本书第2版进行大篇幅内容更新，全方位完美覆盖，可借鉴性极强。 </li>
+<li>推荐博客：Kubernetes 中文社区 </li>
+<li>推荐公众号：K8S 技术社区 </li>
+</ul>
+
+<h3 id="toc_37">《用Mesos框架构建分布式应用》</h3>
+
+<ul>
+<li>豆瓣评分：暂无评分 </li>
+<li>推荐理由：超级薄的一本书，看完之后，你会对 Mesos 会非常了解，并且极大可能性学会如何基于 Mesos 框架构建分布式应用。 </li>
+</ul>
+
+<h3 id="toc_38">《数据结构与算法分析：Java语言描述》</h3>
+
+<ul>
+<li>豆瓣评分：8.3【183 人评价】 </li>
+<li>推荐理由：本书是国外数据结构与算法分析方面的经典教材，使用卓越的Java编程语言作为实现工具讨论了数据结构（组织大量数据的方法）和算法分析（对算法运行时间的估计）。 </li>
+<li>友情提示：算法方法还有其他很好的书籍，例如《算法导论》、《算法（第四版）》，也可以选择阅读。重要的是，保持耐心，享受这个痛并快乐的过程。 </li>
+</ul>
+
+<h3 id="toc_39">《Head First 设计模式》</h3>
+
+<ul>
+<li>豆瓣评分：9.2【2394 人评价】 </li>
+<li>推荐理由：《Head First设计模式》(中文版)共有14章，每章都介绍了几个设计模式，完整地涵盖了四人组版本全部23个设计模式。 </li>
+</ul>
+
+<h3 id="toc_40">《HTTP权威指南》</h3>
+
+<ul>
+<li>豆瓣评分：8.7 【1126 人评价】 </li>
+<li>推荐理由：本书尝试着将HTTP中一些互相关联且常被误解的规则梳理清楚，并编写了一系列基于各种主题的章节，对HTTP各方面的特性进行了介绍。纵观全书，对HTTP“为什么”这样做进行了详细的解释，而不仅仅停留在它是“怎么做”的。 </li>
+</ul>
+
+<h3 id="toc_41">《TCP/IP详解 系列》</h3>
+
+<ul>
+<li>豆瓣评分：9.3 【1883 人评价】 </li>
+<li>推荐理由：完整而详细的TCP/IP协议指南。针对任何希望理解TCP/IP协议是如何实现的读者设计。 </li>
+</ul>
+
+<h3 id="toc_42">《Linux内核设计与实现》</h3>
+
+<ul>
+<li>豆瓣评分：8.7【286 人评价】 </li>
+<li>推荐理由：详细描述了Linux内核的主要子系统和特点，包括Linux内核的设计、实现和接口。从理论到实践涵盖了Linux内核的方方面面，可以满足读者的各种兴趣和需求。 </li>
+<li>友情提示：Linux内核方面不乏好书。本书篇幅方面较为合适。 </li>
+</ul>
+
+<h3 id="toc_43">《剑指Offer：名企面试官精讲典型编程题》</h3>
+
+<ul>
+<li>豆瓣评分：8.5【508 人评价】 </li>
+<li>推荐理由：剖析了80个典型的编程面试题，系统整理基础知识、代码质量、解题思路、优化效率和综合能力这5个面试要点。</li>
+<li>推荐网站：牛客网-专业IT笔试面试备考平台 </li>
+</ul>
+
+<h3 id="toc_44">《程序员代码面试指南：IT名企算法与数据结构题目最优解》</h3>
+
+<ul>
+<li>豆瓣评分：8.4【32 人评价】 </li>
+<li>推荐理由：程序员刷题宝典！编程能力提升秘笈！精选IT名企真实代码面试题，全面覆盖算法与数据结构题型！ </li>
+</ul>
+
+<h3 id="toc_45">《领域驱动设计》</h3>
+
+<ul>
+<li>豆瓣评分：9.0【115 人评价】 </li>
+<li>推荐理由：是领域驱动设计方面的经典之作。全书围绕着设计和开发实践，结合若干真实的项目案例，向读者阐述如何在真实的软件开发中应用领域驱动设计。 </li>
+<li>友情提示：理论的书籍往往较为枯燥，勤修内功是必须走的路。 </li>
+</ul>
+
+<h3 id="toc_46">《火球:UML大战需求分析》</h3>
+
+<ul>
+<li>豆瓣评分：7.9【115 人评价】 </li>
+<li>推荐理由：融合UML、非UML、需求分析及需求管理等各方面的知识，帮助读者解决UML业界问题、需求分析及需求管理问题。 </li>
+<li>友情提示：可能不是最好的 UML 书籍，但从是否能够阅读理解完的角度来说，本书可能是相对合适的。有兴趣的同学也可以看看《UML和模式应用》、《大象：Thinking in UML》。<br/></li>
+</ul>
+
+<p>以上这些书籍的电子版可以关注我的微信公众号获取。 </p>
+
+<p>微信公众号经常会分享一些Java技术相关的干货。如果你喜欢，可以用微信搜索“Java团长”或者“javatuanzhang”关注。</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Springcloud各层框架注解含义]]></title>
+    <link href="http://books.sangkf.cn/15509183306420.html"/>
+    <updated>2019-02-23T18:38:50+08:00</updated>
+    <id>http://books.sangkf.cn/15509183306420.html</id>
+    <content type="html"><![CDATA[
+<p>声明Bean的注解:</p>
+
+<ul>
+<li>@Component : 组件,没有明确的角色</li>
+<li><a href="https://my.oschina.net/service">@Service</a> : 在业务逻辑层(service层)使用</li>
+<li>@Repository : 在数据访问层(dao层)使用.</li>
+<li><p><a href="https://my.oschina.net/u/1774615">@Controller</a> : 在展现层(MVC--SpringMVC)使用<br/>
+<span id="more"></span><!-- more --><br/>
+注入Bean的注解:</p></li>
+<li><p>@Autowired : Spring提供的注解.</p></li>
+<li><p>@Inject : JSR-330提供的注解</p></li>
+<li><p>@Resource : JSR-250提供的注解</p></li>
+</ul>
+
+<p>配置文件的注解:</p>
+
+<ul>
+<li>@Configuration : 声明当前类是个配置类,相当于一个Spring配置的xml文件.</li>
+<li>@ComponentScan (cn.test.demo): 自动扫描包名下所有使用 @Component @Service  @Repository @Controller 的类,并注册为Bean</li>
+<li>@WiselyConfiguration : 组合注解 可以替代 @Configuration和@ComponentScan</li>
+<li>@Bean : 注解在方法上,声明当前方法的返回值为一个Bean.</li>
+<li>* @Bean(initMethod=&quot;aa&quot;,destroyMethod=&quot;bb&quot;)--&gt; 指定 aa和bb方法在构造之后.Bean销毁之前执行.</li>
+</ul>
+
+<p>AOP<a href="https://www.baidu.com/s?wd=%E5%88%87%E9%9D%A2&amp;tn=24004469_oem_dg&amp;rsv_dl=gh_pl_sl_csd">切面</a>编程注解:</p>
+
+<ul>
+<li>@Aspect : 声明这是一个切面 </li>
+<li>@After @Before. @Around 定义切面,可以直接将拦截规则(切入点 PointCut)作为参数</li>
+<li>@PointCut : 专门定义拦截规则 然后在 @After @Before. @Around 中调用</li>
+<li>@Transcational : 事务处理</li>
+<li>@Cacheable : 数据缓存</li>
+<li>@EnableAaspectJAutoProxy : 开启Spring 对 这个切面(Aspect )的支持</li>
+<li>@Target (ElementType.TYPE):元注解,用来指定注解修饰类的那个成员 --&gt;指定拦截规则</li>
+<li>@Retention(RetentionPolicy.RUNTIME) </li>
+<li>* ---&gt;当定义的注解的@Retention为RUNTIME时，才能够通过运行时的反射机制来处理注解.--&gt;指定拦截规则</li>
+</ul>
+
+<p>Spring 常用配置:</p>
+
+<ul>
+<li>@import :导入配置类</li>
+<li>@Scope : 新建Bean的实例 @Scope(&quot;prototype&quot;) 声明Scope 为 Prototype</li>
+<li>@Value : 属性注入</li>
+<li>* @Value (&quot;我爱你&quot;)  --&gt; 普通字符串注入
+<ul>
+<li>@Value (&quot;#{systemProperties[&#39;os.name&#39;]}&quot;) --&gt;注入操作系统属性</li>
+<li>@Value (&quot;#{ T (java.lang.Math).random()  * 100.0 }&quot;) --&gt; 注入表达式结果</li>
+<li>@Value (&quot;#{demoService.another}&quot;) --&gt; 注入其他Bean属性</li>
+<li>@Value ( &quot;classpath:com/wisely/highlight_spring4/ch2/el/test.txt&quot; ) --&gt; 注入文件资源</li>
+<li>@Value (&quot;<a href="http://www.baidu.com%22)--%3E%E6%B3%A8%E5%85%A5%E7%BD%91%E5%9D%80%E8%B5%84%E6%BA%90">http://www.baidu.com&quot;)--&gt;注入网址资源</a></li>
+<li>@Value (&quot;\({book.name}&quot; ) --&gt; 注入配置文件  注意: 使用的是\) 而不是 #</li>
+</ul></li>
+<li>@PostConstruct : 在构造函数执行完之后执行</li>
+<li>@PreDestroy  : 在 Bean 销毁之前执行</li>
+<li>@ActiveProfiles : 用来声明活动的 profile</li>
+<li>@profile: 为不同环境下使用不同的配置提供了支持</li>
+<li>* @Profile(&quot;dev&quot;) .......对方法名为 dev-xxxx的方法提供实例化Bean</li>
+<li>@EnableAsync : 开启异步任务的支持(多线程)</li>
+<li>@Asyns : 声明这是一个异步任务,可以在类级别 和方法级别声明.</li>
+<li>@EnableScheduling : 开启对计划任务的支持(定时器)</li>
+<li>@Scheduled : 声明这是一个计划任务 支持多种计划任务,包含 cron. fixDelay fixRate</li>
+<li>* @Scheduled (dixedDelay = 5000) 通过注解 定时更新</li>
+<li>@Conditional : 条件注解,根据满足某一特定条件创建一个特定的Bean</li>
+<li>@ContextConfiguration : 加载配置文件</li>
+<li>* @ContextConfiguration(classes = {TestConfig.class})
+<ul>
+<li>@ContextConfiguration用来加载ApplicationContext </li>
+<li>classes属性用来加载配置类</li>
+</ul></li>
+<li>@WebAppCofiguration : 指定加载 ApplicationContext是一个WebApplicationContext</li>
+</ul>
+
+<p>@Enable*注解:</p>
+
+<ul>
+<li>@EnableAsync : 开启异步任务的支持(多线程)</li>
+<li>@EnableScheduling : 开启对计划任务的支持(定时器)</li>
+<li>@EnableWebMVC : 开启对Web MVC 的配置支持</li>
+<li>@EnableAaspectJAutoProxy : 开启Spring 对 这个切面(Aspect )的支持</li>
+<li>@EnableConfigurationProperties 开启对@ConfigurationProperties注解配置Bean的支持</li>
+<li>@EnableJpaRepositories : 开启对Spring Data JAP Repository 的支持</li>
+<li>@EnableTransactionManagement 开启对注解式事物的支持</li>
+<li>@EnableCaching开启注解是缓存的支持.</li>
+<li>@EnableDiscoveryClient 让服务发现服务器,使用服务器.Spring cloud 实现服务发现</li>
+<li>@EnableEurekaServer 注册服务器 spring cloud 实现服务注册@</li>
+<li>@EnableScheduling 让spring可以进行任务调度,功能类似于spring.xml文件中的命名空间</li>
+<li>@EnableCaching 开启Cache缓存支持;</li>
+</ul>
+
+<p>SpringMVC 常用注解:</p>
+
+<ul>
+<li>@Controller : 注解在类上 声明这个类是springmvc里的Controller,将其声明为一个spring的Bean.</li>
+<li>@RequestMapping :可以注解在类上和方法上 映射WEB请求(访问路径和参数)</li>
+<li>* @RequestMapping(value= &quot;/convert&quot;,produces+{&quot;application/x-wisely&quot;}) 设置访问URL 返回值类型</li>
+<li>@ResponseBody : 支持将返回值放入response体内 而不是返回一个页面(返回的是一个组数据)</li>
+<li>@RequestBody : 允许request的参数在request体中,而不是直接连接在地址后面 次注解放置在参数前</li>
+<li>@Path Variable : 用来接收路径参数 如/test/001,001为参数,次注解放置在参数前</li>
+<li>@RestController : @Controller + @ResponseBody 组合注解</li>
+<li>@ControllerAdvice : 通过@ControllerAdvice可以将对已控制器的全局配置放置在同一个位置</li>
+<li>@ExceptionHandler : 用于全局处理控制器的异常</li>
+<li>* @ExceptionHandier(value=Exception.class) --&gt;通过value属性可过滤拦截器条件,拦截所有的异常</li>
+<li>@InitBinder : 用来设置WebDataBinder , WebDataBinder用来自动绑定前台请求参数到Model中.</li>
+<li>@ModelAttrbuute : 绑定键值对到Model中,</li>
+<li>@RunWith : 运行器 </li>
+<li>* @RunWith(JUnit4.class)就是指用JUnit4来运行
+<ul>
+<li>@RunWith(SpringJUnit4ClassRunner.class),让测试运行于Spring测试环境</li>
+<li>@RunWith(Suite.class)的话就是一套测试集合，</li>
+</ul></li>
+<li><p>@WebAppConfiguration(&quot;src/main/resources&quot;) : 注解在类上,用来声明加载的ApplicationContex 是一个WebApplicationContext ,它的属性指定的是Web资源的位置,默认为 src/main/webapp ,自定义修改为 resource</p></li>
+<li><p>@Before : 在 xxx 前初始化</p></li>
+</ul>
+
+<p>Spring Boot 注解:</p>
+
+<ul>
+<li>@SpringBootApplication : 是Spring Boot 项目的核心注解 主要目的是开启自动配置</li>
+<li>* @SpringBootApplication注解是一个组合注解,主要组合了@Configuration .+@EnableAutoConfiguration.+@ComponentScan</li>
+<li>@Value : 属性注入,读取properties或者 Yml 文件中的属性</li>
+<li>@ConfigurationProperties : 将properties属性和一个Bean及其属性关联,从而实现类型安全的配置</li>
+<li>* @ConfigurationProperties(prefix = &quot;author&quot;,locations = {&quot;classpath:config/author.properties&quot;})
+<ul>
+<li>通过@ConfigurationProperties加载配置,通过prefix属性指定配置前缀,通过location指定配置文件位置</li>
+</ul></li>
+<li>@EnableAutoConfiguration 注解:作用在于让 Spring Boot   根据应用所声明的依赖来对 Spring 框架进行自动配置<br/>
+        这个注解告诉Spring Boot根据添加的jar依赖猜测你想如何配置Spring。由于<code>spring-boot-starter-web</code>添加了Tomcat和Spring MVC，所以auto-configuration将假定你正在开发一个web应用并相应地对Spring进行设置。</li>
+<li>@ Configuration @EnableAutoConfiguration (exclude={xxxx.class}) 禁用特定的自动配置</li>
+<li>@SpringBootApplication   注解等价于以默认属性使用 @Configuration，@EnableAutoConfiguration和     @ComponentScan。</li>
+</ul>
+
+<p>@SuppressWarnings注解</p>
+
+<ul>
+<li>@SuppressWarnings(&quot;unchecked&quot;)</li>
+<li>* 告诉编译器忽略 unchecked 警告信息,如使用 list ArrayList等未进行参数化产生的警告信息</li>
+<li>@SuppressWarnings(&quot;serial&quot;)</li>
+<li>* 如果编译器出现这样的警告信息: The serializable class WmailCalendar does not declare a static final serialVersionUID field of type long     使用这个注释将警告信息去掉。</li>
+<li>@SuppressWarnings(&quot;deprecation&quot;)</li>
+<li>* 如果使用了使用@Deprecated注释的方法，编译器将出现警告信息。使用这个注释将警告信息去掉。</li>
+<li>@SuppressWarnings(&quot;unchecked&quot;, &quot;deprecation&quot;)</li>
+<li>* 告诉编译器同时忽略unchecked和deprecation的警告信息。</li>
+<li>@SuppressWarnings(value={&quot;unchecked&quot;, &quot;deprecation&quot;})</li>
+<li>* 等同于@SuppressWarnings(&quot;unchecked&quot;, &quot;deprecation&quot;)</li>
+</ul>
+
+<p>案例</p>
+
+<pre><code class="language-java">@Entity
+
+@Table(name = &quot;S_PRODUCEINFO&quot; )
+
+@Data
+
+@NoArgsConstructor
+
+@AllArgsConstructor
+
+public class ProduceInfoEntity {
+
+    @Id
+
+    @Column(name = &quot;app_name&quot;, unique = true, length = 50)
+
+    private String name;
+
+    @Column(name = &quot;status&quot;)
+
+    @Enumerated(EnumType. STRING)
+
+    private ProduceStatus status;
+
+    @Column(name = &quot;create_time&quot;, updatable = false)
+
+    @Temporal(TemporalType. TIMESTAMP)
+
+    @CreationTimestamp
+
+    private Date createTime;
+
+    @Column(name = &quot;update_time&quot;)
+
+    @Temporal(TemporalType. TIMESTAMP)
+
+    @UpdateTimestamp
+
+    private Date updateTime;
+}
+</code></pre>
+
+<p>@Entity : 映射数据库实体类</p>
+
+<p>@Table(name = &quot;S_PRODUCEINFO&quot; ) : 表名为 &quot;S_PRODUCEINFO&quot;</p>
+
+<p>@Id : 声明主键ID</p>
+
+<p>@Column(name = &quot;app_name&quot;, unique = true, length = 50) :对应数据库字段,属性</p>
+
+<p>@Enumerated(EnumType. STRING) : 采用枚举值类型和数据库字段进行交互  </p>
+
+<p>@Temporal : 时间格式 映射数据库会得到规定时间格式的日期</p>
+
+<p>       @Enumerted(EnumType.STRING)  HH:MM:SS 格式的日期</p>
+
+<p>       @Enumerted(EnumType.DATE) 获取年月日  yyyy-MM-dd </p>
+
+<p>       @Enumerted(EnumType.TIME) 获取时分秒  HH:MM:</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[JAVA8新特性]]></title>
+    <link href="http://books.sangkf.cn/15509161097880.html"/>
+    <updated>2019-02-23T18:01:49+08:00</updated>
+    <id>http://books.sangkf.cn/15509161097880.html</id>
+    <content type="html"><![CDATA[
+<p>原文地址 <a href="https://www.cnblogs.com/huyunfan/p/7456535.html">https://www.cnblogs.com/huyunfan/p/7456535.html</a></p>
+
+<ul>
+<li><p><strong>default拓展方法</strong></p>
+<p>default关键字为接口声明添加非抽象方法的实现,也称为拓展方法<br/>
+<span id="more"></span><!-- more --></p>
+<pre><code class="language-java">public interface Formula {
+  void doSomething();<br/>
+  default void before() {<br/>
+      System.out.println(&quot;我是拓展方法&quot;);<br/>
+  }<br/>
+}<br/>
+public class FormulaService implements Formula {<br/>
+  @Override<br/>
+  public void doSomething() {<br/>
+      before();<br/>
+      System.out.println(&quot;我是override方法&quot;);<br/>
+  }<br/>
+}
+</code></pre></li>
+<li><p><strong>Lambda表达式</strong></p>
+<p>java8引入函数式编程，Lambda则是函数式编程的基础。</p>
+<pre><code class="language-java">List&lt;String&gt; list = Arrays.asList(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;);
+// java8之前<br/>
+Collections.sort(list, new Comparator&lt;String&gt;(){<br/>
+  @Override<br/>
+  public int compare(String o1, String o2) {<br/>
+      return o1.compareTo(o2);<br/>
+  }<br/>
+});<br/>
+// lambda<br/>
+Collections.sort(list, (String o1, String o2) -&gt; {<br/>
+          return o2.compareTo(o1);<br/>
+});<br/>
+// 简洁lambda<br/>
+Collections.sort(list, (String o1, String o2) -&gt;  o2.compareTo(o1));<br/>
+// 更简洁lambda<br/>
+Collections.sort(list, (o1, o2) -&gt;  o2.compareTo(o1));<br/>
+// 也可以这样写<br/>
+Collections.sort(list, Comparator.comparing(String::toString));
+</code></pre></li>
+<li><p><strong>函数式接口</strong></p>
+<p>一个函数式接口有且只能有一个抽象方法申明，其中该注意的是 @FunctionalInterface 注解，此时如果在接口中定义了第二个抽象方法，编译器将会抛出异常。当然如果不加该注解也不是不行，如果接口中有多个抽象方法，而你又使用了lambda表达式，则在调用处会抛出异常。</p>
+<pre><code class="language-java">@FunctionalInterface
+public interface Formula&lt;F,T&gt;{<br/>
+  T convert(F var1);<br/>
+}<br/>
+Formula&lt;String,Integer&gt; function = (var1 -&gt; Integer.valueOf(var1));<br/>
+Integer var2 = function.convert(&quot;1000&quot;); 
+</code></pre></li>
+<li><p><strong>方法和构造函数引用</strong></p>
+<p>方法引用的标准语法是 <code>类名:方法名</code></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>引用静态方法</td>
+<td>targetClass :: staticMethodName</td>
+</tr>
+<tr>
+<td>引用某个对象的实例方法</td>
+<td>targetClass :: instanceMethodName</td>
+</tr>
+<tr>
+<td>引用某个类型的任意对象的实例方法</td>
+<td>targetType :: methodName</td>
+</tr>
+<tr>
+<td>引用构造方法</td>
+<td>className :: new</td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li><strong>引用静态方法</strong></li>
+</ol>
+<pre><code class="language-java">Formula&lt;String,Integer&gt; function = (Integer::valueOf);
+Integer var2 = function.convert(&quot;1000&quot;);
+</code></pre>
+<ol>
+<li><strong>引用某个类型的任意对象的实例方法</strong></li>
+</ol>
+<pre><code class="language-java">public static void main(String[] args) {
+   String[] array = {&quot;贱明&quot;, &quot;学友&quot;};<br/>
+   Arrays.sort(array, String::compareTo);<br/>
+}
+</code></pre>
+<ol>
+<li><strong>引用构造方法</strong></li>
+</ol>
+<pre><code class="language-java">// 定义工厂
+interface PersonFactory&lt;P extends Person&gt;{<br/>
+    P create(String name);<br/>
+}<br/>
+// Person类的构造方法<br/>
+public Person(String name) {<br/>
+    this.name = name;<br/>
+}<br/>
+// 创建<br/>
+PersonFactory&lt;Person&gt; factory = Person::new;<br/>
+factory.create(&quot;贱明&quot;);
+</code></pre></li>
+<li><p><strong>Lambda的范围</strong></p>
+<p>lambda可以访问局部对应的外部区域的局部final变量，以及成员变量和静态变量。</p>
+<ol>
+<li><p><strong>访问成员变量</strong></p>
+<pre><code class="language-java">public void doSomething(){
+ final String p1 = &quot;贱明&quot;;<br/>
+ final String p2 = &quot;学友&quot;;<br/>
+ Formula function = (person1, person2) -&gt; p1.compareTo(p2);<br/>
+}
+</code></pre>
+<p>与java8以下版本不同的是，p1 p2你可以不修饰成final 也不会报错，但是如果你想修改他们，编译器则会告诉你这是不被允许的。</p></li>
+<li><p><strong>访问成员变量和静态变量</strong></p>
+<pre><code class="language-java">public void doSomething(){;
+Formula function = (person1, person2) -&gt;{<br/>
+    dehua = &quot;贱明&quot;;<br/>
+    xueyou=&quot;学友&quot;;<br/>
+    return dehua.compareTo(xueyou);<br/>
+};<br/>
+}
+</code></pre></li>
+</ol></li>
+<li><p><strong>内置函数式接口</strong></p>
+<p>​     java8 api中提供了很多内置函数式接口，而且有些接口其实在Google Guava中已经实现了，很大程  度的降低了程序员的工作负担。</p>
+<ol>
+<li><p><strong>Predicates</strong><br/>
+Predicate是一个布尔类型的函数，该函数只有一个输入参数，他包含了多种默认实现。</p>
+<pre><code class="language-java">public static void main(String[] args) {
+Predicate&lt;String&gt; predicate = (s) -&gt; s.contains(&quot;贱明&quot;);<br/>
+String var1 = &quot;牛贱明&quot;;<br/>
+predicate.test(var1);              // true<br/>
+predicate.negate().test(var1);     // false<br/>
+Predicate&lt;Boolean&gt; nonNull = Objects::nonNull;<br/>
+Predicate&lt;Boolean&gt; isNull = Objects::isNull;<br/>
+Predicate&lt;String&gt; isEmpty = String::isEmpty;<br/>
+Predicate&lt;String&gt; isNotEmpty = isEmpty.negate();<br/>
+isNotEmpty.and(isEmpty).test(var1);<br/>
+}
+</code></pre></li>
+<li><p><strong>Functions</strong></p>
+<p>Function接口接收一个参数，并返回单一的结果。默认方法可以将多个函数串在一起</p>
+<pre><code class="language-java">public static void main(String[] args) {
+Function&lt;String, Integer&gt; toInteger = Integer::valueOf;<br/>
+Function&lt;String, String&gt; backToString = toInteger.andThen(String::valueOf);<br/>
+System.out.println(toInteger.apply(&quot;123&quot;));<br/>
+System.out.println(backToString.apply(&quot;123&quot;));<br/>
+}
+</code></pre></li>
+<li><p><strong>Suppliers</strong></p>
+<p>Supplier接口产生一个给定类型的结果。与Function不同的是，Supplier没有输入参数。</p>
+<pre><code class="language-java">Supplier&lt;Person&gt; personSupplier = Person::new;
+Person p = personSupplier.get();   // new Person
+</code></pre></li>
+<li><p><strong>Consumers</strong></p>
+<p>Consumer代表了在一个输入参数上需要进行的操作。</p>
+<pre><code class="language-java">Consumer&lt;Person&gt; greeter = (p) -&gt; System.out.println(&quot;Hello, &quot; + p.getName());
+greeter.accept(new Person(&quot;贱明&quot;));
+</code></pre></li>
+<li><p><strong>Comparators</strong></p>
+<p>Comparator接口在早期的Java版本中非常著名。Java 8 为这个接口添加了不同的默认方法。</p>
+<pre><code class="language-java">Comparator&lt;Person&gt; comparator = (p1, p2) -&gt; p1.getName().compareTo(p2.getName());
+Person p1 = new Person(&quot;贱明&quot;);<br/>
+Person p2 = new Person(&quot;学友&quot;);<br/>
+System.out.println(comparator.compare(p1, p2));             // &gt; 1105<br/>
+System.out.println(comparator.reversed().compare(p1, p2));  // &lt; -1105
+</code></pre></li>
+<li><p><strong>Optionals</strong></p>
+<p>Optional不是一个函数式接口，而是一个精巧的工具接口，用来防止NullPointerException产生。<br/>
+Optional是一个简单的值容器，这个值可以是null，也可以是non-null。考虑到一个方法可能会返回一个non-null的值，也可能返回一个空值。为了不直接返回null，我们在Java 8中就返回一个Optional。</p>
+<pre><code class="language-java">Optional&lt;String&gt; optional = Optional.of(&quot;贱明&quot;);
+System.out.println(optional.isPresent()); // true      <br/>
+System.out.println(optional.get()); // 贱明   <br/>
+System.out.println(optional.orElse(&quot;学友&quot;)); // 贱明    <br/>
+optional.ifPresent((s) -&gt; System.out.println(s.charAt(0))); 
+</code></pre></li>
+</ol></li>
 </ul>
 
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[用 Gatsby 创建一个博客]]></title>
-    <link href="http://books.sangkf.cn/15508995579898.html"/>
-    <updated>2019-02-23T13:25:57+08:00</updated>
-    <id>http://books.sangkf.cn/15508995579898.html</id>
+    <title type="html"><![CDATA[h5仿微信聊天(高仿版)、微信聊天表情|对话框|编辑器]]></title>
+    <link href="http://books.sangkf.cn/15508991872164.html"/>
+    <updated>2019-02-23T13:19:47+08:00</updated>
+    <id>http://books.sangkf.cn/15508991872164.html</id>
     <content type="html"><![CDATA[
 <blockquote>
-<p>转载 <a href="https://blog.csdn.net/itheima_wujie/article/details/78862801#">https://blog.csdn.net/itheima_wujie/article/details/78862801#</a></p>
+<p>转载 <a href="https://www.cnblogs.com/xiaoyan2017/p/8912054.html">https://www.cnblogs.com/xiaoyan2017/p/8912054.html</a></p>
 </blockquote>
 
-<p>Gatsby 是一个令人难以置信的静态站点生成器，它允许使用React作为渲染引擎引擎来搭建一个静态站点，它真正具有现代web应用程序所期望的所有优点。它通过在构建时通过服务器端渲染将动态的 React 组件呈现为静态 HTML 内容。这意味着您的用户可以获得静态站点的所有好处，比如不使用 JavaScript、搜索引擎友好性、非常快的加载速度等等，也并没有失去现代 web 所期望的活力和交互性。一旦呈现为静态 HTML，客户端站点的 React 和 JavaScript 会接管它并添加动态的内容。 Gatsby 最近发布了v1.0.0，推出了很多新特性。包括(但不限于)使用GraphQL创建内容查询的能力，与各种cms集成——包括 WordPress、Contentful、Drupal 等等。还有基于路由的代码分布使得用户体验更佳。在这篇文章中，我们将深入探讨 Gatsby 和一些新特性，并创建一个静态博客。让我们开始吧！<br/>
-<span id="more"></span><!-- more --><br/>
-起步<br/>
-安装cli</p>
+<p>之前做过一版h5微信聊天移动端，这段时间闲来无事就整理了下之前项目，又重新在原先的那版基础上升级了下，如是就有了现在的h5仿微信聊天高仿版，新增了微聊、通讯录、探索、我四个模块 左右触摸滑屏切换，聊天页面优化了多图预览、视频播放，长按菜单UI，聊天底部编辑器重新优化整理(新增多表情)，弹窗则用到了自己开发的wcPop.js，具体看项目效果图吧！<br/>
+<span id="more"></span><!-- more --></p>
 
-<pre><code class="language-javascript">npm install -g gatsby-cli
-</code></pre>
-
-<p>Gatsby 带有一个很棒的CLI(命令行接口)，它包含了一个工作站点的搭建功能，以及帮助开发该站点的命令。</p>
-
-<pre><code class="language-javascript">gatsby new personal-blog &amp;&amp; cd $_
-</code></pre>
-
-<p>该命令将创建文件夹personal-blog，然后进入该目录。现在一个可供开发的环境已经搭建好了。Gatsby 的 CLI包含了许多常见的开发特性，比如gatsby build (构建一个生产、静态生成的项目版本)、gatsby develop(启动一个热加载的web开发服务器)等等。</p>
-
-<p>我们现在可以开始在这个网站上进行真正的开发，并且创建一个功能齐全的，现代的博客。您通常希望使用gatsby develop 来启动本地开发服务器，以验证我们在步骤中所完成的功能。</p>
-
-<p>添加必要的插件<br/>
-Gatsby 支持使用丰富的插件，很多非常有用的插件都是为了完成普通任务而编写的。插件可以分为三个主要类别:功能( functional )插件、源( source )插件和转换器( transformer )插件。</p>
-
-<p>功能插件<br/>
-功能插件用来实现某些功能（离线支持，生成一个站点地图等等）或者他们扩展了 Gatsby 的 webpack 配置，增加了对 Typescript、Sass 等的支持。 对于这个特定的博客文章，我们想要一个单页面应用的感觉(没有页面重载)，以及在head 标签中动态更改title标签的能力。正如所提到的，Gatsby 插件的生态系统是丰富的、充满活力的，而且还在不断增长，所以通常一个已经存在的插件，可以解决你想要解决的特定问题。为了解决我们想要的这个博客的功能，我们将使用以下插件：</p>
-
-<p>gatsby-plugin-catch-links<br/>
-实现了历史 pushState API, 不需要页面重载就可以导航到博客的不同页面<br/>
-gatsby-plugin-react-helmet<br/>
-react-helmet 是一种允许修改head标签的工具 Gatsby 静态地呈现这些头部标签的变化<br/>
-使用下面的命令：</p>
-
-<pre><code class="language-javascript">yarn add gatsby-plugin-catch-links gatsby-plugin-react-helmet
-</code></pre>
-
-<p>我们用的是yarn，但是使用 npm 也很容易：npm i --save [deps]。 在安装了这些功能插件之后，我们将编辑gatsby-config.js。Gatsby 在构建时加载指定插件的公开功能。</p>
-
-<pre><code class="language-javascript">module.exports = {
-  siteMetadata: {
-    title: `Your Name - Blog`,
-    author: `Your Name`,
-  },
-  plugins: [
-    &#39;gatsby-plugin-catch-links&#39;,
-    &#39;gatsby-plugin-react-helmet&#39;,
-  ],
-}
-</code></pre>
-
-<p>除了使用yarn install 和编辑配置文件之外，我们现在还可以编辑网站 head 标签，同时还可以实现一个无需重新加载的单页面应用，。现在，让我们通过实现一个源插件来增强基本功能，该插件可以实现从本地文件系统加载博客文章。</p>
-
-<p>源插件<br/>
-源插件创建节点，然后通过一个转换器插件将其转换为可用的格式。例如，一个典型的工作流通常需要使用gatsby-source-filesystem它从磁盘上加载文件，例如 Markdown 文件，然后指定一个 Markdown 转换器将 Markdown 转换成 HTML 。 因为博客的大部分内容都使用 Markdown 格式，让我们添加gatsby-source-filesystem，与我们之前的步骤类似，我们将安装插件，然后将其注入到我们的 gatsby-config.js,像这样：</p>
-
-<pre><code class="language-javascript">yarn add gatsby-source-filesystem
-</code></pre>
-
-<pre><code class="language-javascript">module.exports = {
-  // previous configuration
-  plugins: [
-    &#39;gatsby-plugin-catch-links&#39;,
-    &#39;gatsby-plugin-react-helmet&#39;,
-    {
-      resolve: `gatsby-source-filesystem`,
-      options: {
-        path: `${__dirname}/src/pages`,
-        name: &#39;pages&#39;,
-      },
-    }
-  ]
-}
-</code></pre>
-
-<p>有一点解释在这里会很有帮助！一个options 对象可以传递给一个插件，我们正在传递文件系统路径(也就是我们的 Markdown 文件将被定位的位置)，然后是源文件的名称。既然 Gatsby 知道了我们的源文件，我们就可以开始应用一些有用的转换器来将这些文件转换为可用的数据！</p>
-
-<p>转换器插件<br/>
-正如前面提到的，转换器插件采用了一些底层的数据格式，这种格式在当前的表单中是不可用的（Markdown，json，yaml等），我们可以用 GraphQL 查询把它转换成 Gatsby 能够理解的格式。filesystem 源插件将从我们的文件系统中加载文件节点(如 Markdown )，然后 Markdown 转换器将接管并转换为可用的 HTML 。 我们将只使用一个转换器插件(用于 Markdown )，所以让我们安装它。</p>
-
-<p>gatsby-transformer-remark<br/>
-使用 remark Markdown解析器进行转换磁盘上的 md 文件为 HTML 。 此外，该转换器还可以选择使用插件来进一步扩展功能，例如通过 gatsby-remark-prismjs来添加语法高亮，通过 gatsby-remark-copy-linked-files 复制在 markdown 中指定的相关文件，通过 gatsby-remark-images 压缩图像，并使用 srcset 添加响应性图像等等。<br/>
-这个过程现在应该很熟悉了，安装之后再添加到配置中。</p>
-
-<pre><code class="language-javascript">yarn add gatsby-transformer-remark
-</code></pre>
-
-<p>编辑 gatsby-config.js</p>
-
-<pre><code class="language-javascript">module.exports = {
-  // previous setup
-    plugins: [
-    &#39;gatsby-plugin-catch-links&#39;,
-    &#39;gatsby-plugin-react-helmet&#39;,
-    {
-      resolve: `gatsby-source-filesystem`,
-      options: {
-        path: `${__dirname}/src/pages`,
-        name: &#39;pages&#39;,
-      },
-    },
-    {
-      resolve: &#39;gatsby-transformer-remark&#39;,
-      options: {
-        plugins: [] // just in case those previously mentioned remark plugins sound cool :)
-      }
-    },
-  ]
-};
-</code></pre>
-
-<p>唷!看起来像有很多设置，但是这些插件将会让 Gatsby 变得强大，并给我们一个难以置信的(但相对简单的！)开发环境。我们还需要一个更简单的步骤。我们只需创建一个 Markdown 文件，它将包含我们的第一个博客文章的内容。让我们开始吧！</p>
-
-<p>书写第一个 Markdown 文章<br/>
-我们先前配置的gatsby-source-filesystem 插件希望我们的内容能够放在 src/pages。Gatsby 在命名规范方面并没有什么规定，但博客文章的一个典型做法是给文件夹起个类似MM-DD-YYYY-title的名字，例如07-12-2017-hello-world。让我们创建一个文件夹src/pages/07-12-2017-getting-started，并把 index.md 放进去。 这个Markdown文件的内容将是我们的博客文章，使用 Markdown 编写(当然！)这是它该有的样子：</p>
-
-<pre><code class="language-txt">---
-path: &quot;/hello-world&quot;
-date: &quot;2017-07-12T17:12:33.962Z&quot;
-title: &quot;My First Gatsby Post&quot;
----
-</code></pre>
-
-<p>Oooooh-weeee, my first blog post!<br/>
-被包含在横线里的部分是什么？这就是所谓的frontmatter，而这部分内容可以供 React 组件使用（例如path，date，title等等）你可以添加其他的数据，因此，你可以自由地进行实验，找到必要的信息，以实现一个理想的博客系统，供你使用。重要的一点是，当我们动态创建页面来指定页面时，path将会被用到识别路由。在这个例子里<a href="http://localhost:8000/hello-world%E5%B0%86%E6%98%AF%E8%BF%99%E4%B8%AA%E6%96%87%E4%BB%B6%E7%9A%84%E8%B7%AF%E5%BE%84%E3%80%82">http://localhost:8000/hello-world将是这个文件的路径。</a> 现在我们已经创建了一个带有frontmatter和一些内容的博客文章，我们可以开始编写一些可以显示这些数据的 React 组件。</p>
-
-<p>创建 React 模板<br/>
-当 Gatsby 支持服务器端渲染(对字符串)的 React 组件时，我们可以使用 React 编写我们的模板（ 也可以使用Preact ）。 我们创建一个 src/templates/blog-post.js文件（请创建一个src/templates文件夹）</p>
-
-<pre><code class="language-javascript">import React from &#39;react&#39;;
-import Helmet from &#39;react-helmet&#39;;
- 
-// import &#39;../css/blog-post.css&#39;; // make it pretty!
- 
-export default function Template({
-  data // this prop will be injected by the GraphQL query we&#39;ll write in a bit
-}) {
-  const { markdownRemark: post } = data; // data.markdownRemark holds our post data
-  return (
-    &lt;div className=&quot;blog-post-container&quot;&gt;
-      &lt;Helmet title={`Your Blog Name - ${post.frontmatter.title}`} /&gt;
-      &lt;div className=&quot;blog-post&quot;&gt;
-        &lt;h1&gt;{post.frontmatter.title}&lt;/h1&gt;
-        &lt;div className=&quot;blog-post-content&quot; dangerouslySetInnerHTML={{ __html: post.html }} /&gt;
-      &lt;/div&gt;
+<pre><code class="language-markup">&lt;!-- //微聊底部功能面板 --&gt;
+&lt;div class=&quot;wc__footTool-panel&quot;&gt;
+    &lt;!-- 输入框模块 --&gt;
+    &lt;div class=&quot;wc__editor-panel wc__borT flexbox&quot;&gt;
+        &lt;div class=&quot;wrap-editor flex1&quot;&gt;&lt;div class=&quot;editor J__wcEditor&quot; contenteditable=&quot;true&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+        &lt;i class=&quot;btn btn-emotion&quot;&gt;&lt;/i&gt;
+        &lt;i class=&quot;btn btn-choose&quot;&gt;&lt;/i&gt;
+        &lt;button class=&quot;btn-submit J__wchatSubmit&quot;&gt;发送&lt;/button&gt;
     &lt;/div&gt;
-  );
-}
-</code></pre>
 
-<p>哇,整洁!这个 React 组件将被呈现为静态 HTML 字符串，这将成为我们博客导航的基础。 在这一点上，有一种合理的混乱和魔法会发生，特别是在 props 属性注入的时候。什么是markdownRemark？这个数据支持从何而来？这些问题，让我们通过编写一个GraphQL查询来回答，以便为我们的组件添加内容。</p>
-
-<p>编写一个 GraphQL 查询<br/>
-在 Template 声明下面，我们将添加一个 GraphQL 查询。这是 Gatsby 的一个非常强大的工具。这让我们可以很简单地挑选出我们想要展示给我们的博客文章的数据片段。我们的查询选择的每个数据都将通过我们前面指定的数据属性注入。</p>
-
-<pre><code class="language-javascript">import React from &#39;react&#39;;
-import Helmet from &#39;react-helmet&#39;;
- 
-// import &#39;../css/blog-post.css&#39;;
- 
-export default function Template({
-  data
-}) {
-  const { markdownRemark: post } = data;
-  return (
-    &lt;div className=&quot;blog-post-container&quot;&gt;
-      &lt;Helmet title={`Your Blog Name - ${post.frontmatter.title}`} /&gt;
-      &lt;div className=&quot;blog-post&quot;&gt;
-        &lt;h1&gt;{post.frontmatter.title}&lt;/h1&gt;
-        &lt;div className=&quot;blog-post-content&quot; dangerouslySetInnerHTML={{ __html: post.html }} /&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
-  );
-}
- 
-export const pageQuery = graphql`
-  query BlogPostByPath($path: String!) {
-    markdownRemark(frontmatter: { path: { eq: $path } }) {
-      html
-      frontmatter {
-        date(formatString: &quot;MMMM DD, YYYY&quot;)
-        path
-        title
-      }
-    }
-  }
-`;
-</code></pre>
-
-<p>如果你对 GraphQL 不熟悉，这看起来可能有点让人困惑，但是我们可以把它们分解一下。</p>
-
-<p>备注: 学习更多关于 GraphQL 知识, 请参考 excellent resource</p>
-
-<p>查询名称 BlogPostByPath (注意:这些查询名称必须是唯一的！)将被注入当前的路径，例如我们正在查看的特定的博客文章。这条路径将在查询中作为$path可用。比如，如果我们查看之前创建的博客文章，将从数据中提取的文件的路径将是 /hello-world。 通过注入的属性获得 data，在 GraphQL 查询中被命名为markdownRemark 。我们通过 GraphQL 查询获取的每个属性都可以在markdownRemark 下面找到。例如,访问转换后的 HTML 我们会通过 data.markdownRemark.html 去拿到数据。 当然，我们的数据结构是在我们的Markdown文件开始时提供的frontmatter。我们定义的每个键都可以被注入到查询中。 现在，我们已经安装了一堆插件来从磁盘加载文件，将 Markdown 转换为HTML。我们有一个单独的 Markdown 文件，它将作为一个博客发布。最后，我们有一个针对博客文章的 React 模板，还有一个连接的 GraphQL 查询来查询博客文章，并将 React 模板注入到查询的数据中。接下来:以编程方式创建必要的静态页面(并将模板注入)与 Gatsby 的 Node API，让我们开始吧。 此时需要注意的一点是，GraphQL 查询是在构建时进行的。该组件被注入数据由 GraphQL 查询所得到。除非有什么动态处理（ componentDidMount 的逻辑，state 变化），否则这个组件将是纯粹的，通过 React 渲染引擎、GraphQL 和 Gatsby 生成的HTML。</p>
-
-<p>创建静态页面<br/>
-Gatsby 公开了一个强大的Node API，它允许创建动态页面这样的功能（博客文章页！），扩展 babel 或 webpack 配置，修改所创建的节点或页面等。这个API写在在gatsby-node.js文件中，在这个文件中发现的每一个导出都将由 Gatsby 分析。Gatsby详细地介绍了它的Node API规范。但是，我们只关心这个实例中的一个特定的APIcreatePages。</p>
-
-<pre><code class="language-javascript">const path = require(&#39;path&#39;);
-​
-exports.createPages = ({ boundActionCreators, graphql }) =&gt; {
- const { createPage } = boundActionCreators;
-​
- const blogPostTemplate = path.resolve(`src/templates/blog-post.js`);
-}
-</code></pre>
-
-<p>没什么复杂的！我们已经在使用 createPages API 了（ Gatsby 将在构建时通过注入的参数来调用）。我们还将获取我们先前创建的 blogPostTemplate 的路径。最后，我们使用了 createPage 激活了 boundActionCreators，Gatsby 在内部使用 Redux 来管理其状态，boundActionCreators 仅仅是 Gatsby 创造的一个action。对于所有公开的 action 的完整列表，请参阅 Gatsby 的文档。现在我们可以构造 GraphQL 查询，它将获取我们所有的 Markdown 贴子。</p>
-
-<p>查询文章</p>
-
-<pre><code class="language-javascript">const path = require(&#39;path&#39;);
-​
-exports.createPages = ({ boundActionCreators, graphql }) =&gt; {
- const { createPage } = boundActionCreators;
-​
- const blogPostTemplate = path.resolve(`src/templates/blog-post.js`);
-​
- return graphql(`{
-    allMarkdownRemark(
-      sort: { order: DESC, fields: [frontmatter___date] }
-      limit: 1000
-    ) {
-      edges {
-        node {
-          excerpt(pruneLength: 250)
-          html
-          id
-          frontmatter {
-            date
-            path
-            title
-          }
-        }
-      }
-    }
- }`)
-    .then(result =&gt; {
-      if (result.errors) {
-        return Promise.reject(result.errors);
-      }
-    });
-}
-</code></pre>
-
-<p>我们使用 GraphQL 获取所有的 Markdown 节点，并在 GraphQL 属性 allMarkdownRemark 下使用它们。 每个公开的属性(在节点上)都可以用于查询。我们正在有效地创造一个GraphQL数据库，然后我们可以通过页面级的GraphQL查询对它进行查询。这里要注意的是exports.createPages API 期望返回一个 Promise。 这里有一个很酷的地方是gatsby-plugin-remark 插件提供了一些有用的数据供我们使用GraphQL查询，例如 excerpt（作为预览的一个简短的代码片段）， id（每个帖子的唯一标识符）等等。 现在我们已经编写了查询，但是我们还没有通过编程方式创建页面(使用createPage动作创建器)。下面让我们开始！</p>
-
-<p>创建页面</p>
-
-<pre><code class="language-javascript">const path = require(&#39;path&#39;);
-​
-exports.createPages = ({ boundActionCreators, graphql }) =&gt; {
- const { createPage } = boundActionCreators;
-​
- const blogPostTemplate = path.resolve(`src/templates/blog-post.js`);
-​
- return graphql(`{
-    allMarkdownRemark(
-      sort: { order: DESC, fields: [frontmatter___date] }
-      limit: 1000
-    ) {
-      edges {
-        node {
-          excerpt(pruneLength: 250)
-          html
-          id
-          frontmatter {
-            date
-            path
-            title
-          }
-        }
-      }
-    }
- }`)
-    .then(result =&gt; {
-      if (result.errors) {
-        return Promise.reject(result.errors);
-      }
-​
-      result.data.allMarkdownRemark.edges
-        .forEach(({ node }) =&gt; {
-          createPage({
-            path: node.frontmatter.path,
-            component: blogPostTemplate,
-            context: {} // additional data can be passed via context
-          });
-        });
-    });
-}
-</code></pre>
-
-<p>我们现在得到了一个 Promise 的 graphql 查询。实际的贴子可以通过路径 result.data.allMarkdownRemark.edges 获得。我们将使用这些数据来构建一个包含 Gatsby 的页面。我们的 GraphQL“形状”直接反映在这个数据对象中，因此，当我们在GraphQL博客文章模板中查询时，我们从该查询中提取的每个属性都将可用。 createPage API接受一个需要定义path和component 属性的对象，我们已经在上面做过了。此外，可以使用可选属性context来注入数据并使其可用于博客文章模板组件通过注入props（用各种 props 来查看每一个可用的 prop！）每一次我们构建 Gatsby 时， createPage 将被调用，Gatsby 将会创建一个静态的 HTML 文件路径根据我们在帖子的前面专门写的 frontmatter。GraphQL查询的数据将注入到 stringified 和 parsed 后的 React 模板。哇，它真的开始工作起来了！ 我们可以在这时运行 yarn develop 然后打开 <a href="http://localhost:8000/hello-world">http://localhost:8000/hello-world</a> 查看我们的第一篇博客文章，应该如下所示：</p>
-
-<p>在这一点上，我们使用 React 组件和几个 GraphQL 查询创建了一个单页静态博客。然而，这不是一个博客！我们不能期望用户猜测每个帖子的路径，我们需要有一个索引或列表页面来展示每个博客文章，简短的介绍，以及一个完整的博客文章的链接。你不知道，我们在 Gatsby 做到这一点有多容易，使用我们在博客模板中使用的类似策略，例如一个 React 组件和一个 GraphQL 查询。</p>
-
-<p>创建博客列表<br/>
-我在这一节中没有详细介绍，因为我们已经对我们的博客模板做了一些非常相似的事情！看看我们，我们在这一点上已经是一个专业级的 Gatsby 使用者了！ 对于页面列表，Gatsby 有一个规范， 它们被放在我们指定的文件系统的根目录中gatsby-source-filesystem，例如src/pages/index.js。如果它不存在，就创建这个文件，让它运行。另外请注意，任何静态的 JavaScript 文件(导出一个 React 组件！)都会得到相应的静态 HTML 文件。例如，我们创造一个 src/pages/tags.js 文件，<a href="http://localhost:8000/tags/">http://localhost:8000/tags/</a> 将可访问。</p>
-
-<pre><code class="language-javascript">import React from &#39;react&#39;;
-import Link from &#39;gatsby-link&#39;;
-import Helmet from &#39;react-helmet&#39;;
-​
-// import &#39;../css/index.css&#39;; // add some style if you want!
-​
-export default function Index({
- data
-}) {
- const { edges: posts } = data.allMarkdownRemark;
- return (
-    &lt;div className=&quot;blog-posts&quot;&gt;
-      {posts
-        .filter(post =&gt; post.node.frontmatter.title.length &gt; 0)
-        .map(({ node: post }) =&gt; {
-          return (
-            &lt;div className=&quot;blog-post-preview&quot; key={post.id}&gt;
-              &lt;h1&gt;
-                &lt;Link to={post.frontmatter.path}&gt;{post.frontmatter.title}&lt;/Link&gt;
-              &lt;/h1&gt;
-              &lt;h2&gt;{post.frontmatter.date}&lt;/h2&gt;
-              &lt;p&gt;{post.excerpt}&lt;/p&gt;
+    &lt;!-- 表情、选择模块 --&gt;
+    &lt;div class=&quot;wc__choose-panel wc__borT&quot; style=&quot;display: none;&quot;&gt;
+        &lt;!-- 表情区域 --&gt;
+        &lt;div class=&quot;wrap-emotion&quot; style=&quot;display: none;&quot;&gt;
+            &lt;div class=&quot;emotion__cells flexbox flex__direction-column&quot;&gt;
+                &lt;div class=&quot;emotion__cells-swiper flex1&quot; id=&quot;J__swiperEmotion&quot;&gt;
+                    &lt;div class=&quot;swiper-container&quot;&gt;
+                        &lt;div class=&quot;swiper-wrapper&quot;&gt;&lt;/div&gt;
+                        &lt;div class=&quot;pagination-emotion&quot;&gt;&lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;emotion__cells-footer&quot; id=&quot;J__emotionFootTab&quot;&gt;
+                    &lt;ul class=&quot;clearfix&quot;&gt;
+                        &lt;li class=&quot;swiperTmpl cur&quot; tmpl=&quot;swiper__tmpl-emotion01&quot;&gt;&lt;img src=&quot;img/emotion/face01/face-lbl.png&quot; alt=&quot;&quot;&gt;&lt;/li&gt;
+                        &lt;li class=&quot;swiperTmpl&quot; tmpl=&quot;swiper__tmpl-emotion02&quot;&gt;&lt;img src=&quot;img/emotion/face02/face-lbl.gif&quot; alt=&quot;&quot;&gt;&lt;/li&gt;
+                        &lt;li class=&quot;swiperTmpl&quot; tmpl=&quot;swiper__tmpl-emotion03&quot;&gt;&lt;img src=&quot;img/emotion/face03/face-lbl.gif&quot; alt=&quot;&quot;&gt;&lt;/li&gt;
+                        &lt;li class=&quot;swiperTmpl&quot; tmpl=&quot;swiper__tmpl-emotion04&quot;&gt;&lt;img src=&quot;img/emotion/face04/face-lbl.gif&quot; alt=&quot;&quot;&gt;&lt;/li&gt;
+                        &lt;li class=&quot;swiperTmpl&quot; tmpl=&quot;swiper__tmpl-emotion05&quot;&gt;&lt;img src=&quot;img/emotion/face05/face-lbl.gif&quot; alt=&quot;&quot;&gt;&lt;/li&gt;
+                        &lt;li class=&quot;swiperTmpl&quot; tmpl=&quot;swiper__tmpl-emotion06&quot;&gt;&lt;img src=&quot;img/emotion/face06/face-lbl.gif&quot; alt=&quot;&quot;&gt;&lt;/li&gt;
+                        &lt;li class=&quot;swiperTmplSet&quot;&gt;&lt;img src=&quot;img/wchat/icon__emotion-set.png&quot; alt=&quot;&quot;&gt;&lt;/li&gt;
+                    &lt;/ul&gt;
+                &lt;/div&gt;
             &lt;/div&gt;
-          );
-        })}
+        &lt;/div&gt;
+        &lt;!-- 选择区域 --&gt;
+        &lt;div class=&quot;wrap-choose&quot; style=&quot;display: none;&quot;&gt;
+            &lt;div class=&quot;choose__cells&quot;&gt;
+                &lt;ul class=&quot;clearfix&quot;&gt;
+                    &lt;li&gt;&lt;a class=&quot;J__wchatZp&quot; href=&quot;javascript:;&quot;&gt;&lt;span class=&quot;img&quot;&gt;&lt;img src=&quot;img/wchat/icon__choose-zp.png&quot; /&gt;&lt;input type=&quot;file&quot; accept=&quot;image/*&quot; /&gt;&lt;/span&gt;&lt;em&gt;照片&lt;/em&gt;&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a class=&quot;J__wchatSp&quot; href=&quot;javascript:;&quot;&gt;&lt;span class=&quot;img&quot;&gt;&lt;img src=&quot;img/wchat/icon__choose-sp.png&quot; /&gt;&lt;input type=&quot;file&quot; accept=&quot;video/*&quot; /&gt;&lt;/span&gt;&lt;em&gt;视频&lt;/em&gt;&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a class=&quot;J__wchatHb&quot; href=&quot;javascript:;&quot;&gt;&lt;span class=&quot;img&quot;&gt;&lt;img src=&quot;img/wchat/icon__choose-hb.png&quot; /&gt;&lt;/span&gt;&lt;em&gt;红包&lt;/em&gt;&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a class=&quot;J__wchatSc&quot; href=&quot;javascript:;&quot;&gt;&lt;span class=&quot;img&quot;&gt;&lt;img src=&quot;img/wchat/icon__choose-sc.png&quot; /&gt;&lt;/span&gt;&lt;em&gt;我的收藏&lt;/em&gt;&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a class=&quot;J__wchatWj&quot; href=&quot;javascript:;&quot;&gt;&lt;span class=&quot;img&quot;&gt;&lt;img src=&quot;img/wchat/icon__choose-wj.png&quot; /&gt;&lt;/span&gt;&lt;em&gt;文件&lt;/em&gt;&lt;/a&gt;&lt;/li&gt;
+                &lt;/ul&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
     &lt;/div&gt;
- );
-}
-​
-export const pageQuery = graphql`
- query IndexQuery {
-    allMarkdownRemark(sort: { order: DESC, fields: [frontmatter___date] }) {
-      edges {
-        node {
-          excerpt(pruneLength: 250)
-          id
-          frontmatter {
-            title
-            date(formatString: &quot;MMMM DD, YYYY&quot;)
-            path
-          }
-        }
-      }
-    }
- }
-`;
+&lt;/div&gt;
 
+&lt;div class=&quot;wc__choosePanel-tmpl&quot;&gt;
+    &lt;!-- //红包模板.begin --&gt;
+    &lt;div id=&quot;J__popupTmpl-Hongbao&quot; style=&quot;display:none;&quot;&gt;
+        &lt;div class=&quot;wc__popupTmpl tmpl-hongbao&quot;&gt;
+            &lt;i class=&quot;wc-xclose&quot;&gt;&lt;/i&gt;
+            &lt;ul class=&quot;clearfix&quot;&gt;
+                &lt;li class=&quot;item flexbox&quot;&gt;
+                    &lt;label class=&quot;txt&quot;&gt;总金额&lt;/label&gt;&lt;input class=&quot;ipt-txt flex1&quot; type=&quot;tel&quot; name=&quot;hbAmount&quot; placeholder=&quot;0.00&quot; /&gt;&lt;em class=&quot;unit&quot;&gt;元&lt;/em&gt;
+                &lt;/li&gt;
+                &lt;li class=&quot;item flexbox&quot;&gt;
+                    &lt;label class=&quot;txt&quot;&gt;红包个数&lt;/label&gt;&lt;input class=&quot;ipt-txt flex1&quot; type=&quot;tel&quot; name=&quot;hbNum&quot; placeholder=&quot;填写个数&quot; /&gt;&lt;em class=&quot;unit&quot;&gt;个&lt;/em&gt;
+                &lt;/li&gt;
+                &lt;li class=&quot;tips&quot;&gt;在线人数共&lt;em class=&quot;memNum&quot;&gt;186&lt;/em&gt;人&lt;/li&gt;
+                &lt;li class=&quot;item item-area&quot;&gt;
+                    &lt;textarea class=&quot;describe&quot; name=&quot;content&quot; placeholder=&quot;恭喜发财，大吉大利&quot;&gt;&lt;/textarea&gt;
+                &lt;/li&gt;
+                &lt;li class=&quot;amountTotal&quot;&gt;￥&lt;em class=&quot;num&quot;&gt;0.00&lt;/em&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;!-- //红包模板.end --&gt;
+&lt;/div&gt;
 </code></pre>
 
-<p>好的!我们在博客文章模板中采用了类似的方法，因此这应该看起来非常熟悉。我们再一次导出包含了 GraphQL 查询的 pageQuery。 注意，我们正在提取一个稍微不同的数据集，具体来说，我们将提取250个字符的摘要，而不是完整的HTML，同时我们还在用格式字符串格式化拖拽日期！GraphQL是很优雅的。 实际的 React 组件是相当琐碎的，需要注意一点，当链接到内部内容时，你应该经常使用 gatsby-link。 如果页面没有通过这个实用工具进行路由，Gatsby 就无法工作。另外，可以使用 pathPrefix，这使得 Gatsby 的网站可以被部署到一个非根域。如果这个博客将托管在Github页面上，这是很有用的。或者挂在 /blog。 现在这变得令人兴奋，感觉我们终于要成功了。现在我们有一个由 Gatsby 所生成的功能完整的博客，其中有真正的内容在 Markdown 里，有一个博客列表，以及在博客中浏览的能力。如果你执行 yarn develop，<a href="http://localhost:8000">http://localhost:8000</a> 应该显示每个博客文章的缩略内容，每个文章标题都链接到博客文章的内容。这是一个真正的博客！</p>
+<pre><code class="language-javascript">// ...长按弹出菜单
+$(&quot;#J__chatMsgList&quot;).on(&quot;longTap&quot;, &quot;li .msg&quot;, function(e){
+    var that = $(this), menuTpl, menuNode = $(&quot;&lt;div class=&#39;wc__chatTapMenu animated anim-fadeIn&#39;&gt;&lt;/div&gt;&quot;);
+    that.addClass(&quot;taped&quot;);
+    that.parents(&quot;li&quot;).siblings().find(&quot;.msg&quot;).removeClass(&quot;taped&quot;);
+    var isRevoke = that.parents(&quot;li&quot;).hasClass(&quot;me&quot;);
+    var _revoke = isRevoke ? &quot;&lt;a href=&#39;#&#39;&gt;&lt;i class=&#39;ico i4&#39;&gt;&lt;/i&gt;撤回&lt;/a&gt;&quot; : &quot;&quot;;
+    
+    if(that.hasClass(&quot;picture&quot;)){
+        console.log(&quot;图片长按&quot;);
+        menuTpl = &quot;&lt;div class=&#39;menu menu-picture&#39;&gt;&lt;a href=&#39;#&#39;&gt;&lt;i class=&#39;ico i1&#39;&gt;&lt;/i&gt;复制&lt;/a&gt;&lt;a href=&#39;#&#39;&gt;&lt;i class=&#39;ico i2&#39;&gt;&lt;/i&gt;收藏&lt;/a&gt;&lt;a href=&#39;#&#39;&gt;&lt;i class=&#39;ico i3&#39;&gt;&lt;/i&gt;另存为&lt;/a&gt;&quot;+ _revoke +&quot;&lt;a href=&#39;#&#39;&gt;&lt;i class=&#39;ico i5&#39;&gt;&lt;/i&gt;删除&lt;/a&gt;&lt;/div&gt;&quot;;
+    }else if(that.hasClass(&quot;video&quot;)){
+        console.log(&quot;视频长按&quot;);
+        menuTpl = &quot;&lt;div class=&#39;menu menu-video&#39;&gt;&lt;a href=&#39;#&#39;&gt;&lt;i class=&#39;ico i3&#39;&gt;&lt;/i&gt;另存为&lt;/a&gt;&quot; + _revoke +&quot;&lt;a href=&#39;#&#39;&gt;&lt;i class=&#39;ico i5&#39;&gt;&lt;/i&gt;删除&lt;/a&gt;&lt;/div&gt;&quot;;
+    }else{
+        console.log(&quot;文字长按&quot;);
+        menuTpl = &quot;&lt;div class=&#39;menu menu-text&#39;&gt;&lt;a href=&#39;#&#39;&gt;&lt;i class=&#39;ico i1&#39;&gt;&lt;/i&gt;复制&lt;/a&gt;&lt;a href=&#39;#&#39;&gt;&lt;i class=&#39;ico i2&#39;&gt;&lt;/i&gt;收藏&lt;/a&gt;&quot; + _revoke +&quot;&lt;a href=&#39;#&#39;&gt;&lt;i class=&#39;ico i5&#39;&gt;&lt;/i&gt;删除&lt;/a&gt;&lt;/div&gt;&quot;;
+    }
 
-<p>现在，你在跟随本教程的学习过程中获得的知识，将会使你做出一些不可思议的事情。您不仅可以使用CSS(styled-components！)使其变得漂亮，还可以通过实现以下功能来变得更强大！</p>
+    if(!$(&quot;.wc__chatTapMenu&quot;).length){
+        $(&quot;.wc__chatMsg-panel&quot;).append(menuNode.html(menuTpl));
+        autoPos();
+    }else{
+        $(&quot;.wc__chatTapMenu&quot;).hide().html(menuTpl).fadeIn(250);
+        autoPos();
+    }
 
-<p>添加一个 tag 列表和 tag 查询页</p>
+    function autoPos(){
+        console.log(that.position().top)
+        var _other = that.parents(&quot;li&quot;).hasClass(&quot;others&quot;);
+        $(&quot;.wc__chatTapMenu&quot;).css({
+            position: &quot;absolute&quot;,
+            left: that.position().left + parseInt(that.css(&quot;marginLeft&quot;)) + (_other ? 0 : that.outerWidth() - $(&quot;.wc__chatTapMenu&quot;).outerWidth()),
+            top: that.position().top - $(&quot;.wc__chatTapMenu&quot;).outerHeight() - 8
+        });
+    }
+});
+</code></pre>
 
-<p>提示：gatsby-node.js 文件中的 createPages API 在这里很有用，还有之前的 frontmatter<br/>
-在特定的博客文章之间添加导航（createPages 的 context API在这里很有用） 随着我们对 Gatsby 及其API的探索，你应该感到有能力开始充分利用 Gatsby 的潜力，博客仅仅是一个起点;Gatsby 丰富的生态系统、可扩展的 API 和高级的查询功能为构建真正令人难以置信的高性能站点提供了强大的工具集。<br/>
-现在去做一些伟大的事情吧！</p>
+<p><img src="media/15508991872164/15508994793999.jpg" alt=""/><br/>
+<img src="media/15508991872164/15508994870198.jpg" alt=""/><br/>
+<img src="media/15508991872164/15508994947946.jpg" alt=""/><br/>
+<img src="media/15508991872164/15508995011000.jpg" alt=""/><br/>
+<img src="media/15508991872164/15508995078981.jpg" alt=""/><br/>
+<img src="media/15508991872164/15508995144669.jpg" alt=""/><br/>
+<img src="media/15508991872164/15508995204276.jpg" alt=""/><br/>
+<img src="media/15508991872164/15508995255771.jpg" alt=""/><br/>
+<img src="media/15508991872164/15508995347731.jpg" alt=""/></p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[欢迎使用 MWeb]]></title>
+    <link href="http://books.sangkf.cn/15474356181402.html"/>
+    <updated>2019-01-14T11:13:38+08:00</updated>
+    <id>http://books.sangkf.cn/15474356181402.html</id>
+    <content type="html"><![CDATA[
+<p>MWeb 是专业的 Markdown 写作、记笔记、静态博客生成软件，目前已支持 Mac，iPad 和 iPhone。MWeb 有以下特色：<br/>
+<span id="more"></span><!-- more --></p>
+
+<h2 id="toc_0">软件本身：</h2>
+
+<ul>
+<li>使用原生的 macOS 技术打造，追求与系统的完美结合。</li>
+<li>原则上，首先是追求界面简洁和高性能，然后才是强大易用，功能全面。</li>
+</ul>
+
+<h2 id="toc_1">Markdown 语法：</h2>
+
+<ul>
+<li>使用 Github Flavored Markdown 语法，简称 GFM 语法。</li>
+<li>支持表格、TOC、LaTeX、代码块、任务列表、脚注等。</li>
+<li>画图库支持 mermaid, viz, echarts, plantuml, sequence, flow。</li>
+</ul>
+
+<h2 id="toc_2">Markdown 辅助：</h2>
+
+<ul>
+<li>支持截图并粘贴、复制并粘贴、拖拽等方式插入图片并直接显示在编辑器内。</li>
+<li>在兼容 Markdown 语法的情况下支持设置图片宽度。</li>
+<li>好用的表格插入和 LaTeX 书写辅助。</li>
+</ul>
+
+<h2 id="toc_3">Markdown 输出：</h2>
+
+<ul>
+<li>支持导出为图片、HTML、Epub、PDF、RTF、Docx。</li>
+<li>支持发布到 Wordrpess、支持 Metaweblog API 协议的服务、Wordpress.com、印象笔记（Evernote）、Blogger、Medium、Tumblr。</li>
+<li>图片上传服务（图床）支持 Google Photos、Imgur、七牛云、又拍云和自定义的图床服务。</li>
+</ul>
+
+<h2 id="toc_4">Markdown 笔记：</h2>
+
+<ul>
+<li>强大的文档库支持分类树和标签管理文档，文档可归类于多个分类，可以把分类整个导出为 Epub、PDF 和生成静态网站。非常合适用于笔记、个人知识收集、管理和输出。</li>
+<li>快速笔记：随意增加笔记及图片等素材，支持以天为单位把增加的素材组合在一个文档内，方便整理及记录历史收集情况。</li>
+<li>快速搜索：目前已支持全局快捷键调出搜索。</li>
+</ul>
+
+<h2 id="toc_5">外部 Markdown 文档：</h2>
+
+<ul>
+<li>外部 Markdown 文档使用外部模式管理。外部模式使用目录树的方式编辑和管理你的 markdown 文档，还能很好的支持 gitbook、JekyII、hexo 等等编辑和图片插入。</li>
+</ul>
+
+<h2 id="toc_6">MWeb 文档：</h2>
+
+<p>如果要更详细了解 MWeb，建议你一定要去看一下官网的帮助文档，网址为：<a href="https://zh.mweb.im/help.html">https://zh.mweb.im/help.html</a>。我们建议在使用文档库之前，一定要阅读一下  <a href="https://zh.mweb.im/mweb-library.html">MWeb 文档库详细介绍</a> 这篇文章，以便更好的使用文档库。</p>
+
+<h2 id="toc_7">帮助我们改进 MWeb</h2>
+
+<p>如果你喜欢 MWeb，想让它变得更好，你可以：</p>
+
+<ol>
+<li>推荐 MWeb，让更多的人知道。</li>
+<li>给我们发反馈和建议：<a href="mailto:coderforart+2333@gmail.com">coderforart+2333@gmail.com</a></li>
+<li>在 Mac App Store 上评价 （如果是在 MAS 上购买的话）。</li>
+</ol>
 
 ]]></content>
   </entry>
