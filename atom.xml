@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[见课就上的小婊砸]]></title>
-  <link href="http://books.sangkf.cn/atom.xml" rel="self"/>
-  <link href="http://books.sangkf.cn/"/>
-  <updated>2019-02-23T22:28:29+08:00</updated>
-  <id>http://books.sangkf.cn/</id>
+  <link href="https://books.sangkf.cn/atom.xml" rel="self"/>
+  <link href="https://books.sangkf.cn/"/>
+  <updated>2019-02-23T22:36:03+08:00</updated>
+  <id>https://books.sangkf.cn/</id>
   <author>
     <name><![CDATA[]]></name>
     
@@ -14,9 +14,9 @@
   
   <entry>
     <title type="html"><![CDATA[Gitment：使用 GitHub Issues 搭建评论系统]]></title>
-    <link href="http://books.sangkf.cn/15509294487927.html"/>
+    <link href="https://books.sangkf.cn/15509294487927.html"/>
     <updated>2019-02-23T21:44:08+08:00</updated>
-    <id>http://books.sangkf.cn/15509294487927.html</id>
+    <id>https://books.sangkf.cn/15509294487927.html</id>
     <content type="html"><![CDATA[
 <blockquote>
 <p>[转载]<a href="https://imsun.net/posts/gitment-introduction/">https://imsun.net/posts/gitment-introduction/</a></p>
@@ -127,9 +127,9 @@ gitment.render(&#39;container&#39;)
   
   <entry>
     <title type="html"><![CDATA[如何使用“发布脚本”功能发布静态网站]]></title>
-    <link href="http://books.sangkf.cn/15509249440186.html"/>
+    <link href="https://books.sangkf.cn/15509249440186.html"/>
     <updated>2019-02-23T20:29:04+08:00</updated>
-    <id>http://books.sangkf.cn/15509249440186.html</id>
+    <id>https://books.sangkf.cn/15509249440186.html</id>
     <content type="html"><![CDATA[
 <p>“发布脚本”这个功能 MWeb for Mac 2.2.3 版新增的，是为了让 MWeb 中的静态网站体验能达到 “新增文档并编辑” - “右键并选择执行发布脚本” 这样一个简单的流程。避免之前那样，生成网站后还要去敲命令进行发布。</p>
 
@@ -243,9 +243,9 @@ fi
   
   <entry>
     <title type="html"><![CDATA[自定义预览样式，让 MWeb 支持 ECharts、mermaid、PlantUML 等任何 JS 画图库]]></title>
-    <link href="http://books.sangkf.cn/15509248711452.html"/>
+    <link href="https://books.sangkf.cn/15509248711452.html"/>
     <updated>2019-02-23T20:27:51+08:00</updated>
-    <id>http://books.sangkf.cn/15509248711452.html</id>
+    <id>https://books.sangkf.cn/15509248711452.html</id>
     <content type="html"><![CDATA[
 <p>之前 MWeb 2.0 说要支持 PlantUML，后来又否定了，因为我发现大部分朋友只需要自定义预览样式就可以做到的这种 PlantUML 支持，而早在 MWeb 1.2 版都支持了自我增加这功能了，介绍文章为：<a href="http://zh.mweb.im/mweb-v1.2-release-zh.html">自定预览 CSS</a>。2.0 中的自定预览功能有所变化，这也是今天要介绍的内容。<br/>
 <span id="more"></span><!-- more --><br/>
@@ -296,9 +296,9 @@ fi
   
   <entry>
     <title type="html"><![CDATA[MySQL基础]]></title>
-    <link href="http://books.sangkf.cn/15509225472378.html"/>
+    <link href="https://books.sangkf.cn/15509225472378.html"/>
     <updated>2019-02-23T19:49:07+08:00</updated>
-    <id>http://books.sangkf.cn/15509225472378.html</id>
+    <id>https://books.sangkf.cn/15509225472378.html</id>
     <content type="html"><![CDATA[
 <p>一、MySQL概述</p>
 
@@ -762,9 +762,9 @@ select name from B
   
   <entry>
     <title type="html"><![CDATA[书籍列表]]></title>
-    <link href="http://books.sangkf.cn/15509185062441.html"/>
+    <link href="https://books.sangkf.cn/15509185062441.html"/>
     <updated>2019-02-23T18:41:46+08:00</updated>
-    <id>http://books.sangkf.cn/15509185062441.html</id>
+    <id>https://books.sangkf.cn/15509185062441.html</id>
     <content type="html"><![CDATA[
 <p>【转载】<a href="https://blog.csdn.net/qq_37267015/article/details/79011859">https://blog.csdn.net/qq_37267015/article/details/79011859</a></p>
 
@@ -1158,9 +1158,9 @@ select name from B
   
   <entry>
     <title type="html"><![CDATA[Springcloud各层框架注解含义]]></title>
-    <link href="http://books.sangkf.cn/15509183306420.html"/>
+    <link href="https://books.sangkf.cn/15509183306420.html"/>
     <updated>2019-02-23T18:38:50+08:00</updated>
-    <id>http://books.sangkf.cn/15509183306420.html</id>
+    <id>https://books.sangkf.cn/15509183306420.html</id>
     <content type="html"><![CDATA[
 <p>声明Bean的注解:</p>
 
@@ -1376,9 +1376,9 @@ public class ProduceInfoEntity {
   
   <entry>
     <title type="html"><![CDATA[JAVA8新特性]]></title>
-    <link href="http://books.sangkf.cn/15509161097880.html"/>
+    <link href="https://books.sangkf.cn/15509161097880.html"/>
     <updated>2019-02-23T18:01:49+08:00</updated>
-    <id>http://books.sangkf.cn/15509161097880.html</id>
+    <id>https://books.sangkf.cn/15509161097880.html</id>
     <content type="html"><![CDATA[
 <p>原文地址 <a href="https://www.cnblogs.com/huyunfan/p/7456535.html">https://www.cnblogs.com/huyunfan/p/7456535.html</a></p>
 
@@ -1569,9 +1569,9 @@ optional.ifPresent((s) -&gt; System.out.println(s.charAt(0)));
   
   <entry>
     <title type="html"><![CDATA[h5仿微信聊天(高仿版)、微信聊天表情|对话框|编辑器]]></title>
-    <link href="http://books.sangkf.cn/15508991872164.html"/>
+    <link href="https://books.sangkf.cn/15508991872164.html"/>
     <updated>2019-02-23T13:19:47+08:00</updated>
-    <id>http://books.sangkf.cn/15508991872164.html</id>
+    <id>https://books.sangkf.cn/15508991872164.html</id>
     <content type="html"><![CDATA[
 <blockquote>
 <p>转载 <a href="https://www.cnblogs.com/xiaoyan2017/p/8912054.html">https://www.cnblogs.com/xiaoyan2017/p/8912054.html</a></p>
@@ -1707,9 +1707,9 @@ $(&quot;#J__chatMsgList&quot;).on(&quot;longTap&quot;, &quot;li .msg&quot;, func
   
   <entry>
     <title type="html"><![CDATA[欢迎使用 MWeb]]></title>
-    <link href="http://books.sangkf.cn/15474356181402.html"/>
+    <link href="https://books.sangkf.cn/15474356181402.html"/>
     <updated>2019-01-14T11:13:38+08:00</updated>
-    <id>http://books.sangkf.cn/15474356181402.html</id>
+    <id>https://books.sangkf.cn/15474356181402.html</id>
     <content type="html"><![CDATA[
 <p>MWeb 是专业的 Markdown 写作、记笔记、静态博客生成软件，目前已支持 Mac，iPad 和 iPhone。MWeb 有以下特色：<br/>
 <span id="more"></span><!-- more --></p>
