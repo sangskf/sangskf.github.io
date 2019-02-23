@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  Archives - 见课就上的小婊砸
+  如何使用“发布脚本”功能发布静态网站 - 见课就上的小婊砸
   
   </title>
   
@@ -124,140 +124,173 @@
 
  <script type="text/javascript">
   $(function(){
-    $('#menu_item_archives').addClass('is_active');
+    $('#menu_item_index').addClass('is_active');
   });
 </script>
 <div class="row">
   <div class="large-8 medium-8 columns">
-    <div id="archives-page-wrap">
-        <h1>Archives</h1>
-        <div class="markdown-body archives-wrap">
+      <div class="markdown-body article-wrap">
+       <div class="article">
           
-             
-                <h1>2019</h1>
-            
-            <div class="article">
-              <a class="clearlink" href="15509249440186.html">
-                <h1>如何使用“发布脚本”功能发布静态网站</h1>
-              </a>
-              <div class="read-more clearfix">
-                <span class="date">2019/2/23 20:29 下午</span>
-                <span>posted in&nbsp;</span> 
-                
-                    <span class="posted-in"><a href='other.html'>其他</a></span>
-                 
-              </div>
-            </div><!-- article -->
+          <h1>如何使用“发布脚本”功能发布静态网站</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2019/2/23 20:29 下午</span>
 
+          <span>posted in&nbsp;</span> 
           
-            
-            <div class="article">
-              <a class="clearlink" href="15509248711452.html">
-                <h1>自定义预览样式，让 MWeb 支持 ECharts、mermaid、PlantUML 等任何 JS 画图库</h1>
-              </a>
-              <div class="read-more clearfix">
-                <span class="date">2019/2/23 20:27 下午</span>
-                <span>posted in&nbsp;</span> 
-                
-                    <span class="posted-in"><a href='other.html'>其他</a></span>
-                 
-              </div>
-            </div><!-- article -->
-
-          
-            
-            <div class="article">
-              <a class="clearlink" href="15509225472378.html">
-                <h1>MySQL基础</h1>
-              </a>
-              <div class="read-more clearfix">
-                <span class="date">2019/2/23 19:49 下午</span>
-                <span>posted in&nbsp;</span> 
-                
-                    <span class="posted-in"><a href='database.html'>数据库</a></span>
-                 
-              </div>
-            </div><!-- article -->
-
-          
-            
-            <div class="article">
-              <a class="clearlink" href="15509185062441.html">
-                <h1>书籍列表</h1>
-              </a>
-              <div class="read-more clearfix">
-                <span class="date">2019/2/23 18:41 下午</span>
-                <span>posted in&nbsp;</span> 
-                
-                    <span class="posted-in"><a href='java.html'>后端</a></span>
-                 
-              </div>
-            </div><!-- article -->
-
-          
-            
-            <div class="article">
-              <a class="clearlink" href="15509183306420.html">
-                <h1>Springcloud各层框架注解含义</h1>
-              </a>
-              <div class="read-more clearfix">
-                <span class="date">2019/2/23 18:38 下午</span>
-                <span>posted in&nbsp;</span> 
-                
-                    <span class="posted-in"><a href='microservice.html'>微服务</a></span>
-                 
-              </div>
-            </div><!-- article -->
-
-          
-            
-            <div class="article">
-              <a class="clearlink" href="15509161097880.html">
-                <h1>JAVA8新特性</h1>
-              </a>
-              <div class="read-more clearfix">
-                <span class="date">2019/2/23 18:1 下午</span>
-                <span>posted in&nbsp;</span> 
-                
-                    <span class="posted-in"><a href='other.html'>其他</a></span>
-                 
-              </div>
-            </div><!-- article -->
-
-          
-            
-            <div class="article">
-              <a class="clearlink" href="15508991872164.html">
-                <h1>h5仿微信聊天(高仿版)、微信聊天表情|对话框|编辑器</h1>
-              </a>
-              <div class="read-more clearfix">
-                <span class="date">2019/2/23 13:19 下午</span>
-                <span>posted in&nbsp;</span> 
-                
-                    <span class="posted-in"><a href='front.html'>前端</a></span>
-                 
-              </div>
-            </div><!-- article -->
-
-          
-            
-            <div class="article">
-              <a class="clearlink" href="15474356181402.html">
-                <h1>欢迎使用 MWeb</h1>
-              </a>
-              <div class="read-more clearfix">
-                <span class="date">2019/1/14 11:13 上午</span>
-                <span>posted in&nbsp;</span> 
-                
-                    <span class="posted-in"><a href='other.html'>其他</a></span>
-                 
-              </div>
-            </div><!-- article -->
-
+              <span class="posted-in"><a href='other.html'>其他</a></span>
            
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <p>“发布脚本”这个功能 MWeb for Mac 2.2.3 版新增的，是为了让 MWeb 中的静态网站体验能达到 “新增文档并编辑” - “右键并选择执行发布脚本” 这样一个简单的流程。避免之前那样，生成网站后还要去敲命令进行发布。</p>
+
+<h2 id="toc_0">1. 开始前的准备</h2>
+
+<p>目前发布脚本只测试过使用 git 发布，所以当前介绍的是发布到 github pages 或者其它基于 git 的 pages 服务，比如说 coding.net 或者 OSChina 的 pages。开始之前假定你已经配置好 pages 服务，如果你还没配置好，然后想用的是 github pages，请参考这里：<a href="https://pages.github.com/">https://pages.github.com/</a>。</p>
+
+<h2 id="toc_1">2. Clone 你的 pages 到 MWeb 静态网站生成目录中</h2>
+
+<p><strong>注意：</strong>如果你之前都已经可以正常用 git 来发布静态网站了，可以跳过这一步。如果不是，请看下面的步骤：</p>
+
+<ol>
+<li>用 MWeb 生成静态网站。</li>
+<li>去 “MWeb 偏好设置” - “通用设置” - “生成的静态网站保存位置” 那里，点 “在 Finder 中显示” 按钮，进入 MWeb 的静态网站输出文件夹，在文件夹内应该可以看到你已生成的网站。比如说我生成的网站是 “MWeb中文官网”，就会看到一个 “MWeb中文官网” 的文件夹，文件夹内就是生成的静态网站了。下面会以 “MWeb中文官网” 做例子。</li>
+<li>在命令行中进入 “MWeb 的静态网站输出文件夹”。<br/>
+如果你不知道怎么做，可以在 Finder 中选择 “MWeb中文官网” 文件夹的上一级文件夹，按 <code>CMD + C</code> 复制，再打开命令行窗口，键入 cd 命令，加一个空格，再按 <code>CMD + V</code> 粘贴路径，再按 <code>Enter</code>。。</li>
+<li>删除 “MWeb中文官网” 文件夹，然后在命令行中执行：<code>git clone &#39;你的 git pages 的 repo&#39; &#39;MWeb中文官网&#39;</code>。 这里的 <code>&#39;你的 git pages 的 repo&#39; &#39;MWeb中文官网&#39;</code> 请换成你自己的。</li>
+<li>在 MWeb 中使用 “清理并重新生成” 命令，重新生成静态网站。</li>
+</ol>
+
+<p><strong>注意：</strong>在你 git 发布出问题的时候，也可以用上面的 3、4、5 这三个步骤进行初始化。</p>
+
+<h2 id="toc_2">3. 配置发布脚本</h2>
+
+<p>在下图，在 “MWeb 偏好设置” - “扩展” - “发布脚本” 中配置。<br/>
+<img src="media/15509249440186/15028630661421.jpg" alt=""/></p>
+
+<p>我上图的是发布到 coding 的 pages，如果选择发布脚本执行前 “生成网站”，这样每次发布前都会生成网站，就能达到 “新增文档并编辑” - “右键并选择执行发布脚本” 这一简单的编辑和发布流程。实测没有问题。</p>
+
+<p>如果你点击 “加载例子” 按钮，加载出来的是以下的脚本样例：</p>
+
+<pre><code class="language-text">#!/bin/sh
+# Please set the name and email. 
+# Because MWeb can&#39;t get your github global setting.
+
+git config user.name &quot;Your github name&quot;
+git config user.email &quot;Your github email&quot;
+
+git add --ignore-removal .
+git commit -m &quot;{{year}}-{{month}}-{{day}} {{time}}&quot;
+git push -u origin master
+
+</code></pre>
+
+<p>注意：有些朋友使用的分支是 <strong>gh-pages</strong>，我这里是 <strong>master</strong>。</p>
+
+<p>在中国，github 一般情况下是无法正常发布的，如果你用 github，可以使用代理，比如说我发布 “MWeb英文官网” 就是使用 Surge 的代理，全部发布脚本如下：</p>
+
+<pre><code class="language-text">#!/bin/sh
+
+export https_proxy=http://127.0.0.1:6152;export http_proxy=http://127.0.0.1:6152
+
+git config user.name &quot;myname&quot;
+git config user.email &quot;myemail@gmail.com&quot;
+git add --ignore-removal .
+git commit -m &quot;{{input}} at {{year}}-{{month}}-{{day}} {{time}}&quot;
+git push -u origin master
+
+</code></pre>
+
+<h2 id="toc_3">4. 使用</h2>
+
+<p>使用方法非常简单，右键网站分类，选择 “复制发布脚本命令并打开终端（Terminal）...”，当终端打开后，在终端中按快捷键 <code>Command + V</code> 即可。如图：</p>
+
+<p><img src="media/15509249440186/15028632273692.jpg" alt=""/></p>
+
+<h2 id="toc_4">5. 打开终端后自动执行发布脚本</h2>
+
+<p>这个方法是：<a href="https://github.com/bramblex/">https://github.com/bramblex/</a> 这位朋友分享的，非常感谢，这位朋友的原文如下：</p>
+
+<p>mweb 现在的只能复制执行脚本命令, 并且打开终端嘛.</p>
+
+<p>那么打开终端的时候会自动执行 bashrc / zshrc 文件, 那在 bashrc / zshrc 里面加入检测剪贴板并且自动发布的脚本就能实现打开终端后自动执行发布脚本了.</p>
+
+<pre><code class="language-text"># 在 ~/.zshrc 或 ~/.bashrc 添下面代码, 就能实现自动执行发布脚本
+# https://gist.github.com/bramblex/a6b12543a076e2c1fa5acecb95f51ead
+
+if (pbpaste  | grep -Eq  &#39;^cd &quot;[^&quot;]*&quot; &amp;&amp; sh &quot;[^&quot;]*/site_publish_logs/sh_\d*\.sh&quot; &amp;&amp; open &quot;[^&quot;]*&quot;&#39;) 
+then
+    echo &quot;========== MWEB AUTO PUBLISH START ==========&quot; 
+    echo &quot;Runing command:&quot;
+    pbpaste
+
+    if pbpaste | sh
+    then
+
+        echo &quot;Success!&quot;
+        echo &quot;Clean pasteboard...&quot;
+        echo -n &quot;&quot; | pbcopy
+        echo &quot;==========  MWEB AUTO PUBLISH END  ==========&quot;
+        echo &quot;Close terminal 5s later...&quot;
+        sleep 5
+        exit
+
+    else
+
+        echo &quot;Failed!&quot;
+        echo &quot;Clean pasteboard...&quot;
+        echo -n &quot;&quot; | pbcopy
+        echo &quot;==========  MWEB AUTO PUBLISH END  ==========&quot;
+
+    fi
+
+fi
+</code></pre>
+
+
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="15509248711452.html" 
+          title="Next Post: 自定义预览样式，让 MWeb 支持 ECharts、mermaid、PlantUML 等任何 JS 画图库">自定义预览样式，让 MWeb 支持 ECharts、mermaid、PlantUML 等任何 JS 画图库 &raquo;</a>
+      
+      </p>
         </div>
       </div>
-  </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
 
  <div class="large-4 medium-4 columns">
   <div class="hide-for-small">
