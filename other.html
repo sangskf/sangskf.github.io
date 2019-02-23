@@ -132,6 +132,194 @@
 		<div class="markdown-body home-categories">
 		
 			<div class="article">
+                <a class="clearlink" href="15509338125902.html">
+                
+                  <h1>使用脚本快速部署Java项目</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<p>自己经常写一些小项目，有时候是自己写，更多时候是帮别人写。 一般都要部署到服务器上，最早使用的方法是本地 mvn clean package 打包好，上传到服务器上运行。有时候发现自己写了个bug，修复了，或者改了点/加了点需求，改完代码，又要重新打包，上传。 反反复复，很麻烦。之前在公司，用的是 jenkins，解决了这个痛点，jenkins 搭好了后，只需要在 jenkins 后台点击构建即可。后来，也用了一段时间公司自己开发的一个云产品，类似 EDAS 的一个东西，只需要把代码推到 GitLab上，  构建项目，运行项目全在后台操作，安全可靠。 但是这些东西，都是针对大型项目，项目复杂度高，服务器配置也高。自己一个人开发的小项目，通常都是单模块项目，客户的服务器配置可能也不高，2G内存，1G内存都有可能。 于是，直接用 shell 脚本启动项目不失为一种好方法。  </p>
+
+<h2 id="toc_0">具体实现</h2>
+
+<p>代码结构如下<br/>
+ <img src="media/15509338125902/QQ20190117-222349@2x.png" alt=""/>   <br/>
+主要思路就是，通过 shell 脚本执行以下几个操作  </p>
+
+<ol>
+<li>git pull 拉取 git 仓库最新代码</li>
+<li>停止之前运行的项目</li>
+<li>mvn clean package -Dmaven.test.skip=true 打包项目</li>
+<li>cd target  进入 target 目录</li>
+<li>nohup java -jar sens-latest.jar &amp; 后台运行 jar 包</li>
+</ol>
+
+<p><strong>sens.sh</strong>    </p>
+
+<pre><code class="language-bash">#!/bin/bash
+APP_NAME=sens-latest.jar
+
+usage() {
+    echo &quot;用法: sh sens.sh [start(启动)|stop(停止)|restart(重启)|status(状态)]&quot;
+    exit 1
+}
+
+is_exist(){
+  pid=`ps -ef|grep $APP_NAME|grep -v grep|awk &#39;{print $2}&#39; `
+  if [ -z &quot;${pid}&quot; ]; then
+   return 1
+  else
+    return 0
+  fi
+}
+
+start(){
+  is_exist
+  if [ $? -eq &quot;0&quot; ]; then
+    echo &quot;${APP_NAME} 正在运行。 pid=${pid} .&quot;
+  else
+    nohup java -server -Xms256m -Xmx512m -jar $APP_NAME &gt; /dev/null 2&gt;&amp;1 &amp;
+    echo &quot;${APP_NAME}启动成功，请查看日志确保运行正常。&quot;
+    fi
+}
+
+stop(){
+  is_exist
+  if [ $? -eq &quot;0&quot; ]; then
+    kill -9 $pid
+    echo &quot;${pid} 进程已被杀死，程序停止运行&quot;
+  else
+    echo &quot;${APP_NAME} 没有运行。&quot;
+  fi
+}
+
+status(){
+  is_exist
+  if [ $? -eq &quot;0&quot; ]; then
+    echo &quot;${APP_NAME} 正在运行。Pid is ${pid}&quot;
+  else
+    echo &quot;${APP_NAME} 没有运行。&quot;
+  fi
+}
+
+restart(){
+  stop
+  start
+}
+
+case &quot;$1&quot; in
+  &quot;start&quot;)
+    start
+    ;;
+  &quot;stop&quot;)
+    stop
+    ;;
+  &quot;status&quot;)
+    status
+    ;;
+  &quot;restart&quot;)
+    restart
+    ;;
+  *)
+    usage
+    ;;
+esac
+</code></pre>
+
+<p><strong>deploy.sh</strong></p>
+
+<pre><code class="language-bash">#!/bin/bash
+
+# 指定SENS的根目录，请按实际修改
+SENS_DIR=&quot;/www/wwwroot/SENS&quot;
+# 拉取最新的源码
+# git pull
+echo &quot;代码拉取完毕！&quot;
+
+# 进入SENS根目录
+cd $SENS_DIR
+
+# 停止SENS
+sh $SENS_DIR/bin/sens.sh stop
+
+# 执行打包
+mvn clean package -Pprod -Dmaven.test.skip=true
+echo &quot;代码拉取完毕！&quot;
+
+# 进入打包好的SENS目录
+cd $SENS_DIR/target/dist/sens
+
+# 运行SENS
+nohup java -server -Xms256m -Xmx512m -jar `find ./ -name &quot;sens*.jar&quot;` &gt; /dev/null 2&gt;&amp;1 &amp;
+
+echo &quot;SENS部署完毕，Enjoy！&quot;
+</code></pre>
+
+<p> 启动项目：sh deploy.sh<br/>
+ 停止项目：sh sens.sh stop</p>
+
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                  
+                    <span class="date">2019/2/23 22:56 下午</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='other.html'>其他</a></span>
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="15509336304684.html">
+                
+                  <h1>地址收藏</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<ul>
+<li><p>言曌博客<br/>
+<a href="http://blog.liuyanzhao.com/">http://blog.liuyanzhao.com/</a></p></li>
+<li></li>
+</ul>
+
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                  
+                    <span class="date">2019/2/23 22:53 下午</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='other.html'>其他</a></span>
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
                 <a class="clearlink" href="15509294487927.html">
                 
                   <h1>Gitment：使用 GitHub Issues 搭建评论系统</h1>
@@ -272,39 +460,6 @@
                 </div>
               </div><!-- article -->
         
-			<div class="article">
-                <a class="clearlink" href="15474356181402.html">
-                
-                  <h1>欢迎使用 MWeb</h1>
-                  <div class="a-content">
-                      
-                      <div class="a-content-text">
-                        
-                        	<p>MWeb 是专业的 Markdown 写作、记笔记、静态博客生成软件，目前已支持 Mac，iPad 和 iPhone。MWeb 有以下特色：<br/>
-
-                        
-                      </div>
-                  </div>
-                </a>
-                <div class="read-more clearfix">
-                  <div class="more-left left">
-                   <a href="15474356181402.html">Read more</a>&nbsp;&nbsp; 
-                    <span class="date">2019/1/14 11:13 上午</span>
-                    <span>posted in&nbsp;</span> 
-          				  
-          					    <span class="posted-in"><a href='other.html'>其他</a></span>
-          				   
-                  </div>
-                  <div class="more-right right">
-                  <span class="comments">
-                      
-
-                       
-                  </span>
-                  </div>
-                </div>
-              </div><!-- article -->
-        
               
 
 
@@ -316,7 +471,7 @@
 			  </div>
 			  <div class="large-6 columns">
 			<p class="text-right" style="padding-top:25px;">
-			
+			 <a href="other_1.html">&raquo; Next Page</a> 
 			</p>
 			  </div>
 			</div>
@@ -384,6 +539,18 @@
 	      
 		      
 			      <li class="post">
+			        <a href="15509338125902.html">使用脚本快速部署Java项目</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15509336304684.html">地址收藏</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
 			        <a href="15509294487927.html">Gitment：使用 GitHub Issues 搭建评论系统</a>
 			      </li>
 		     
@@ -401,16 +568,8 @@
 		     
 		  
 		      
-			      <li class="post">
-			        <a href="15509225472378.html">MySQL基础</a>
-			      </li>
-		     
 		  
 		      
-			      <li class="post">
-			        <a href="15509185062441.html">书籍列表</a>
-			      </li>
-		     
 		  
 		      
 		  
