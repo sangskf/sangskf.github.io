@@ -135,25 +135,25 @@
         <h1></h1>
 
         <div class="markdown-body post-page">
-        <iframe src="https://www.bilibili.com/audio/am28693999?type=2" frameborder="0" scrolling="no" id="external-frame" width="100%" 
-min-height="800" onload="setIframeHeight(this)"></iframe>
+        <div class="resp-container">
+    <iframe class="resp-iframe" src="https://www.bilibili.com/audio/am28693999?type=2" gesture="media"  allow="encrypted-media" allowfullscreen></iframe>
+</div>
 
-<script>
-document.domain = "books.sangkf.cn";
-
-function setIframeHeight(iframe) {
-if (iframe) {
-var iframeWin = iframe.contentWindow || iframe.contentDocument.parentWindow;
-if (iframeWin.document.body) {
-iframe.height = iframeWin.document.documentElement.scrollHeight || iframeWin.document.body.scrollHeight;
+<style type="text/css">
+.resp-container {
+    position: relative;
+    overflow: hidden;
+    padding-top: 56.25%;
 }
+.resp-iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
 }
-};
-
-window.onload = function () {
-setIframeHeight(document.getElementById('external-frame'));
-};
-</script>
+</style>
 
         </div>
     </div>
