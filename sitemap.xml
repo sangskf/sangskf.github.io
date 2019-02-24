@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
   <loc>https://books.sangkf.cn/</loc>
-  <lastmod>2019-02-24T22:30:53+08:00</lastmod>
+  <lastmod>2019-02-24T22:33:09+08:00</lastmod>
 </url>
 
 <url>
@@ -41,6 +41,11 @@
 </url>
 
 <url>
+  <loc>https://books.sangkf.cn/15509225472378.html</loc>
+  <lastmod>2019-02-23T19:49:07+08:00</lastmod>
+</url>
+
+<url>
   <loc>https://books.sangkf.cn/15509183306420.html</loc>
   <lastmod>2019-02-23T18:38:50+08:00</lastmod>
 </url>
@@ -71,11 +76,6 @@
   <lastmod>2019-02-24T21:56:48+08:00</lastmod>
 </url>
 
-<url>
-  <loc>https://books.sangkf.cn/15509225472378.html</loc>
-  <lastmod>2019-02-24T21:57:04+08:00</lastmod>
-</url>
-
 
 <url>
   <loc>https://books.sangkf.cn/front.html</loc>
@@ -87,6 +87,10 @@
 
 <url>
   <loc>https://books.sangkf.cn/microservice.html</loc>
+</url>
+
+<url>
+  <loc>https://books.sangkf.cn/database.html</loc>
 </url>
 
 <url>
