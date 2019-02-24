@@ -4,7 +4,7 @@
   <title><![CDATA[见课就上的小婊砸]]></title>
   <link href="https://books.sangkf.cn/atom.xml" rel="self"/>
   <link href="https://books.sangkf.cn/"/>
-  <updated>2019-02-24T11:39:44+08:00</updated>
+  <updated>2019-02-24T11:42:14+08:00</updated>
   <id>https://books.sangkf.cn/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -18,12 +18,12 @@
     <updated>2019-02-24T11:20:08+08:00</updated>
     <id>https://books.sangkf.cn/15509784083382.html</id>
     <content type="html"><![CDATA[
-<p><img src="media/15509784083382/15509784261382.jpg" alt="" class="mw_img_center" style="width:500px;display: block; clear:both; margin: 0 auto;"/><br/>
-<span id="more"></span><!-- more --></p>
-
 <blockquote>
-<p>Java 8另一个新增的重要特性就是引入了新的时间和日期API，它们被包含在<code>java.time</code>包中。借助新的时间和日期API可以以更简洁的方法处理时间和日期。</p>
+<p>Java 8另一个新增的重要特性就是引入了新的时间和日期API，它们被包含在<code>java.time</code>包中。借助新的时间和日期API可以以更简洁的方法处理时间和日期。<br/>
+<span id="more"></span><!-- more --></p>
 </blockquote>
+
+<p><img src="media/15509784083382/15509784261382.jpg" alt="" class="mw_img_center" style="width:500px;display: block; clear:both; margin: 0 auto;"/></p>
 
 <p>在介绍本篇文章内容之前，我们先来讨论Java 8为什么要引入新的日期API，与之前的时间和日期处理方式有什么不同？</p>
 
