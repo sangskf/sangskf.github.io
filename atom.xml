@@ -4,7 +4,7 @@
   <title><![CDATA[见课就上的小婊砸]]></title>
   <link href="https://books.sangkf.cn/atom.xml" rel="self"/>
   <link href="https://books.sangkf.cn/"/>
-  <updated>2019-02-24T22:21:38+08:00</updated>
+  <updated>2019-02-24T22:22:55+08:00</updated>
   <id>https://books.sangkf.cn/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -989,7 +989,7 @@ fi
 <li>@ComponentScan (cn.test.demo): 自动扫描包名下所有使用 @Component @Service  @Repository @Controller 的类,并注册为Bean</li>
 <li>@WiselyConfiguration : 组合注解 可以替代 @Configuration和@ComponentScan</li>
 <li>@Bean : 注解在方法上,声明当前方法的返回值为一个Bean.</li>
-<li>* @Bean(initMethod=&quot;aa&quot;,destroyMethod=&quot;bb&quot;)--&gt; 指定 aa和bb方法在构造之后.Bean销毁之前执行.</li>
+<li>@Bean(initMethod=&quot;aa&quot;,destroyMethod=&quot;bb&quot;)--&gt; 指定 aa和bb方法在构造之后.Bean销毁之前执行.</li>
 </ul>
 
 <h3 id="toc_3">AOP<a href="https://www.baidu.com/s?wd=%E5%88%87%E9%9D%A2&amp;tn=24004469_oem_dg&amp;rsv_dl=gh_pl_sl_csd">切面</a>编程注解:</h3>
