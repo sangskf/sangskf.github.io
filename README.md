@@ -5,6 +5,6 @@
 
 ![](http://image.sangkf.cn/15509759882606.jpg)
 
-![](http://image.sangkf.cn/15509762885632.jpg)
+<div style="align:left;width:640;height:960;">![](http://image.sangkf.cn/15509762885632.jpg)</div>
 
-![](http://image.sangkf.cn/15509763598970.jpg)
+<div style="align:left;width:640;height:960;">![](http://image.sangkf.cn/15509763598970.jpg)</div>
