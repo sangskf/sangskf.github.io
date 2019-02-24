@@ -4,7 +4,7 @@
   <title><![CDATA[见课就上的小婊砸]]></title>
   <link href="https://books.sangkf.cn/atom.xml" rel="self"/>
   <link href="https://books.sangkf.cn/"/>
-  <updated>2019-02-24T22:02:51+08:00</updated>
+  <updated>2019-02-24T22:14:00+08:00</updated>
   <id>https://books.sangkf.cn/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -964,21 +964,21 @@ fi
     <updated>2019-02-23T18:38:50+08:00</updated>
     <id>https://books.sangkf.cn/15509183306420.html</id>
     <content type="html"><![CDATA[
-<p>声明Bean的注解:</p>
+<h3 id="toc_0">声明Bean的注解:</h3>
 
 <ul>
 <li>@Component : 组件,没有明确的角色</li>
 <li><a href="https://my.oschina.net/service">@Service</a> : 在业务逻辑层(service层)使用</li>
 <li>@Repository : 在数据访问层(dao层)使用.</li>
-<li><p><a href="https://my.oschina.net/u/1774615">@Controller</a> : 在展现层(MVC--SpringMVC)使用<br/>
-<span id="more"></span><!-- more --><br/>
-注入Bean的注解:</p></li>
-<li><p>@Autowired : Spring提供的注解.</p></li>
-<li><p>@Inject : JSR-330提供的注解</p></li>
-<li><p>@Resource : JSR-250提供的注解</p></li>
+<li><a href="https://my.oschina.net/u/1774615">@Controller</a> : 在展现层(MVC--SpringMVC)使用
+<span id="more"></span><!-- more -->
+### 注入Bean的注解:</li>
+<li>@Autowired : Spring提供的注解.</li>
+<li>@Inject : JSR-330提供的注解</li>
+<li>@Resource : JSR-250提供的注解</li>
 </ul>
 
-<p>配置文件的注解:</p>
+<h3 id="toc_1">配置文件的注解:</h3>
 
 <ul>
 <li>@Configuration : 声明当前类是个配置类,相当于一个Spring配置的xml文件.</li>
@@ -988,7 +988,7 @@ fi
 <li>* @Bean(initMethod=&quot;aa&quot;,destroyMethod=&quot;bb&quot;)--&gt; 指定 aa和bb方法在构造之后.Bean销毁之前执行.</li>
 </ul>
 
-<p>AOP<a href="https://www.baidu.com/s?wd=%E5%88%87%E9%9D%A2&amp;tn=24004469_oem_dg&amp;rsv_dl=gh_pl_sl_csd">切面</a>编程注解:</p>
+<h3 id="toc_2">AOP<a href="https://www.baidu.com/s?wd=%E5%88%87%E9%9D%A2&amp;tn=24004469_oem_dg&amp;rsv_dl=gh_pl_sl_csd">切面</a>编程注解:</h3>
 
 <ul>
 <li>@Aspect : 声明这是一个切面 </li>
@@ -1002,7 +1002,7 @@ fi
 <li>* ---&gt;当定义的注解的@Retention为RUNTIME时，才能够通过运行时的反射机制来处理注解.--&gt;指定拦截规则</li>
 </ul>
 
-<p>Spring 常用配置:</p>
+<h3 id="toc_3">Spring 常用配置:</h3>
 
 <ul>
 <li>@import :导入配置类</li>
@@ -1037,7 +1037,7 @@ fi
 <li>@WebAppCofiguration : 指定加载 ApplicationContext是一个WebApplicationContext</li>
 </ul>
 
-<p>@Enable*注解:</p>
+<h3 id="toc_4">@Enable*注解:</h3>
 
 <ul>
 <li>@EnableAsync : 开启异步任务的支持(多线程)</li>
@@ -1054,7 +1054,7 @@ fi
 <li>@EnableCaching 开启Cache缓存支持;</li>
 </ul>
 
-<p>SpringMVC 常用注解:</p>
+<h3 id="toc_5">SpringMVC 常用注解:</h3>
 
 <ul>
 <li>@Controller : 注解在类上 声明这个类是springmvc里的Controller,将其声明为一个spring的Bean.</li>
@@ -1079,7 +1079,7 @@ fi
 <li><p>@Before : 在 xxx 前初始化</p></li>
 </ul>
 
-<p>Spring Boot 注解:</p>
+<h3 id="toc_6">Spring Boot 注解:</h3>
 
 <ul>
 <li>@SpringBootApplication : 是Spring Boot 项目的核心注解 主要目的是开启自动配置</li>
@@ -1096,7 +1096,7 @@ fi
 <li>@SpringBootApplication   注解等价于以默认属性使用 @Configuration，@EnableAutoConfiguration和     @ComponentScan。</li>
 </ul>
 
-<p>@SuppressWarnings注解</p>
+<h3 id="toc_7">@SuppressWarnings注解</h3>
 
 <ul>
 <li>@SuppressWarnings(&quot;unchecked&quot;)</li>
@@ -1111,69 +1111,47 @@ fi
 <li>* 等同于@SuppressWarnings(&quot;unchecked&quot;, &quot;deprecation&quot;)</li>
 </ul>
 
-<p>案例</p>
+<h4 id="toc_8">案例</h4>
 
 <pre><code class="language-java">@Entity
-
 @Table(name = &quot;S_PRODUCEINFO&quot; )
-
 @Data
-
 @NoArgsConstructor
-
 @AllArgsConstructor
-
 public class ProduceInfoEntity {
 
     @Id
-
     @Column(name = &quot;app_name&quot;, unique = true, length = 50)
-
     private String name;
-
+    
     @Column(name = &quot;status&quot;)
-
     @Enumerated(EnumType. STRING)
-
     private ProduceStatus status;
-
+    
     @Column(name = &quot;create_time&quot;, updatable = false)
-
     @Temporal(TemporalType. TIMESTAMP)
-
     @CreationTimestamp
-
     private Date createTime;
 
     @Column(name = &quot;update_time&quot;)
-
     @Temporal(TemporalType. TIMESTAMP)
-
     @UpdateTimestamp
-
     private Date updateTime;
 }
 </code></pre>
 
-<p>@Entity : 映射数据库实体类</p>
+<h3 id="toc_9">@Entity : 映射数据库实体类</h3>
 
-<p>@Table(name = &quot;S_PRODUCEINFO&quot; ) : 表名为 &quot;S_PRODUCEINFO&quot;</p>
-
-<p>@Id : 声明主键ID</p>
-
-<p>@Column(name = &quot;app_name&quot;, unique = true, length = 50) :对应数据库字段,属性</p>
-
-<p>@Enumerated(EnumType. STRING) : 采用枚举值类型和数据库字段进行交互  </p>
-
-<p>@Temporal : 时间格式 映射数据库会得到规定时间格式的日期</p>
-
-<p>       @Enumerted(EnumType.STRING)  HH:MM:SS 格式的日期</p>
-
-<p>       @Enumerted(EnumType.DATE) 获取年月日  yyyy-MM-dd </p>
-
-<p>       @Enumerted(EnumType.TIME) 获取时分秒  HH:MM:<br/>
+<p>@Table(name = &quot;S_PRODUCEINFO&quot; ) : 表名为 &quot;S_PRODUCEINFO&quot;<br/>
+@Id : 声明主键ID<br/>
+@Column(name = &quot;app_name&quot;, unique = true, length = 50) :对应数据库字段,属性<br/>
+@Enumerated(EnumType. STRING) : 采用枚举值类型和数据库字段进行交互  <br/>
+@Temporal : 时间格式 映射数据库会得到规定时间格式的日期<br/>
+@Enumerted(EnumType.STRING)  HH:MM:SS 格式的日期<br/>
+@Enumerted(EnumType.DATE) 获取年月日  yyyy-MM-dd <br/>
+@Enumerted(EnumType.TIME) 获取时分秒  HH:MM:<br/>
        <br/>
-       [TOC]</p>
+[TOC]</p>
 
 ]]></content>
   </entry>
@@ -1505,8 +1483,6 @@ $(&quot;#J__chatMsgList&quot;).on(&quot;longTap&quot;, &quot;li .msg&quot;, func
 <img src="media/15508991872164/15508995204276.jpg" alt="" class="mw_img_left" style="width:200px;display: block; float: left; margin: 0px 8px 8px 0px;"/><br/>
 <img src="media/15508991872164/15508995255771.jpg" alt="" class="mw_img_left" style="width:200px;display: block; float: left; margin: 0px 8px 8px 0px;"/><br/>
 <img src="media/15508991872164/15508995347731.jpg" alt="" class="mw_img_left" style="width:200px;display: block; float: left; margin: 0px 8px 8px 0px;"/></p>
-
-
 
 ]]></content>
   </entry>
