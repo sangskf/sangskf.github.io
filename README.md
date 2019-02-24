@@ -5,6 +5,10 @@
 
 ![](http://image.sangkf.cn/15509759882606.jpg)
 
-<div style="align:left;width:640;height:960;">![](http://image.sangkf.cn/15509762885632.jpg)</div>
+手机端显示
 
-<div style="align:left;width:640;height:960;">![](http://image.sangkf.cn/15509763598970.jpg)</div>
+<img src="http://image.sangkf.cn/15509762885632.jpg" width="360" height="540" alt="手机端显示" align=left>
+
+手机端带菜单显示
+
+<img src="http://image.sangkf.cn/15509763598970.jpg" width="360" height="540" alt="手机端带菜单显示" align=left>
