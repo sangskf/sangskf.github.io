@@ -731,9 +731,9 @@ Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
 <style type="text/css">
 	#custom_menu{
-		width: 200px;
 		float: left;
 		z-index: 999;
+		margin-top: 65px;
 	}
 	#custom_menu li{
 	   list-style: none;
@@ -759,7 +759,7 @@ Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
 		$(".article-content>ul:last").wrap("<div id='custom_menu'></div>");
     	var $custom_menu = $("#custom_menu");
     	$("#custom_menu").remove();
-    	$custom_menu.insertBefore($("#main-content"));
+    	$custom_menu.insertBefore($(".inner-wrap"));
     	var menuYloc = $("#custom_menu").offset().top;
 		$(window).scroll(function () {
 			var offsetTop = menuYloc + $(window).scrollTop() + "px";
