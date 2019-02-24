@@ -172,11 +172,11 @@
 
 <p>由于以上这些问题，出现了一些三方的日期处理框架，例如Joda-Time，date4j等开源项目。但是，Java需要一套标准的用于处理时间和日期的框架，于是Java 8中引入了新的日期API。新的日期API是<a href="https://jcp.org/en/jsr/detail?id=310">JSR-310</a>规范的实现，Joda-Time框架的作者正是JSR-310的规范的倡导者，所以能从Java 8的日期API中看到很多Joda-Time的特性。</p>
 
-<h2 id="toc_0"><a href="https://lw900925.github.io/java/java8-newtime-api.html#Java-8%E6%97%A5%E6%9C%9F-%E6%97%B6%E9%97%B4%E7%B1%BB" title="Java 8日期/时间类"></a>Java 8日期/时间类</h2>
+<h2 id="toc_0">Java 8日期/时间类</h2>
 
 <p>Java 8的日期和时间类包含<code>LocalDate</code>、<code>LocalTime</code>、<code>Instant</code>、<code>Duration</code>以及<code>Period</code>，这些类都包含在<code>java.time</code>包中，下面我们看看这些类的用法。</p>
 
-<h3 id="toc_1">LocalDate<code>和</code>LocalTime</h3>
+<h3 id="toc_1">LocalDate和LocalTime</h3>
 
 <p><code>LocalDate</code>类表示一个具体的日期，但不包含具体时间，也不包含时区信息。可以通过<code>LocalDate</code>的静态方法<code>of()</code>创建一个实例，<code>LocalDate</code>也包含一些方法用来获取年份，月份，天，星期几等：</p>
 
@@ -494,7 +494,7 @@ ChronoLocalDate jpChronoLocalDate = jpChronology.dateNow();
 <a href="#toc_0">Java 8日期/时间类</a>
 <ul>
 <li>
-<a href="#toc_1">LocalDate<code>和</code>LocalTime</a>
+<a href="#toc_1">LocalDate和LocalTime</a>
 </li>
 <li>
 <a href="#toc_2">LocalDateTime</a>
