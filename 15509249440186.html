@@ -55,7 +55,7 @@
         
         <li id=""><a target="_self" href="archives.html">归档</a></li>
         
-        <li id=""><a target="_blank" href="about.html">关于作者</a></li>
+        <li id=""><a target="_self" href="about.html">关于作者</a></li>
         
         </ul>
 
@@ -96,19 +96,11 @@
         
         <li><a target="_self" href="archives.html">归档</a></li>
         
-        <li><a target="_blank" href="about.html">关于作者</a></li>
+        <li><a target="_self" href="about.html">关于作者</a></li>
         
 
     <li><label>Categories</label></li>
 
-        
-            <li><a href="front.html">前端</a></li>
-        
-            <li><a href="java.html">后端</a></li>
-        
-            <li><a href="microservice.html">微服务</a></li>
-        
-            <li><a href="database.html">数据库</a></li>
         
             <li><a href="other.html">其他</a></li>
          
@@ -285,21 +277,19 @@ fi
       </div>
       <div class="comments-wrap">
         <div class="share-comments">
-          <div id="container"></div>
-<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
-<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
-<script>
-var gitment = new Gitment({
-  id: location.href, // 可选。默认为 location.href
-  owner: 'sangskf',
-  repo: 'sangskf.github.io',
-  oauth: {
-    client_id: '14d87c9522298bd378c3',
-    client_secret: '6639fcb9eef53d63c3f1c983313fafaa790e9e5f',
-  },
-})
-gitment.render('container')
-</script>
+          <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script> 
+<div id="gitalk-container"></div>     <script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: `14d87c9522298bd378c3`,
+        clientSecret: `6639fcb9eef53d63c3f1c983313fafaa790e9e5f`,
+        repo: `sangskf.github.io`,
+        owner: 'sangskf',
+        admin: ['sangskf'],
+        id: location.href
+    });
+    gitalk.render('gitalk-container');
+</script> 
 
           
 
@@ -348,14 +338,6 @@ gitment.render('container')
 
       	<p class="cat-list">
         
-            <a href="front.html"><strong>前端</strong></a>
-        
-            <a href="java.html"><strong>后端</strong></a>
-        
-            <a href="microservice.html"><strong>微服务</strong></a>
-        
-            <a href="database.html"><strong>数据库</strong></a>
-        
             <a href="other.html"><strong>其他</strong></a>
          
         </p>
@@ -373,24 +355,6 @@ gitment.render('container')
 	      
 		      
 			      <li class="post">
-			        <a href="15509800202549.html">画图</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="15509784083382.html">Java 8新特性：新的时间和日期API</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="15509338125902.html">使用脚本快速部署Java项目</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
 			        <a href="15509336304684.html">地址收藏</a>
 			      </li>
 		     
@@ -402,18 +366,22 @@ gitment.render('container')
 		     
 		  
 		      
+			      <li class="post">
+			        <a href="15509249440186.html">如何使用“发布脚本”功能发布静态网站</a>
+			      </li>
+		     
 		  
 		      
+			      <li class="post">
+			        <a href="15509248711452.html">自定义预览样式，让 MWeb 支持 ECharts、mermaid、PlantUML 等任何 JS 画图库</a>
+			      </li>
+		     
 		  
 		      
-		  
-		      
-		  
-		      
-		  
-		      
-		  
-		      
+			      <li class="post">
+			        <a href="15509161097880.html">JAVA8新特性</a>
+			      </li>
+		     
 		  
 		      
 		   

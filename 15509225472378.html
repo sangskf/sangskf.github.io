@@ -55,7 +55,7 @@
         
         <li id=""><a target="_self" href="archives.html">归档</a></li>
         
-        <li id=""><a target="_blank" href="about.html">关于作者</a></li>
+        <li id=""><a target="_self" href="about.html">关于作者</a></li>
         
         </ul>
 
@@ -96,19 +96,11 @@
         
         <li><a target="_self" href="archives.html">归档</a></li>
         
-        <li><a target="_blank" href="about.html">关于作者</a></li>
+        <li><a target="_self" href="about.html">关于作者</a></li>
         
 
     <li><label>Categories</label></li>
 
-        
-            <li><a href="front.html">前端</a></li>
-        
-            <li><a href="java.html">后端</a></li>
-        
-            <li><a href="microservice.html">微服务</a></li>
-        
-            <li><a href="database.html">数据库</a></li>
         
             <li><a href="other.html">其他</a></li>
          
@@ -124,36 +116,19 @@
        
 
  <script type="text/javascript">
-  $(function(){
-    $('#menu_item_index').addClass('is_active');
-  });
+	$(function(){
+		var currentURL = '15509225472378.html';
+		currentURL = currentURL.substr(0,currentURL.length-5);
+		$('#menu_item_'+currentURL).addClass('is_active');
+	});
 </script>
 <div class="row">
-  <div class="large-8 medium-8 columns">
-      <div class="markdown-body article-wrap">
-       <div class="article">
-          
-          <h1>MySQL基础</h1>
-     
-        <div class="read-more clearfix">
-          <span class="date">2019/2/23 19:49 下午</span>
 
-          <span>发布于分类&nbsp;</span> 
-          
-              <span class="posted-in"><a href='database.html'>数据库</a></span>
-           
-         
-          <span class="comments">
-            
+    <div id="single-page-wrap">
+        <h1>MySQL基础</h1>
 
-            
-          </span>
-
-        </div>
-      </div><!-- article -->
-
-      <div class="article-content">
-      <p>一、MySQL概述</p>
+        <div class="markdown-body post-page">
+        <p>一、MySQL概述</p>
 
 <p>1、什么是数据库 ？<br/>
 　答：数据的仓库，如：在ATM的示例中我们创建了一个 db 目录，称其为数据库</p>
@@ -610,172 +585,9 @@ select name from B
 
 <p><a href="javascript:void(0);" title="复制代码"><img src="media/15509225472378/copycode.gif" alt="复制代码"/></a></p>
 
-
-    
-
-      </div>
-
-      <div class="row">
-        <div class="large-6 columns">
-        <p class="text-left" style="padding:15px 0px;">
-      
-          <a href="15509248711452.html" 
-          title="Previous Post: 自定义预览样式，让 MWeb 支持 ECharts、mermaid、PlantUML 等任何 JS 画图库">&laquo; 自定义预览样式，让 MWeb 支持 ECharts、mermaid、PlantUML 等任何 JS 画图库</a>
-      
-        </p>
         </div>
-        <div class="large-6 columns">
-      <p class="text-right" style="padding:15px 0px;">
-      
-          <a  href="15509185062441.html" 
-          title="Next Post: 书籍列表">书籍列表 &raquo;</a>
-      
-      </p>
-        </div>
-      </div>
-      <div class="comments-wrap">
-        <div class="share-comments">
-          <div id="container"></div>
-<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
-<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
-<script>
-var gitment = new Gitment({
-  id: location.href, // 可选。默认为 location.href
-  owner: 'sangskf',
-  repo: 'sangskf.github.io',
-  oauth: {
-    client_id: '14d87c9522298bd378c3',
-    client_secret: '6639fcb9eef53d63c3f1c983313fafaa790e9e5f',
-  },
-})
-gitment.render('container')
-</script>
-
-          
-
-          
-        </div>
-      </div>
-    </div><!-- article-wrap -->
-  </div><!-- large 8 -->
-
-
-
-
- <div class="large-4 medium-4 columns">
-  <div class="hide-for-small">
-    <div id="sidebar" class="sidebar">
-          <div id="site-info" class="site-info">
-            
-                <div class="site-a-logo"><img src="http://image.sangkf.cn/IMG_0186.jpg" /></div>
-            
-                <h1>见课就上的小婊砸</h1>
-                <div class="site-des">人生的磨难是很多的，所以我们不可对于每一件轻微的伤害都过于敏感。在生活磨难面前，精神上的坚强和无动于衷是我们抵抗罪恶和人生意外的最好武器。</div>
-                <div class="social">
-
-
-
-
-
-
-
-
-
-<a target="_blank" class="github" target="_blank" href="https://github.com/sangskf" title="GitHub">GitHub</a>
-<a target="_blank" class="email" href="mailto:413198756@qq.com" title="Email">Email</a>
-  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
-                
-              	 </div>
-          	</div>
-
-             
-
-              <div id="site-categories" class="side-item ">
-                <div class="side-header">
-                  <h2>文章分类</h2>
-                </div>
-                <div class="side-content">
-
-      	<p class="cat-list">
-        
-            <a href="front.html"><strong>前端</strong></a>
-        
-            <a href="java.html"><strong>后端</strong></a>
-        
-            <a href="microservice.html"><strong>微服务</strong></a>
-        
-            <a href="database.html"><strong>数据库</strong></a>
-        
-            <a href="other.html"><strong>其他</strong></a>
-         
-        </p>
-
-
-                </div>
-              </div>
-
-              <div id="site-categories" class="side-item">
-                <div class="side-header">
-                  <h2>最新发布</h2>
-                </div>
-                <div class="side-content">
-                <ul class="posts-list">
-	      
-		      
-			      <li class="post">
-			        <a href="15509800202549.html">画图</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="15509784083382.html">Java 8新特性：新的时间和日期API</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="15509338125902.html">使用脚本快速部署Java项目</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="15509336304684.html">地址收藏</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="15509294487927.html">Gitment：使用 GitHub Issues 搭建评论系统</a>
-			      </li>
-		     
-		  
-		      
-		  
-		      
-		  
-		      
-		  
-		      
-		  
-		      
-		  
-		      
-		  
-		      
-		  
-		      
-		   
-		  		</ul>
-                </div>
-              </div>
-        </div><!-- sidebar -->
-      </div><!-- hide for small -->
-</div><!-- large 4 -->
-
-</div><!-- row -->
-
+    </div>
+</div>              
  <div class="page-bottom clearfix">
   <div class="row">
    <p class="copyright">Copyright &copy; 2019
