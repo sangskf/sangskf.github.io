@@ -158,14 +158,18 @@
 <li><a href="https://my.oschina.net/service">@Service</a> : 在业务逻辑层(service层)使用</li>
 <li>@Repository : 在数据访问层(dao层)使用.</li>
 <li><a href="https://my.oschina.net/u/1774615">@Controller</a> : 在展现层(MVC--SpringMVC)使用
-<span id="more"></span><!-- more -->
-### 注入Bean的注解:</li>
+<span id="more"></span><!-- more --></li>
+</ul>
+
+<h3 id="toc_1">注入Bean的注解:</h3>
+
+<ul>
 <li>@Autowired : Spring提供的注解.</li>
 <li>@Inject : JSR-330提供的注解</li>
 <li>@Resource : JSR-250提供的注解</li>
 </ul>
 
-<h3 id="toc_1">配置文件的注解:</h3>
+<h3 id="toc_2">配置文件的注解:</h3>
 
 <ul>
 <li>@Configuration : 声明当前类是个配置类,相当于一个Spring配置的xml文件.</li>
@@ -175,7 +179,7 @@
 <li>* @Bean(initMethod=&quot;aa&quot;,destroyMethod=&quot;bb&quot;)--&gt; 指定 aa和bb方法在构造之后.Bean销毁之前执行.</li>
 </ul>
 
-<h3 id="toc_2">AOP<a href="https://www.baidu.com/s?wd=%E5%88%87%E9%9D%A2&amp;tn=24004469_oem_dg&amp;rsv_dl=gh_pl_sl_csd">切面</a>编程注解:</h3>
+<h3 id="toc_3">AOP<a href="https://www.baidu.com/s?wd=%E5%88%87%E9%9D%A2&amp;tn=24004469_oem_dg&amp;rsv_dl=gh_pl_sl_csd">切面</a>编程注解:</h3>
 
 <ul>
 <li>@Aspect : 声明这是一个切面 </li>
@@ -185,17 +189,17 @@
 <li>@Cacheable : 数据缓存</li>
 <li>@EnableAaspectJAutoProxy : 开启Spring 对 这个切面(Aspect )的支持</li>
 <li>@Target (ElementType.TYPE):元注解,用来指定注解修饰类的那个成员 --&gt;指定拦截规则</li>
-<li>@Retention(RetentionPolicy.RUNTIME) </li>
-<li>* ---&gt;当定义的注解的@Retention为RUNTIME时，才能够通过运行时的反射机制来处理注解.--&gt;指定拦截规则</li>
+<li>@Retention(RetentionPolicy.RUNTIME) <br/>
+---&gt;当定义的注解的@Retention为RUNTIME时，才能够通过运行时的反射机制来处理注解.--&gt;指定拦截规则</li>
 </ul>
 
-<h3 id="toc_3">Spring 常用配置:</h3>
+<h3 id="toc_4">Spring 常用配置:</h3>
 
 <ul>
 <li>@import :导入配置类</li>
 <li>@Scope : 新建Bean的实例 @Scope(&quot;prototype&quot;) 声明Scope 为 Prototype</li>
 <li>@Value : 属性注入</li>
-<li>* @Value (&quot;我爱你&quot;)  --&gt; 普通字符串注入
+<li>@Value (&quot;我爱你&quot;)  --&gt; 普通字符串注入
 <ul>
 <li>@Value (&quot;#{systemProperties[&#39;os.name&#39;]}&quot;) --&gt;注入操作系统属性</li>
 <li>@Value (&quot;#{ T (java.lang.Math).random()  * 100.0 }&quot;) --&gt; 注入表达式结果</li>
@@ -207,24 +211,22 @@
 <li>@PostConstruct : 在构造函数执行完之后执行</li>
 <li>@PreDestroy  : 在 Bean 销毁之前执行</li>
 <li>@ActiveProfiles : 用来声明活动的 profile</li>
-<li>@profile: 为不同环境下使用不同的配置提供了支持</li>
-<li>* @Profile(&quot;dev&quot;) .......对方法名为 dev-xxxx的方法提供实例化Bean</li>
+<li>@profile: 为不同环境下使用不同的配置提供了支持<br/>
+@Profile(&quot;dev&quot;) .......对方法名为 dev-xxxx的方法提供实例化Bean</li>
 <li>@EnableAsync : 开启异步任务的支持(多线程)</li>
 <li>@Asyns : 声明这是一个异步任务,可以在类级别 和方法级别声明.</li>
 <li>@EnableScheduling : 开启对计划任务的支持(定时器)</li>
 <li>@Scheduled : 声明这是一个计划任务 支持多种计划任务,包含 cron. fixDelay fixRate</li>
-<li>* @Scheduled (dixedDelay = 5000) 通过注解 定时更新</li>
+<li>@Scheduled (dixedDelay = 5000) 通过注解 定时更新</li>
 <li>@Conditional : 条件注解,根据满足某一特定条件创建一个特定的Bean</li>
 <li>@ContextConfiguration : 加载配置文件</li>
-<li>* @ContextConfiguration(classes = {TestConfig.class})
-<ul>
-<li>@ContextConfiguration用来加载ApplicationContext </li>
-<li>classes属性用来加载配置类</li>
-</ul></li>
+<li>@ContextConfiguration(classes = {TestConfig.class})<br/>
+@ContextConfiguration用来加载ApplicationContext <br/>
+classes属性用来加载配置类</li>
 <li>@WebAppCofiguration : 指定加载 ApplicationContext是一个WebApplicationContext</li>
 </ul>
 
-<h3 id="toc_4">@Enable*注解:</h3>
+<h3 id="toc_5">@Enable*注解:</h3>
 
 <ul>
 <li>@EnableAsync : 开启异步任务的支持(多线程)</li>
@@ -241,64 +243,56 @@
 <li>@EnableCaching 开启Cache缓存支持;</li>
 </ul>
 
-<h3 id="toc_5">SpringMVC 常用注解:</h3>
+<h3 id="toc_6">SpringMVC 常用注解:</h3>
 
 <ul>
 <li>@Controller : 注解在类上 声明这个类是springmvc里的Controller,将其声明为一个spring的Bean.</li>
-<li>@RequestMapping :可以注解在类上和方法上 映射WEB请求(访问路径和参数)</li>
-<li>* @RequestMapping(value= &quot;/convert&quot;,produces+{&quot;application/x-wisely&quot;}) 设置访问URL 返回值类型</li>
+<li>@RequestMapping :可以注解在类上和方法上 映射WEB请求(访问路径和参数)<br/>
+@RequestMapping(value= &quot;/convert&quot;,produces+{&quot;application/x-wisely&quot;}) 设置访问URL 返回值类型</li>
 <li>@ResponseBody : 支持将返回值放入response体内 而不是返回一个页面(返回的是一个组数据)</li>
 <li>@RequestBody : 允许request的参数在request体中,而不是直接连接在地址后面 次注解放置在参数前</li>
 <li>@Path Variable : 用来接收路径参数 如/test/001,001为参数,次注解放置在参数前</li>
 <li>@RestController : @Controller + @ResponseBody 组合注解</li>
 <li>@ControllerAdvice : 通过@ControllerAdvice可以将对已控制器的全局配置放置在同一个位置</li>
 <li>@ExceptionHandler : 用于全局处理控制器的异常</li>
-<li>* @ExceptionHandier(value=Exception.class) --&gt;通过value属性可过滤拦截器条件,拦截所有的异常</li>
+<li>@ExceptionHandier(value=Exception.class) --&gt;通过value属性可过滤拦截器条件,拦截所有的异常</li>
 <li>@InitBinder : 用来设置WebDataBinder , WebDataBinder用来自动绑定前台请求参数到Model中.</li>
 <li>@ModelAttrbuute : 绑定键值对到Model中,</li>
 <li>@RunWith : 运行器 </li>
-<li>* @RunWith(JUnit4.class)就是指用JUnit4来运行
-<ul>
-<li>@RunWith(SpringJUnit4ClassRunner.class),让测试运行于Spring测试环境</li>
-<li>@RunWith(Suite.class)的话就是一套测试集合，</li>
-</ul></li>
-<li><p>@WebAppConfiguration(&quot;src/main/resources&quot;) : 注解在类上,用来声明加载的ApplicationContex 是一个WebApplicationContext ,它的属性指定的是Web资源的位置,默认为 src/main/webapp ,自定义修改为 resource</p></li>
-<li><p>@Before : 在 xxx 前初始化</p></li>
+<li>@RunWith(JUnit4.class)就是指用JUnit4来运行<br/>
+@RunWith(SpringJUnit4ClassRunner.class),让测试运行于Spring测试环境<br/>
+@RunWith(Suite.class)的话就是一套测试集合，</li>
+<li>@WebAppConfiguration(&quot;src/main/resources&quot;) : 注解在类上,用来声明加载的ApplicationContex 是一个WebApplicationContext ,它的属性指定的是Web资源的位置,默认为 src/main/webapp ,自定义修改为 resource</li>
+<li>@Before : 在 xxx 前初始化</li>
 </ul>
 
-<h3 id="toc_6">Spring Boot 注解:</h3>
+<h3 id="toc_7">Spring Boot 注解:</h3>
 
 <ul>
 <li>@SpringBootApplication : 是Spring Boot 项目的核心注解 主要目的是开启自动配置</li>
-<li>* @SpringBootApplication注解是一个组合注解,主要组合了@Configuration .+@EnableAutoConfiguration.+@ComponentScan</li>
+<li>@SpringBootApplication注解是一个组合注解,主要组合了@Configuration .+@EnableAutoConfiguration.+@ComponentScan</li>
 <li>@Value : 属性注入,读取properties或者 Yml 文件中的属性</li>
 <li>@ConfigurationProperties : 将properties属性和一个Bean及其属性关联,从而实现类型安全的配置</li>
-<li>* @ConfigurationProperties(prefix = &quot;author&quot;,locations = {&quot;classpath:config/author.properties&quot;})
-<ul>
-<li>通过@ConfigurationProperties加载配置,通过prefix属性指定配置前缀,通过location指定配置文件位置</li>
-</ul></li>
-<li>@EnableAutoConfiguration 注解:作用在于让 Spring Boot   根据应用所声明的依赖来对 Spring 框架进行自动配置<br/>
-        这个注解告诉Spring Boot根据添加的jar依赖猜测你想如何配置Spring。由于<code>spring-boot-starter-web</code>添加了Tomcat和Spring MVC，所以auto-configuration将假定你正在开发一个web应用并相应地对Spring进行设置。</li>
-<li>@ Configuration @EnableAutoConfiguration (exclude={xxxx.class}) 禁用特定的自动配置</li>
+<li>@ConfigurationProperties(prefix = &quot;author&quot;,locations = {&quot;classpath:config/author.properties&quot;}),通过@ConfigurationProperties加载配置,通过prefix属性指定配置前缀,通过location指定配置文件位置</li>
+<li>@EnableAutoConfiguration 注解:作用在于让 Spring Boot   根据应用所声明的依赖来对 Spring 框架进行自动配置,这个注解告诉Spring Boot根据添加的jar依赖猜测你想如何配置Spring。由于<code>spring-boot-starter-web</code>添加了Tomcat和Spring MVC，所以auto-configuration将假定你正在开发一个web应用并相应地对Spring进行设置。</li>
+<li>@Configuration @EnableAutoConfiguration (exclude={xxxx.class}) 禁用特定的自动配置</li>
 <li>@SpringBootApplication   注解等价于以默认属性使用 @Configuration，@EnableAutoConfiguration和     @ComponentScan。</li>
 </ul>
 
-<h3 id="toc_7">@SuppressWarnings注解</h3>
+<h3 id="toc_8">@SuppressWarnings注解</h3>
 
 <ul>
-<li>@SuppressWarnings(&quot;unchecked&quot;)</li>
-<li>* 告诉编译器忽略 unchecked 警告信息,如使用 list ArrayList等未进行参数化产生的警告信息</li>
+<li>@SuppressWarnings(&quot;unchecked&quot;)<br/>
+告诉编译器忽略 unchecked 警告信息,如使用 list ArrayList等未进行参数化产生的警告信息</li>
 <li>@SuppressWarnings(&quot;serial&quot;)</li>
-<li>* 如果编译器出现这样的警告信息: The serializable class WmailCalendar does not declare a static final serialVersionUID field of type long     使用这个注释将警告信息去掉。</li>
-<li>@SuppressWarnings(&quot;deprecation&quot;)</li>
-<li>* 如果使用了使用@Deprecated注释的方法，编译器将出现警告信息。使用这个注释将警告信息去掉。</li>
-<li>@SuppressWarnings(&quot;unchecked&quot;, &quot;deprecation&quot;)</li>
-<li>* 告诉编译器同时忽略unchecked和deprecation的警告信息。</li>
-<li>@SuppressWarnings(value={&quot;unchecked&quot;, &quot;deprecation&quot;})</li>
-<li>* 等同于@SuppressWarnings(&quot;unchecked&quot;, &quot;deprecation&quot;)</li>
+<li>如果编译器出现这样的警告信息: The serializable class WmailCalendar does not declare a static final serialVersionUID field of type long     使用这个注释将警告信息去掉。</li>
+<li>@SuppressWarnings(&quot;deprecation&quot;)<br/>
+如果使用了使用@Deprecated注释的方法，编译器将出现警告信息。使用这个注释将警告信息去掉。</li>
+<li>@SuppressWarnings(&quot;unchecked&quot;, &quot;deprecation&quot;),告诉编译器同时忽略unchecked和deprecation的警告信息。</li>
+<li>@SuppressWarnings(value={&quot;unchecked&quot;, &quot;deprecation&quot;}), 等同于@SuppressWarnings(&quot;unchecked&quot;, &quot;deprecation&quot;)</li>
 </ul>
 
-<h4 id="toc_8">案例</h4>
+<h4 id="toc_9">案例</h4>
 
 <pre><code class="language-java">@Entity
 @Table(name = &quot;S_PRODUCEINFO&quot; )
@@ -327,18 +321,19 @@ public class ProduceInfoEntity {
 }
 </code></pre>
 
-<h3 id="toc_9">@Entity : 映射数据库实体类</h3>
+<h3 id="toc_10">@Entity : 映射数据库实体类</h3>
 
-<p>@Table(name = &quot;S_PRODUCEINFO&quot; ) : 表名为 &quot;S_PRODUCEINFO&quot;<br/>
-@Id : 声明主键ID<br/>
-@Column(name = &quot;app_name&quot;, unique = true, length = 50) :对应数据库字段,属性<br/>
-@Enumerated(EnumType. STRING) : 采用枚举值类型和数据库字段进行交互  <br/>
-@Temporal : 时间格式 映射数据库会得到规定时间格式的日期<br/>
-@Enumerted(EnumType.STRING)  HH:MM:SS 格式的日期<br/>
-@Enumerted(EnumType.DATE) 获取年月日  yyyy-MM-dd <br/>
-@Enumerted(EnumType.TIME) 获取时分秒  HH:MM:<br/>
-       <br/>
-[TOC]</p>
+<ul>
+<li>@Table(name = &quot;S_PRODUCEINFO&quot; ) : 表名为 &quot;S_PRODUCEINFO&quot;</li>
+<li>@Id : 声明主键ID</li>
+<li>@Column(name = &quot;app_name&quot;, unique = true, length = 50) :对应数据库字段,属性</li>
+<li>@Enumerated(EnumType. STRING) : 采用枚举值类型和数据库字段进行交互 </li>
+<li>@Temporal : 时间格式 映射数据库会得到规定时间格式的日期</li>
+<li>@Enumerted(EnumType.STRING)  HH:MM:SS 格式的日期</li>
+<li>@Enumerted(EnumType.DATE) 获取年月日  yyyy-MM-dd </li>
+<li>@Enumerted(EnumType.TIME) 获取时分秒  HH:MM:<br/>
+       </li>
+</ul>
 
 
     
