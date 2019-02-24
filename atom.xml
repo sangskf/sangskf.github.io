@@ -4,13 +4,356 @@
   <title><![CDATA[见课就上的小婊砸]]></title>
   <link href="https://books.sangkf.cn/atom.xml" rel="self"/>
   <link href="https://books.sangkf.cn/"/>
-  <updated>2019-02-23T23:53:37+08:00</updated>
+  <updated>2019-02-24T11:36:52+08:00</updated>
   <id>https://books.sangkf.cn/</id>
   <author>
     <name><![CDATA[]]></name>
     
   </author>
   <generator uri="http://www.mweb.im/">MWeb</generator>
+  
+  <entry>
+    <title type="html"><![CDATA[Java 8新特性：新的时间和日期API]]></title>
+    <link href="https://books.sangkf.cn/15509784083382.html"/>
+    <updated>2019-02-24T11:20:08+08:00</updated>
+    <id>https://books.sangkf.cn/15509784083382.html</id>
+    <content type="html"><![CDATA[
+<p><img src="media/15509784083382/15509784261382.jpg" alt="" class="mw_img_center" style="width:500px;display: block; clear:both; margin: 0 auto;"/><br/>
+<span id="more"></span><!-- more --></p>
+
+<blockquote>
+<p>Java 8另一个新增的重要特性就是引入了新的时间和日期API，它们被包含在<code>java.time</code>包中。借助新的时间和日期API可以以更简洁的方法处理时间和日期。</p>
+</blockquote>
+
+<p>在介绍本篇文章内容之前，我们先来讨论Java 8为什么要引入新的日期API，与之前的时间和日期处理方式有什么不同？</p>
+
+<p>在Java 8之前，所有关于时间和日期的API都存在各种使用方面的缺陷，主要有：</p>
+
+<ol>
+<li>Java的<code>java.util.Date</code>和<code>java.util.Calendar</code>类易用性差，不支持时区，而且他们都不是线程安全的；</li>
+<li>用于格式化日期的类<code>DateFormat</code>被放在<code>java.text</code>包中，它是一个抽象类，所以我们需要实例化一个<code>SimpleDateFormat</code>对象来处理日期格式化，并且<code>DateFormat</code>也是非线程安全，这意味着如果你在多线程程序中调用同一个<code>DateFormat</code>对象，会得到意想不到的结果。</li>
+<li>对日期的计算方式繁琐，而且容易出错，因为月份是从0开始的，从<code>Calendar</code>中获取的月份需要加一才能表示当前月份。</li>
+</ol>
+
+<p>由于以上这些问题，出现了一些三方的日期处理框架，例如Joda-Time，date4j等开源项目。但是，Java需要一套标准的用于处理时间和日期的框架，于是Java 8中引入了新的日期API。新的日期API是<a href="https://jcp.org/en/jsr/detail?id=310">JSR-310</a>规范的实现，Joda-Time框架的作者正是JSR-310的规范的倡导者，所以能从Java 8的日期API中看到很多Joda-Time的特性。</p>
+
+<h2 id="toc_0"><a href="https://lw900925.github.io/java/java8-newtime-api.html#Java-8%E6%97%A5%E6%9C%9F-%E6%97%B6%E9%97%B4%E7%B1%BB" title="Java 8日期/时间类"></a>Java 8日期/时间类</h2>
+
+<p>Java 8的日期和时间类包含<code>LocalDate</code>、<code>LocalTime</code>、<code>Instant</code>、<code>Duration</code>以及<code>Period</code>，这些类都包含在<code>java.time</code>包中，下面我们看看这些类的用法。</p>
+
+<h3 id="toc_1"><a href="https://lw900925.github.io/java/java8-newtime-api.html#LocalDate%E5%92%8CLocalTime" title="LocalDate和LocalTime"></a><code>LocalDate</code>和<code>LocalTime</code></h3>
+
+<p><code>LocalDate</code>类表示一个具体的日期，但不包含具体时间，也不包含时区信息。可以通过<code>LocalDate</code>的静态方法<code>of()</code>创建一个实例，<code>LocalDate</code>也包含一些方法用来获取年份，月份，天，星期几等：</p>
+
+<pre><code class="language-java">LocalDate localDate = LocalDate.of(2017, 1, 4);     // 初始化一个日期：2017-01-04
+int year = localDate.getYear();                     // 年份：2017
+Month month = localDate.getMonth();                 // 月份：JANUARY
+int dayOfMonth = localDate.getDayOfMonth();         // 月份中的第几天：4
+DayOfWeek dayOfWeek = localDate.getDayOfWeek();     // 一周的第几天：WEDNESDAY
+int length = localDate.lengthOfMonth();             // 月份的天数：31
+boolean leapYear = localDate.isLeapYear();          // 是否为闰年：false
+</code></pre>
+
+<p>也可以调用静态方法<code>now()</code>来获取当前日期：</p>
+
+<p>LocalDate now = LocalDate.now();</p>
+
+<p><code>LocalTime</code>和<code>LocalDate</code>类似，他们之间的区别在于<code>LocalDate</code>不包含具体时间，而<code>LocalTime</code>包含具体时间，例如：</p>
+
+<pre><code class="language-java">LocalTime localTime = LocalTime.of(17, 23, 52);     // 初始化一个时间：17:23:52
+int hour = localTime.getHour();                     // 时：17
+int minute = localTime.getMinute();                 // 分：23
+int second = localTime.getSecond();                 // 秒：52
+</code></pre>
+
+<h3 id="toc_2"><a href="https://lw900925.github.io/java/java8-newtime-api.html#LocalDateTime" title="LocalDateTime"></a><code>LocalDateTime</code></h3>
+
+<p><code>LocalDateTime</code>类是<code>LocalDate</code>和<code>LocalTime</code>的结合体，可以通过<code>of()</code>方法直接创建，也可以调用<code>LocalDate</code>的<code>atTime()</code>方法或<code>LocalTime</code>的<code>atDate()</code>方法将<code>LocalDate</code>或<code>LocalTime</code>合并成一个<code>LocalDateTime</code>：</p>
+
+<pre><code class="language-java">LocalDateTime ldt1 = LocalDateTime.of(2017, Month.JANUARY, 4, 17, 23, 52);
+
+LocalDate localDate = LocalDate.of(2017, Month.JANUARY, 4);
+LocalTime localTime = LocalTime.of(17, 23, 52);
+LocalDateTime ldt2 = localDate.atTime(localTime);
+
+</code></pre>
+
+<p><code>LocalDateTime</code>也提供用于向<code>LocalDate</code>和<code>LocalTime</code>的转化：</p>
+
+<pre><code class="language-java">LocalDate date = ldt1.toLocalDate();
+LocalTime time = ldt1.toLocalTime();
+</code></pre>
+
+<h3 id="toc_3"><a href="https://lw900925.github.io/java/java8-newtime-api.html#Instant" title="Instant"></a><code>Instant</code></h3>
+
+<p><code>Instant</code>用于表示一个时间戳，它与我们常使用的<code>System.currentTimeMillis()</code>有些类似，不过<code>Instant</code>可以精确到纳秒（Nano-Second），<code>System.currentTimeMillis()</code>方法只精确到毫秒（Milli-Second）。如果查看<code>Instant</code>源码，发现它的内部使用了两个常量，<code>seconds</code>表示从1970-01-01 00:00:00开始到现在的秒数，<code>nanos</code>表示纳秒部分（<code>nanos</code>的值不会超过<code>999,999,999</code>）。<code>Instant</code>除了使用<code>now()</code>方法创建外，还可以通过<code>ofEpochSecond</code>方法创建：</p>
+
+<pre><code class="language-java">Instant instant = Instant.ofEpochSecond(120, 100000);
+</code></pre>
+
+<p><code>ofEpochSecond()</code>方法的第一个参数为秒，第二个参数为纳秒，上面的代码表示从1970-01-01 00:00:00开始后两分钟的10万纳秒的时刻，控制台上的输出为：</p>
+
+<pre><code class="language-java">1970-01-01T00:02:00.000100Z
+</code></pre>
+
+<h3 id="toc_4"><a href="https://lw900925.github.io/java/java8-newtime-api.html#Duration" title="Duration"></a><code>Duration</code></h3>
+
+<p><code>Duration</code>的内部实现与<code>Instant</code>类似，也是包含两部分：<code>seconds</code>表示秒，<code>nanos</code>表示纳秒。两者的区别是<code>Instant</code>用于表示一个时间戳（或者说是一个时间点），而<code>Duration</code>表示一个时间段，所以<code>Duration</code>类中不包含<code>now()</code>静态方法。可以通过<code>Duration.between()</code>方法创建<code>Duration</code>对象：</p>
+
+<pre><code class="language-java">LocalDateTime from = LocalDateTime.of(2017, Month.JANUARY, 5, 10, 7, 0);    // 2017-01-05 10:07:00
+LocalDateTime to = LocalDateTime.of(2017, Month.FEBRUARY, 5, 10, 7, 0);     // 2017-02-05 10:07:00
+Duration duration = Duration.between(from, to);     // 表示从 2017-01-05 10:07:00 到 2017-02-05 10:07:00 这段时间
+
+long days = duration.toDays();              // 这段时间的总天数
+long hours = duration.toHours();            // 这段时间的小时数
+long minutes = duration.toMinutes();        // 这段时间的分钟数
+long seconds = duration.getSeconds();       // 这段时间的秒数
+long milliSeconds = duration.toMillis();    // 这段时间的毫秒数
+long nanoSeconds = duration.toNanos();      // 这段时间的纳秒数
+</code></pre>
+
+<p><code>Duration</code>对象还可以通过<code>of()</code>方法创建，该方法接受一个时间段长度，和一个时间单位作为参数：</p>
+
+<pre><code class="language-java">Duration duration1 = Duration.of(5, ChronoUnit.DAYS);       // 5天
+Duration duration2 = Duration.of(1000, ChronoUnit.MILLIS);  // 1000毫秒
+
+</code></pre>
+
+<h3 id="toc_5"><a href="https://lw900925.github.io/java/java8-newtime-api.html#Period" title="Period"></a><code>Period</code></h3>
+
+<p><code>Period</code>在概念上和<code>Duration</code>类似，区别在于<code>Period</code>是以年月日来衡量一个时间段，比如2年3个月6天：</p>
+
+<pre><code class="language-java">Period period = Period.of(2, 3, 6);
+</code></pre>
+
+<p><code>Period</code>对象也可以通过<code>between()</code>方法创建，值得注意的是，由于<code>Period</code>是以年月日衡量时间段，所以between()方法只能接收LocalDate类型的参数：</p>
+
+<pre><code class="language-java">// 2017-01-05 到 2017-02-05 这段时间
+Period period = Period.between(
+ LocalDate.of(2017, 1, 5),
+ LocalDate.of(2017, 2, 5));
+</code></pre>
+
+<h2 id="toc_6"><a href="https://lw900925.github.io/java/java8-newtime-api.html#%E6%97%A5%E6%9C%9F%E7%9A%84%E6%93%8D%E4%BD%9C%E5%92%8C%E6%A0%BC%E5%BC%8F%E5%8C%96" title="日期的操作和格式化"></a>日期的操作和格式化</h2>
+
+<h3 id="toc_7"><a href="https://lw900925.github.io/java/java8-newtime-api.html#%E5%A2%9E%E5%8A%A0%E5%92%8C%E5%87%8F%E5%B0%91%E6%97%A5%E6%9C%9F" title="增加和减少日期"></a>增加和减少日期</h3>
+
+<p>Java 8中的日期/时间类都是不可变的，这是为了保证线程安全。当然，新的日期/时间类也提供了方法用于创建对象的可变版本，比如增加一天或者减少一天：</p>
+
+<pre><code class="language-java">LocalDate date = LocalDate.of(2017, 1, 5);          // 2017-01-05
+
+LocalDate date1 = date.withYear(2016);              // 修改为 2016-01-05
+LocalDate date2 = date.withMonth(2);                // 修改为 2017-02-05
+LocalDate date3 = date.withDayOfMonth(1);           // 修改为 2017-01-01
+
+LocalDate date4 = date.plusYears(1);                // 增加一年 2018-01-05
+LocalDate date5 = date.minusMonths(2);              // 减少两个月 2016-11-05
+LocalDate date6 = date.plus(5, ChronoUnit.DAYS);    // 增加5天 2017-01-10
+</code></pre>
+
+<p>上面例子中对于日期的操作比较简单，但是有些时候我们要面临更复杂的时间操作，比如将时间调到下一个工作日，或者是下个月的最后一天，这时候我们可以使用<code>with()</code>方法的另一个重载方法，它接收一个<code>TemporalAdjuster</code>参数，可以使我们更加灵活的调整日期：</p>
+
+<pre><code class="language-java">LocalDate date7 = date.with(nextOrSame(DayOfWeek.SUNDAY));      // 返回下一个距离当前时间最近的星期日
+LocalDate date9 = date.with(lastInMonth(DayOfWeek.SATURDAY));   // 返回本月最后一个星期六
+</code></pre>
+
+<p>要使上面的代码正确编译，你需要使用静态导入<code>TemporalAdjusters</code>对象：</p>
+
+<pre><code class="language-java">import static java.time.temporal.TemporalAdjusters.*;
+</code></pre>
+
+<p><code>TemporalAdjusters</code>类中包含了很多静态方法可以直接使用，下面的表格列出了一些方法：</p>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: left">方法名</th>
+<th style="text-align: left">描述</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td style="text-align: left"><code>dayOfWeekInMonth</code></td>
+<td style="text-align: left">返回同一个月中每周的第几天</td>
+</tr>
+<tr>
+<td style="text-align: left"><code>firstDayOfMonth</code></td>
+<td style="text-align: left">返回当月的第一天</td>
+</tr>
+<tr>
+<td style="text-align: left"><code>firstDayOfNextMonth</code></td>
+<td style="text-align: left">返回下月的第一天</td>
+</tr>
+<tr>
+<td style="text-align: left"><code>firstDayOfNextYear</code></td>
+<td style="text-align: left">返回下一年的第一天</td>
+</tr>
+<tr>
+<td style="text-align: left"><code>firstDayOfYear</code></td>
+<td style="text-align: left">返回本年的第一天</td>
+</tr>
+<tr>
+<td style="text-align: left"><code>firstInMonth</code></td>
+<td style="text-align: left">返回同一个月中第一个星期几</td>
+</tr>
+<tr>
+<td style="text-align: left"><code>lastDayOfMonth</code></td>
+<td style="text-align: left">返回当月的最后一天</td>
+</tr>
+<tr>
+<td style="text-align: left"><code>lastDayOfNextMonth</code></td>
+<td style="text-align: left">返回下月的最后一天</td>
+</tr>
+<tr>
+<td style="text-align: left"><code>lastDayOfNextYear</code></td>
+<td style="text-align: left">返回下一年的最后一天</td>
+</tr>
+<tr>
+<td style="text-align: left"><code>lastDayOfYear</code></td>
+<td style="text-align: left">返回本年的最后一天</td>
+</tr>
+<tr>
+<td style="text-align: left"><code>lastInMonth</code></td>
+<td style="text-align: left">返回同一个月中最后一个星期几</td>
+</tr>
+<tr>
+<td style="text-align: left"><code>next / previous</code></td>
+<td style="text-align: left">返回后一个/前一个给定的星期几</td>
+</tr>
+<tr>
+<td style="text-align: left"><code>nextOrSame / previousOrSame</code></td>
+<td style="text-align: left">返回后一个/前一个给定的星期几，如果这个值满足条件，直接返回</td>
+</tr>
+</tbody>
+</table>
+
+<p>如果上面表格中列出的方法不能满足你的需求，你还可以创建自定义的<code>TemporalAdjuster</code>接口的实现，<code>TemporalAdjuster</code>也是一个函数式接口，所以我们可以使用Lambda表达式：</p>
+
+<pre><code class="language-java">@FunctionalInterface
+public interface TemporalAdjuster {
+ Temporal adjustInto(Temporal temporal);
+}
+</code></pre>
+
+<p>比如给定一个日期，计算该日期的下一个工作日（不包括星期六和星期天）：</p>
+
+<pre><code class="language-java">LocalDate date = LocalDate.of(2017, 1, 5);
+date.with(temporal -&gt; {
+ // 当前日期
+ DayOfWeek dayOfWeek = DayOfWeek.of(temporal.get(ChronoField.DAY_OF_WEEK));
+
+ // 正常情况下，每次增加一天
+ int dayToAdd = 1;
+
+ // 如果是星期五，增加三天
+ if (dayOfWeek == DayOfWeek.FRIDAY) {
+ dayToAdd = 3;
+ }
+
+ // 如果是星期六，增加两天
+ if (dayOfWeek == DayOfWeek.SATURDAY) {
+ dayToAdd = 2;
+ }
+
+ return temporal.plus(dayToAdd, ChronoUnit.DAYS);
+});
+</code></pre>
+
+<h3 id="toc_8"><a href="https://lw900925.github.io/java/java8-newtime-api.html#%E6%A0%BC%E5%BC%8F%E5%8C%96%E6%97%A5%E6%9C%9F" title="格式化日期"></a>格式化日期</h3>
+
+<p>新的日期API中提供了一个<code>DateTimeFormatter</code>类用于处理日期格式化操作，它被包含在<code>java.time.format</code>包中，Java 8的日期类有一个<code>format()</code>方法用于将日期格式化为字符串，该方法接收一个<code>DateTimeFormatter</code>类型参数：</p>
+
+<pre><code class="language-java">LocalDateTime dateTime = LocalDateTime.now();
+String strDate1 = dateTime.format(DateTimeFormatter.BASIC_ISO_DATE);    // 20170105
+String strDate2 = dateTime.format(DateTimeFormatter.ISO_LOCAL_DATE);    // 2017-01-05
+String strDate3 = dateTime.format(DateTimeFormatter.ISO_LOCAL_TIME);    // 14:20:16.998
+String strDate4 = dateTime.format(DateTimeFormatter.ofPattern(&quot;yyyy-MM-dd&quot;));   // 2017-01-05
+String strDate5 = dateTime.format(DateTimeFormatter.ofPattern(&quot;今天是：YYYY年 MMMM DD日 E&quot;, Locale.CHINESE)); // 今天是：2017年 一月 05日 星期四
+</code></pre>
+
+<p>同样，日期类也支持将一个字符串解析成一个日期对象，例如：</p>
+
+<pre><code class="language-java">String strDate6 = &quot;2017-01-05&quot;;
+String strDate7 = &quot;2017-01-05 12:30:05&quot;;
+
+LocalDate date = LocalDate.parse(strDate6, DateTimeFormatter.ofPattern(&quot;yyyy-MM-dd&quot;));
+LocalDateTime dateTime1 = LocalDateTime.parse(strDate7, DateTimeFormatter.ofPattern(&quot;yyyy-MM-dd HH:mm:ss&quot;));
+</code></pre>
+
+<h2 id="toc_9"><a href="https://lw900925.github.io/java/java8-newtime-api.html#%E6%97%B6%E5%8C%BA" title="时区"></a>时区</h2>
+
+<p>Java 8中的时区操作被很大程度上简化了，新的时区类<code>java.time.ZoneId</code>是原有的<code>java.util.TimeZone</code>类的替代品。<code>ZoneId</code>对象可以通过<code>ZoneId.of()</code>方法创建，也可以通过<code>ZoneId.systemDefault()</code>获取系统默认时区：</p>
+
+<pre><code class="language-java">ZoneId shanghaiZoneId = ZoneId.of(&quot;Asia/Shanghai&quot;);
+ZoneId systemZoneId = ZoneId.systemDefault();
+
+</code></pre>
+
+<p><code>of()</code>方法接收一个“区域/城市”的字符串作为参数，你可以通过<code>getAvailableZoneIds()</code>方法获取所有合法的“区域/城市”字符串：</p>
+
+<pre><code class="language-java">Set zoneIds = ZoneId.getAvailableZoneIds();
+</code></pre>
+
+<p>对于老的时区类<code>TimeZone</code>，Java 8也提供了转化方法：</p>
+
+<pre><code class="language-java">ZoneId oldToNewZoneId = TimeZone.getDefault().toZoneId();
+</code></pre>
+
+<p>有了<code>ZoneId</code>，我们就可以将一个<code>LocalDate</code>、<code>LocalTime</code>或<code>LocalDateTime</code>对象转化为<code>ZonedDateTime</code>对象：</p>
+
+<pre><code class="language-java">LocalDateTime localDateTime = LocalDateTime.now();
+ZonedDateTime zonedDateTime = ZonedDateTime.of(localDateTime, shanghaiZoneId);
+</code></pre>
+
+<p>将<code>zonedDateTime</code>打印到控制台为：</p>
+
+<pre><code class="language-java">2017-01-05T15:26:56.147+08:00[Asia/Shanghai]
+</code></pre>
+
+<p><code>ZonedDateTime</code>对象由两部分构成，<code>LocalDateTime</code>和<code>ZoneId</code>，其中<code>2017-01-05T15:26:56.147</code>部分为<code>LocalDateTime</code>，<code>+08:00[Asia/Shanghai]</code>部分为<code>ZoneId</code>。</p>
+
+<p>另一种表示时区的方式是使用<code>ZoneOffset</code>，它是以当前时间和<strong>世界标准时间（UTC）/格林威治时间（GMT）</strong>的偏差来计算，例如：</p>
+
+<pre><code class="language-java">ZoneOffset zoneOffset = ZoneOffset.of(&quot;+09:00&quot;);
+LocalDateTime localDateTime = LocalDateTime.now();
+OffsetDateTime offsetDateTime = OffsetDateTime.of(localDateTime, zoneOffset);
+</code></pre>
+
+<h2 id="toc_10"><a href="https://lw900925.github.io/java/java8-newtime-api.html#%E5%85%B6%E4%BB%96%E5%8E%86%E6%B3%95" title="其他历法"></a>其他历法</h2>
+
+<p>Java中使用的历法是ISO 8601日历系统，它是世界民用历法，也就是我们所说的公历。平年有365天，闰年是366天。闰年的定义是：非世纪年，能被4整除；世纪年能被400整除。为了计算的一致性，公元1年的前一年被当做公元0年，以此类推。</p>
+
+<p>此外Java 8还提供了4套其他历法（很奇怪为什么没有汉族人使用的农历），每套历法都包含一个日期类，分别是：</p>
+
+<ul>
+<li><code>ThaiBuddhistDate</code>：泰国佛教历</li>
+<li><code>MinguoDate</code>：中华民国历</li>
+<li><code>JapaneseDate</code>：日本历</li>
+<li><code>HijrahDate</code>：伊斯兰历</li>
+</ul>
+
+<p>每个日期类都继承<code>ChronoLocalDate</code>类，所以可以在不知道具体历法的情况下也可以操作。不过这些历法一般不常用，除非是有某些特殊需求情况下才会使用。</p>
+
+<p>这些不同的历法也可以用于向公历转换：</p>
+
+<pre><code class="language-java">LocalDate date = LocalDate.now();
+JapaneseDate jpDate = JapaneseDate.from(date);
+</code></pre>
+
+<p>由于它们都继承<code>ChronoLocalDate</code>类，所以在不知道具体历法情况下，可以通过<code>ChronoLocalDate</code>类操作日期：</p>
+
+<pre><code class="language-java">Chronology jpChronology = Chronology.ofLocale(Locale.JAPANESE);
+ChronoLocalDate jpChronoLocalDate = jpChronology.dateNow();
+
+</code></pre>
+
+<p>我们在开发过程中应该尽量避免使用<code>ChronoLocalDate</code>，尽量用与历法无关的方式操作时间，因为不同的历法计算日期的方式不一样，比如开发者会在程序中做一些假设，假设一年中有12个月，如果是中国农历中包含了闰月，一年有可能是13个月，但开发者认为是12个月，多出来的一个月属于明年的。再比如假设年份是累加的，过了一年就在原来的年份上加一，但日本天皇在换代之后需要重新纪年，所以过了一年年份可能会从1开始计算。</p>
+
+<p>在实际开发过程中建议使用<code>LocalDate</code>，包括存储、操作、业务规则的解读；除非需要将程序的输入或者输出本地化，这时可以使用<code>ChronoLocalDate</code>类。</p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[使用脚本快速部署Java项目]]></title>
