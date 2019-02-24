@@ -309,6 +309,12 @@ gitment.render('container')
 	      
 		      
 			      <li class="post">
+			        <a href="15509800202549.html">画图</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
 			        <a href="15509784083382.html">Java 8新特性：新的时间和日期API</a>
 			      </li>
 		     
@@ -332,10 +338,6 @@ gitment.render('container')
 		     
 		  
 		      
-			      <li class="post">
-			        <a href="15509249440186.html">如何使用“发布脚本”功能发布静态网站</a>
-			      </li>
-		     
 		  
 		      
 		  
@@ -393,8 +395,45 @@ Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
     </script>
 
     
-
-
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+<style type="text/css">
+	#custom_menu{
+		width: 200px;
+		float: left;
+		z-index: 999;
+	}
+	#custom_menu li{
+	   list-style: none;
+	   margin: 0px;
+	   padding: 0px;
+	}
+	#custom_menu ul li{
+		border-bottom: : 1px solid #ccc;
+	}
+	#custom_menu ul li a{
+		display: block;
+		text-decoration: none;
+		padding: 10px;
+		background-color: white;
+		border-left: 2px solid #ccc;
+	}
+	#custom_menu ul li a:hover{
+		background-color: #f7f7f7;
+	}
+</style>
+<script>
+	$(document).ready(function(){
+		$(".article-content>ul:last").wrap("<div id='custom_menu'></div>");
+    	var $custom_menu = $("#custom_menu");
+    	$("#custom_menu").remove();
+    	$custom_menu.insertBefore($("#main-content"));
+    	var menuYloc = $("#custom_menu").offset().top;
+		$(window).scroll(function () {
+			var offsetTop = menuYloc + $(window).scrollTop() + "px";
+			$("#custom_menu").css("margin-top",offsetTop);
+		});
+	});
+</script> 
 
   </body>
 </html>
