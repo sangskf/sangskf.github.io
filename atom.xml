@@ -4,7 +4,7 @@
   <title><![CDATA[见课就上的小婊砸]]></title>
   <link href="https://books.sangkf.cn/atom.xml" rel="self"/>
   <link href="https://books.sangkf.cn/"/>
-  <updated>2019-02-24T21:58:37+08:00</updated>
+  <updated>2019-02-24T22:02:51+08:00</updated>
   <id>https://books.sangkf.cn/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -664,6 +664,13 @@ echo &quot;SENS部署完毕，Enjoy！&quot;
 <ul>
 <li>言曌博客
 <a href="http://blog.liuyanzhao.com/">http://blog.liuyanzhao.com/</a></li>
+</ul>
+
+<hr/>
+
+<ul>
+<li><a href="http://blog.sangkf.cn">个人博客</a></li>
+<li><a href="http://pma.sangkf.cn">PhpMyAdmin</a></li>
 </ul>
 
 ]]></content>
