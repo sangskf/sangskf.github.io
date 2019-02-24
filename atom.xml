@@ -4,7 +4,7 @@
   <title><![CDATA[见课就上的小婊砸]]></title>
   <link href="https://books.sangkf.cn/atom.xml" rel="self"/>
   <link href="https://books.sangkf.cn/"/>
-  <updated>2019-02-24T11:36:52+08:00</updated>
+  <updated>2019-02-24T11:39:40+08:00</updated>
   <id>https://books.sangkf.cn/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -351,6 +351,8 @@ ChronoLocalDate jpChronoLocalDate = jpChronology.dateNow();
 <p>我们在开发过程中应该尽量避免使用<code>ChronoLocalDate</code>，尽量用与历法无关的方式操作时间，因为不同的历法计算日期的方式不一样，比如开发者会在程序中做一些假设，假设一年中有12个月，如果是中国农历中包含了闰月，一年有可能是13个月，但开发者认为是12个月，多出来的一个月属于明年的。再比如假设年份是累加的，过了一年就在原来的年份上加一，但日本天皇在换代之后需要重新纪年，所以过了一年年份可能会从1开始计算。</p>
 
 <p>在实际开发过程中建议使用<code>LocalDate</code>，包括存储、操作、业务规则的解读；除非需要将程序的输入或者输出本地化，这时可以使用<code>ChronoLocalDate</code>类。</p>
+
+<p>转载出处：<a href="https://lw900925.github.io/java/java8-newtime-api.html#more">https://lw900925.github.io/java/java8-newtime-api.html#more</a></p>
 
 ]]></content>
   </entry>
