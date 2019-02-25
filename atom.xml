@@ -4,7 +4,7 @@
   <title><![CDATA[见课就上的小婊砸]]></title>
   <link href="https://books.sangkf.cn/atom.xml" rel="self"/>
   <link href="https://books.sangkf.cn/"/>
-  <updated>2019-02-25T11:22:36+08:00</updated>
+  <updated>2019-02-25T11:25:30+08:00</updated>
   <id>https://books.sangkf.cn/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -25,9 +25,9 @@
 <h2 id="toc_0">代理的含义</h2>
 
 <ul>
-<li>代理类的目的是为其他对象提供一个代理以控制对某个对象的访问。</li>
-<li>代理类负责为委托类预处理消息，过滤消息并转发消息，以及进行消息被委托类执行后的后续处理。
+<li>代理类的目的是为其他对象提供一个代理以控制对某个对象的访问。
 <span id="more"></span><!-- more --></li>
+<li>代理类负责为委托类预处理消息，过滤消息并转发消息，以及进行消息被委托类执行后的后续处理。</li>
 <li>为了保持行为的一致性，代理类和委托类通常会实现相同的接口，所以在访问者看来两者没有丝毫的区别。</li>
 <li>通过代理类这中间一层，能有效控制对委托类对象的直接访问，也可以很好的隐藏和保护委托类对象，同时也为实施不同控制策略预留了空间，从而在设计上获得了更大的灵活性。</li>
 </ul>
@@ -471,15 +471,15 @@
     <updated>2019-02-25T11:15:39+08:00</updated>
     <id>https://books.sangkf.cn/15510645390936.html</id>
     <content type="html"><![CDATA[
-<p><strong>基础篇</strong></p>
+<p>列举一些Java常用的知识点<br/>
+<span id="more"></span><!-- more --></p>
 
-<p><strong>01面向对象</strong></p>
-
-<p><strong>→ 什么是面向对象</strong><br/>
+<p><strong>基础篇</strong><br/>
+<strong>01面向对象</strong><br/>
+<strong>→ 什么是面向对象</strong><br/>
 面向对象、面向过程</p>
 
 <p>面向对象的三大基本特征和五大基本原则<br/>
-<span id="more"></span><!-- more --><br/>
 <strong>→ 平台无关性</strong><br/>
 Java 如何实现的平台无关</p>
 
@@ -1280,9 +1280,9 @@ TensorFlow、DeepLearning4J</p>
 <p>原文地址 <a href="https://www.cnblogs.com/huyunfan/p/7456535.html">https://www.cnblogs.com/huyunfan/p/7456535.html</a></p>
 
 <ul>
-<li><p><strong>default拓展方法</strong></p>
-<p>default关键字为接口声明添加非抽象方法的实现,也称为拓展方法<br/>
-<span id="more"></span><!-- more --></p>
+<li><p><strong>default拓展方法</strong><br/>
+<span id="more"></span><!-- more --><br/>
+default关键字为接口声明添加非抽象方法的实现,也称为拓展方法</p>
 <pre><code class="language-java">public interface Formula {
   void doSomething();<br/>
   default void before() {<br/>
