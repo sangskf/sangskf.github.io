@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  JDK动态代理 - 见课就上的小婊砸
+  Mysql大表优化方案 - 见课就上的小婊砸
   
   </title>
   
@@ -133,7 +133,7 @@
       <div class="markdown-body article-wrap">
        <div class="article">
           
-          <h1>JDK动态代理</h1>
+          <h1>Mysql大表优化方案</h1>
      
         <div class="read-more clearfix">
           <span class="date">2019/2/25 11:16 上午</span>
@@ -153,56 +153,9 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <blockquote>
-<p>[转载]<a href="https://blog.csdn.net/xiaokang123456kao/article/details/77679848">https://blog.csdn.net/xiaokang123456kao/article/details/77679848</a></p>
-</blockquote>
+      <p><a href="https://yq.aliyun.com/articles/679881?spm=a2c4e.11155472.0.0.ae1e42459WcIqo">原文地址</a></p>
 
-<h2 id="toc_0">代理的含义</h2>
-
-<ul>
-<li>代理类的目的是为其他对象提供一个代理以控制对某个对象的访问。
-<span id="more"></span><!-- more --></li>
-<li>代理类负责为委托类预处理消息，过滤消息并转发消息，以及进行消息被委托类执行后的后续处理。</li>
-<li>为了保持行为的一致性，代理类和委托类通常会实现相同的接口，所以在访问者看来两者没有丝毫的区别。</li>
-<li>通过代理类这中间一层，能有效控制对委托类对象的直接访问，也可以很好的隐藏和保护委托类对象，同时也为实施不同控制策略预留了空间，从而在设计上获得了更大的灵活性。</li>
-</ul>
-
-<h2 id="toc_1">动态代理相关类介绍</h2>
-
-<ol>
-<li><p>InvocationHandler</p>
-<pre><code class="language-text">每一个动态代理类都必须要实现InvocationHandler这个接口，并且每个代理类的实例都关联了一个Handler,当我们通过代理对象调用一个方法的时候，这个方法的调用就会被转发为由InvocationHandler这个接口的Invoke方法来进行调用。
-</code></pre>
-<p>InvocationHandler这个接口的唯一一个方法invoke方法:</p>
-<pre><code class="language-java">Object invoke(Object proxy, Method method, Object[] args) throws Throwable
-</code></pre>
-<p>三个参数:</p>
-<ul>
-<li>proxy： 指代JDK动态生成的最终代理对象</li>
-<li>method：指代的是我们所要调用真是对象的某个方法的Method对象</li>
-<li>args: 指代的是调用真是对象的某个方法时接收的参数</li>
-</ul></li>
-<li><p>Proxy</p>
-<p>​    Proxy这个类的作用就是用来动态创建一个代理对象的类，它提供了许多的方法，但是我们用的最多的就是 newProxyInstance 这个方法</p>
-<pre><code class="language-java">public static Object newProxyInstance(ClassLoader loader,
-                                         Class&lt;?&gt;[] interfaces,<br/>
-                                         InvocationHandler h)<br/>
-       throws IllegalArgumentException
-</code></pre>
-<p>这个方法的作用就是得到一个动态的代理对象，其接收三个参数，我们来看看这三个参数所代表的含义：</p>
-<ul>
-<li>loader:　一个ClassLoader对象，定义了由哪个ClassLoader来对生成的代理对象进行加载</li>
-<li>interfaces:　　一个Interface对象的数组，表示的是我将要给我需要代理的对象提供一组什么接口，如果我提供了一组接口给它，那么这个代理对象就宣称实现了该接口(多态)，这样我就能调用这组接口中的方法了</li>
-<li>一个InvocationHandler对象，表示的是当我这个动态代理对象在调用方法的时候，会关联到哪一个InvocationHandler对象上</li>
-</ul>
-<p>其实我们所说的DynamicProxy（动态代理类）是这样一种class：它是在运行时生成的class，在生成它时你必须提供一组interface给它，然后该class就宣称它实现了这些 interface。如此一来，我们可以把该class的实例当作这些interface中的任何一个来用（可以强转为相应的接口类型）。当然，这个DynamicProxy其实就是一个Proxy，它不会做实质性的工作，在生成它的实例时你必须提供一个handler，由它接管实际的工作。</p></li>
-</ol>
-
-<h1 id="toc_2">Mysql大表优化方案</h1>
-
-<p><a href="https://yq.aliyun.com/articles/679881?spm=a2c4e.11155472.0.0.ae1e42459WcIqo">原文地址</a></p>
-
-<h2 id="toc_3">单表优化方案</h2>
+<h2 id="toc_0">单表优化方案</h2>
 
 <blockquote>
 <p>除非单表数据未来会一直不断上涨，否则不要一开始就考虑拆分，拆分会带来逻辑、部署、运维的各种复杂度，一般以整型值为主的表在千万级以下，字符串为主的表在五百万以下是没有太大问题的。而事实上很多时候MySQL单表的性能依然有不少优化空间，甚至能正常支撑千万级以上的数据量。</p>
@@ -293,11 +246,11 @@
 <p>Scale up，这个不多说了，根据MySQL是CPU密集型还是I/O密集型，通过提升CPU和内存、使用SSD，都能显著提升MySQL性能。</p></li>
 </ol>
 
-<h2 id="toc_4">读写分离</h2>
+<h2 id="toc_1">读写分离</h2>
 
 <p>也是目前常用的优化，从库读主库写，一般不要采用双主或多主引入很多复杂性，尽量采用文中的其他方案来提高性能。同时目前很多拆分的解决方案同时也兼顾考虑了读写分离</p>
 
-<h2 id="toc_5">缓存</h2>
+<h2 id="toc_2">缓存</h2>
 
 <p><strong>缓存可以发生在这些层次：</strong></p>
 
@@ -319,7 +272,7 @@
 
 <p><strong>2）回写式（Write Back）：</strong>当有数据要写入数据库时，只会更新缓存，然后异步批量的将缓存数据同步到数据库上。这种实现比较复杂，需要较多的应用逻辑，同时可能会产生数据库与缓存的不同步，但效率非常高。</p>
 
-<h2 id="toc_6">表分区</h2>
+<h2 id="toc_3">表分区</h2>
 
 <p>MySQL在5.1版引入的分区是一种简单的水平拆分，用户需要在建表的时候加上分区参数，对应用是透明的无需修改代码。</p>
 
@@ -377,7 +330,7 @@
 
 <p>另外MySQL有一种早期的简单的分区实现 - 合并表（merge table），限制较多且缺乏优化，不建议使用，应该用新的分区机制来替代。</p>
 
-<h2 id="toc_7">垂直拆分</h2>
+<h2 id="toc_4">垂直拆分</h2>
 
 <p>垂直分库是根据数据库里面的数据表的相关性进行拆分，比如：一个数据库里面既存在用户数据，又存在订单数据，那么垂直拆分可以把用户数据放到用户库、把订单数据放到订单库。垂直分表是对数据表进行垂直拆分的一种方式，常见的是把一个多字段的大表按常用字段和非常用字段进行拆分，每个表里面的数据记录数一般情况下是相同的，只是字段不一样，使用主键关联。</p>
 
@@ -407,9 +360,9 @@
 
 <p>4）事务处理复杂。</p>
 
-<h2 id="toc_8">水平拆分</h2>
+<h2 id="toc_5">水平拆分</h2>
 
-<h4 id="toc_9">概述</h4>
+<h4 id="toc_6">概述</h4>
 
 <p>水平拆分是通过某种策略将数据分片来存储，分库内分表和分库两部分，每片数据会分散到不同的MySQL表或库，达到分布式的效果，能够支持非常大的数据量。前面的表分区本质上也是一种特殊的库内分表。</p>
 
@@ -437,7 +390,7 @@
 
 <p>3）数据多次扩展难度跟维护量极大。</p>
 
-<h4 id="toc_10">分片原则</h4>
+<h4 id="toc_7">分片原则</h4>
 
 <p>1）能不分就不分，参考“单表优化”；</p>
 
@@ -455,7 +408,7 @@
 
 <p>总体上来说，分片的选择是取决于最频繁的查询SQL的条件，因为不带任何Where语句的查询SQL，会遍历所有的分片，性能相对最差，因此这种SQL越多，对系统的影响越大，所以我们要尽量避免这种SQL的产生。</p>
 
-<h4 id="toc_11">解决方案</h4>
+<h4 id="toc_8">解决方案</h4>
 
 <p>由于水平拆分牵涉的逻辑比较复杂，当前也有了不少比较成熟的解决方案。这些方案分为两大类：客户端架构和代理架构。</p>
 
@@ -502,7 +455,7 @@
 <p>需部署和运维独立的代理中间件，成本高；<br/>
 应用需经过代理来连接数据库，网络上多了一跳，性能有损失且有额外风险。</p>
 
-<h4 id="toc_12">各方案比较</h4>
+<h4 id="toc_9">各方案比较</h4>
 
 <p><img src="/Users/sangkuofeng/Library/Application%20Support/typora-user-images/image-20190218161825489.png" alt="image-20190218161825489"/></p>
 
@@ -520,7 +473,7 @@
 <p>1）客户端架构：ShardingJDBC；<br/>
 2）代理架构：MyCat或者Atlas。</p>
 
-<h2 id="toc_13">兼容MySQL且可水平扩展的数据库</h2>
+<h2 id="toc_10">兼容MySQL且可水平扩展的数据库</h2>
 
 <p><strong>目前也有一些开源数据库兼容MySQL协议，如：</strong></p>
 
@@ -545,54 +498,43 @@
 
 <ul>
 <li>
-<a href="#toc_0">代理的含义</a>
+<a href="#toc_0">单表优化方案</a>
 </li>
 <li>
-<a href="#toc_1">动态代理相关类介绍</a>
-</li>
-</ul>
+<a href="#toc_1">读写分离</a>
 </li>
 <li>
-<a href="#toc_2">Mysql大表优化方案</a>
-<ul>
-<li>
-<a href="#toc_3">单表优化方案</a>
+<a href="#toc_2">缓存</a>
 </li>
 <li>
-<a href="#toc_4">读写分离</a>
+<a href="#toc_3">表分区</a>
 </li>
 <li>
-<a href="#toc_5">缓存</a>
+<a href="#toc_4">垂直拆分</a>
 </li>
 <li>
-<a href="#toc_6">表分区</a>
-</li>
-<li>
-<a href="#toc_7">垂直拆分</a>
-</li>
-<li>
-<a href="#toc_8">水平拆分</a>
+<a href="#toc_5">水平拆分</a>
 <ul>
 <li>
 <ul>
 <li>
-<a href="#toc_9">概述</a>
+<a href="#toc_6">概述</a>
 </li>
 <li>
-<a href="#toc_10">分片原则</a>
+<a href="#toc_7">分片原则</a>
 </li>
 <li>
-<a href="#toc_11">解决方案</a>
+<a href="#toc_8">解决方案</a>
 </li>
 <li>
-<a href="#toc_12">各方案比较</a>
+<a href="#toc_9">各方案比较</a>
 </li>
 </ul>
 </li>
 </ul>
 </li>
 <li>
-<a href="#toc_13">兼容MySQL且可水平扩展的数据库</a>
+<a href="#toc_10">兼容MySQL且可水平扩展的数据库</a>
 </li>
 </ul>
 
@@ -605,6 +547,9 @@
       <div class="row">
         <div class="large-6 columns">
         <p class="text-left" style="padding:15px 0px;">
+      
+          <a href="15510682951931.html" 
+          title="Previous Post: JDK动态代理">&laquo; JDK动态代理</a>
       
         </p>
         </div>
@@ -705,7 +650,13 @@
 	      
 		      
 			      <li class="post">
-			        <a href="15510645880732.html">JDK动态代理</a>
+			        <a href="15510682951931.html">JDK动态代理</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15510645880732.html">Mysql大表优化方案</a>
 			      </li>
 		     
 		  
@@ -728,10 +679,6 @@
 		     
 		  
 		      
-			      <li class="post">
-			        <a href="15509800202549.html">MarkDown常见图表，流程图书写✍️</a>
-			      </li>
-		     
 		  
 		      
 		  
