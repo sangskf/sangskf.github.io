@@ -4,7 +4,7 @@
   <title><![CDATA[见课就上的小婊砸]]></title>
   <link href="https://books.sangkf.cn/atom.xml" rel="self"/>
   <link href="https://books.sangkf.cn/"/>
-  <updated>2019-02-25T19:44:26+08:00</updated>
+  <updated>2019-02-25T19:45:47+08:00</updated>
   <id>https://books.sangkf.cn/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -18,7 +18,9 @@
     <updated>2019-02-25T19:36:31+08:00</updated>
     <id>https://books.sangkf.cn/15510945917129.html</id>
     <content type="html"><![CDATA[
-<p>分布式事务场景如何设计系统架构及解决数据一致性问题，个人理解最终方案把握以下原则就可以了，那就是：大事务=小事务（原子事务）+异步（消息通知），<strong>解决分布式事务的最好办法其实就是不考虑分布式事务，将一个大的业务进行拆分，整个大的业务流程，转化成若干个小的业务流程，然后通过设计补偿流程从而考虑最终一致性。</strong></p>
+<p>分布式事务场景如何设计系统架构及解决数据一致性问题，个人理解最终方案把握以下原则就可以了，那就是：大事务=小事务（原子事务）+异步（消息通知），<br/>
+<span id="more"></span><!-- more --><br/>
+<strong>解决分布式事务的最好办法其实就是不考虑分布式事务，将一个大的业务进行拆分，整个大的业务流程，转化成若干个小的业务流程，然后通过设计补偿流程从而考虑最终一致性。</strong></p>
 
 <h4 id="toc_0">What’s 事务</h4>
 
@@ -180,7 +182,8 @@
     <content type="html"><![CDATA[
 <h2 id="toc_0">事务特性</h2>
 
-<p>原子性、一致性、隔离性、持久性，这四个属性通常称为ACID特性。</p>
+<p>原子性、一致性、隔离性、持久性，这四个属性通常称为ACID特性。<br/>
+<span id="more"></span><!-- more --></p>
 
 <ul>
 <li>原子性（atomicity）。一个事务是一个不可分割的工作单位，事务中包括的诸操作要么都做，要么都不做。</li>
