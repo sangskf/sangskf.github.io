@@ -4,7 +4,7 @@
   <title><![CDATA[见课就上的小婊砸]]></title>
   <link href="https://books.sangkf.cn/atom.xml" rel="self"/>
   <link href="https://books.sangkf.cn/"/>
-  <updated>2019-02-24T22:33:07+08:00</updated>
+  <updated>2019-02-25T10:59:02+08:00</updated>
   <id>https://books.sangkf.cn/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -35,6 +35,8 @@
     John-&gt;Bob: How about you?
     Bob--&gt;John: Jolly good!
 </code></pre>
+
+<p><img src="media/15509800202549/15510632566254.jpg" alt="" style="width:500px;"/></p>
 
 <h3 id="toc_1">dot</h3>
 
@@ -68,6 +70,8 @@ digraph G {
 }
 </code></pre>
 
+<p><img src="media/15509800202549/15510633206455.jpg" alt="" style="width:293px;"/></p>
+
 <h3 id="toc_2">echarts</h3>
 
 <pre><code class="language-echarts">option = {
@@ -84,6 +88,8 @@ digraph G {
     }]
 };
 </code></pre>
+
+<p><img src="media/15509800202549/15510633473570.jpg" alt="" style="width:500px;"/></p>
 
 <h3 id="toc_3">顺序图和流程图</h3>
 
@@ -102,16 +108,21 @@ cond(yes)-&gt;e
 cond(no)-&gt;op
 </code></pre>
 
+<p><img src="media/15509800202549/15510633802834.jpg" alt="" style="width:436px;"/></p>
+
 <h3 id="toc_4">LaTeX （MathJax 渲染）</h3>
 
-<p>块级公式：<br/>
-\[  x = \dfrac{-b \pm \sqrt{b^2 - 4ac}}{2a} \]</p>
+<pre><code class="language-text">块级公式：
+$$  x = \dfrac{-b \pm \sqrt{b^2 - 4ac}}{2a} $$
 
-<p>\[ \frac{1}{\Bigl(\sqrt{\phi \sqrt{5}}-\phi\Bigr) e^{\frac25 \pi}} =<br/>
-1+\frac{e^{-2\pi}} {1+\frac{e^{-4\pi}} {1+\frac{e^{-6\pi}}<br/>
-{1+\frac{e^{-8\pi}} {1+\ldots} } } } \]</p>
+\\[ \frac{1}{\Bigl(\sqrt{\phi \sqrt{5}}-\phi\Bigr) e^{\frac25 \pi}} =
+1+\frac{e^{-2\pi}} {1+\frac{e^{-4\pi}} {1+\frac{e^{-6\pi}}
+{1+\frac{e^{-8\pi}} {1+\ldots} } } } \\]
 
-<p>行内公式： \(\Gamma(n) = (n-1)!\quad\forall n\in\mathbb N\)</p>
+行内公式： $\Gamma(n) = (n-1)!\quad\forall n\in\mathbb N$
+</code></pre>
+
+<p><img src="media/15509800202549/15510634028669.jpg" alt="" style="width:500px;"/></p>
 
 <ul>
 <li>
