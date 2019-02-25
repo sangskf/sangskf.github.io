@@ -4,13 +4,133 @@
   <title><![CDATA[见课就上的小婊砸]]></title>
   <link href="https://books.sangkf.cn/atom.xml" rel="self"/>
   <link href="https://books.sangkf.cn/"/>
-  <updated>2019-02-25T21:54:26+08:00</updated>
+  <updated>2019-02-25T22:09:00+08:00</updated>
   <id>https://books.sangkf.cn/</id>
   <author>
     <name><![CDATA[]]></name>
     
   </author>
   <generator uri="http://www.mweb.im/">MWeb</generator>
+  
+  <entry>
+    <title type="html"><![CDATA[😋 技术必备基础知识]]></title>
+    <link href="https://books.sangkf.cn/15511034481464.html"/>
+    <updated>2019-02-25T22:04:08+08:00</updated>
+    <id>https://books.sangkf.cn/15511034481464.html</id>
+    <content type="html"><![CDATA[
+<p>本项目包含了技术面试必备的基础知识，浅显易懂，你不需要花很长的时间去阅读和理解成堆的技术书籍就可以快速掌握这些知识，从而节省宝贵的面试复习时间。你也可以阅读 <a href="https://github.com/CyC2018/Backend-Interview-Guide">面试进阶指南</a>，包含了学习指导和面试技巧，让你更轻松拿到满意的 Offer。<br/>
+<span id="more"></span><!-- more --></p>
+
+<h2 id="toc_0">✏️ 算法</h2>
+
+<ul>
+<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E5%89%91%E6%8C%87%20offer%20%E9%A2%98%E8%A7%A3.md">剑指 Offer 题解</a></li>
+<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/Leetcode%20%E9%A2%98%E8%A7%A3.md">Leetcode 题解</a></li>
+<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E7%AE%97%E6%B3%95.md">算法</a></li>
+</ul>
+
+<h2 id="toc_1">💻 操作系统</h2>
+
+<ul>
+<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F.md">计算机操作系统</a></li>
+<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/Linux.md">Linux</a></li>
+</ul>
+
+<h2 id="toc_2">☁️ 网络</h2>
+
+<ul>
+<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C.md">计算机网络</a></li>
+<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/HTTP.md">HTTP</a></li>
+<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/Socket.md">Socket</a></li>
+</ul>
+
+<h2 id="toc_3">🎨 面向对象</h2>
+
+<ul>
+<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.md">设计模式</a></li>
+<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E6%83%B3.md">面向对象思想</a></li>
+</ul>
+
+<h2 id="toc_4">💾 数据库</h2>
+
+<ul>
+<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86.md">数据库系统原理</a></li>
+<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/SQL.md">SQL</a></li>
+<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/Leetcode-Database%20%E9%A2%98%E8%A7%A3.md">Leetcode-Database 题解</a></li>
+<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/MySQL.md">MySQL</a></li>
+<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/Redis.md">Redis</a></li>
+</ul>
+
+<h2 id="toc_5">☕️ Java</h2>
+
+<ul>
+<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/Java%20%E5%9F%BA%E7%A1%80.md">Java 基础</a></li>
+<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/Java%20%E5%AE%B9%E5%99%A8.md">Java 容器</a></li>
+<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/Java%20%E5%B9%B6%E5%8F%91.md">Java 并发</a></li>
+<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/Java%20%E8%99%9A%E6%8B%9F%E6%9C%BA.md">Java 虚拟机</a></li>
+<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/Java%20IO.md">Java I/O</a></li>
+</ul>
+
+<h2 id="toc_6">💡 系统设计</h2>
+
+<ul>
+<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%80.md">系统设计基础</a></li>
+<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E5%88%86%E5%B8%83%E5%BC%8F.md">分布式</a></li>
+<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E9%9B%86%E7%BE%A4.md">集群</a></li>
+<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E6%94%BB%E5%87%BB%E6%8A%80%E6%9C%AF.md">攻击技术</a></li>
+<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E7%BC%93%E5%AD%98.md">缓存</a></li>
+<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97.md">消息队列</a></li>
+</ul>
+
+<h2 id="toc_7">🔧 工具</h2>
+
+<ul>
+<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/Git.md">Git</a></li>
+<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/Docker.md">Docker</a></li>
+<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E6%9E%84%E5%BB%BA%E5%B7%A5%E5%85%B7.md">构建工具</a></li>
+<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F.md">正则表达式</a></li>
+</ul>
+
+<h2 id="toc_8">🍉 编码实践</h2>
+
+<ul>
+<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E4%BB%A3%E7%A0%81%E5%8F%AF%E8%AF%BB%E6%80%A7.md">代码可读性</a></li>
+<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E4%BB%A3%E7%A0%81%E9%A3%8E%E6%A0%BC%E8%A7%84%E8%8C%83.md">代码风格规范</a></li>
+</ul>
+
+<ul>
+<li>
+<a href="#toc_0">✏️ 算法</a>
+</li>
+<li>
+<a href="#toc_1">💻 操作系统</a>
+</li>
+<li>
+<a href="#toc_2">☁️ 网络</a>
+</li>
+<li>
+<a href="#toc_3">🎨 面向对象</a>
+</li>
+<li>
+<a href="#toc_4">💾 数据库</a>
+</li>
+<li>
+<a href="#toc_5">☕️ Java</a>
+</li>
+<li>
+<a href="#toc_6">💡 系统设计</a>
+</li>
+<li>
+<a href="#toc_7">🔧 工具</a>
+</li>
+<li>
+<a href="#toc_8">🍉 编码实践</a>
+</li>
+</ul>
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[分布式事务]]></title>
@@ -4033,142 +4153,6 @@ optional.ifPresent((s) -&gt; System.out.println(s.charAt(0)));
 </ul>
 
 
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[h5仿微信聊天(高仿版)、微信聊天表情|对话框|编辑器]]></title>
-    <link href="https://books.sangkf.cn/15508991872164.html"/>
-    <updated>2019-02-23T13:19:47+08:00</updated>
-    <id>https://books.sangkf.cn/15508991872164.html</id>
-    <content type="html"><![CDATA[
-<blockquote>
-<p>转载 <a href="https://www.cnblogs.com/xiaoyan2017/p/8912054.html">https://www.cnblogs.com/xiaoyan2017/p/8912054.html</a></p>
-</blockquote>
-
-<p>之前做过一版h5微信聊天移动端，这段时间闲来无事就整理了下之前项目，又重新在原先的那版基础上升级了下，如是就有了现在的h5仿微信聊天高仿版，新增了微聊、通讯录、探索、我四个模块 左右触摸滑屏切换，聊天页面优化了多图预览、视频播放，长按菜单UI，聊天底部编辑器重新优化整理(新增多表情)，弹窗则用到了自己开发的wcPop.js，具体看项目效果图吧！<br/>
-<span id="more"></span><!-- more --></p>
-
-<pre><code class="language-markup">&lt;!-- //微聊底部功能面板 --&gt;
-&lt;div class=&quot;wc__footTool-panel&quot;&gt;
-    &lt;!-- 输入框模块 --&gt;
-    &lt;div class=&quot;wc__editor-panel wc__borT flexbox&quot;&gt;
-        &lt;div class=&quot;wrap-editor flex1&quot;&gt;&lt;div class=&quot;editor J__wcEditor&quot; contenteditable=&quot;true&quot;&gt;&lt;/div&gt;&lt;/div&gt;
-        &lt;i class=&quot;btn btn-emotion&quot;&gt;&lt;/i&gt;
-        &lt;i class=&quot;btn btn-choose&quot;&gt;&lt;/i&gt;
-        &lt;button class=&quot;btn-submit J__wchatSubmit&quot;&gt;发送&lt;/button&gt;
-    &lt;/div&gt;
-
-    &lt;!-- 表情、选择模块 --&gt;
-    &lt;div class=&quot;wc__choose-panel wc__borT&quot; style=&quot;display: none;&quot;&gt;
-        &lt;!-- 表情区域 --&gt;
-        &lt;div class=&quot;wrap-emotion&quot; style=&quot;display: none;&quot;&gt;
-            &lt;div class=&quot;emotion__cells flexbox flex__direction-column&quot;&gt;
-                &lt;div class=&quot;emotion__cells-swiper flex1&quot; id=&quot;J__swiperEmotion&quot;&gt;
-                    &lt;div class=&quot;swiper-container&quot;&gt;
-                        &lt;div class=&quot;swiper-wrapper&quot;&gt;&lt;/div&gt;
-                        &lt;div class=&quot;pagination-emotion&quot;&gt;&lt;/div&gt;
-                    &lt;/div&gt;
-                &lt;/div&gt;
-                &lt;div class=&quot;emotion__cells-footer&quot; id=&quot;J__emotionFootTab&quot;&gt;
-                    &lt;ul class=&quot;clearfix&quot;&gt;
-                        &lt;li class=&quot;swiperTmpl cur&quot; tmpl=&quot;swiper__tmpl-emotion01&quot;&gt;&lt;img src=&quot;img/emotion/face01/face-lbl.png&quot; alt=&quot;&quot;&gt;&lt;/li&gt;
-                        &lt;li class=&quot;swiperTmpl&quot; tmpl=&quot;swiper__tmpl-emotion02&quot;&gt;&lt;img src=&quot;img/emotion/face02/face-lbl.gif&quot; alt=&quot;&quot;&gt;&lt;/li&gt;
-                        &lt;li class=&quot;swiperTmpl&quot; tmpl=&quot;swiper__tmpl-emotion03&quot;&gt;&lt;img src=&quot;img/emotion/face03/face-lbl.gif&quot; alt=&quot;&quot;&gt;&lt;/li&gt;
-                        &lt;li class=&quot;swiperTmpl&quot; tmpl=&quot;swiper__tmpl-emotion04&quot;&gt;&lt;img src=&quot;img/emotion/face04/face-lbl.gif&quot; alt=&quot;&quot;&gt;&lt;/li&gt;
-                        &lt;li class=&quot;swiperTmpl&quot; tmpl=&quot;swiper__tmpl-emotion05&quot;&gt;&lt;img src=&quot;img/emotion/face05/face-lbl.gif&quot; alt=&quot;&quot;&gt;&lt;/li&gt;
-                        &lt;li class=&quot;swiperTmpl&quot; tmpl=&quot;swiper__tmpl-emotion06&quot;&gt;&lt;img src=&quot;img/emotion/face06/face-lbl.gif&quot; alt=&quot;&quot;&gt;&lt;/li&gt;
-                        &lt;li class=&quot;swiperTmplSet&quot;&gt;&lt;img src=&quot;img/wchat/icon__emotion-set.png&quot; alt=&quot;&quot;&gt;&lt;/li&gt;
-                    &lt;/ul&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-        &lt;!-- 选择区域 --&gt;
-        &lt;div class=&quot;wrap-choose&quot; style=&quot;display: none;&quot;&gt;
-            &lt;div class=&quot;choose__cells&quot;&gt;
-                &lt;ul class=&quot;clearfix&quot;&gt;
-                    &lt;li&gt;&lt;a class=&quot;J__wchatZp&quot; href=&quot;javascript:;&quot;&gt;&lt;span class=&quot;img&quot;&gt;&lt;img src=&quot;img/wchat/icon__choose-zp.png&quot; /&gt;&lt;input type=&quot;file&quot; accept=&quot;image/*&quot; /&gt;&lt;/span&gt;&lt;em&gt;照片&lt;/em&gt;&lt;/a&gt;&lt;/li&gt;
-                    &lt;li&gt;&lt;a class=&quot;J__wchatSp&quot; href=&quot;javascript:;&quot;&gt;&lt;span class=&quot;img&quot;&gt;&lt;img src=&quot;img/wchat/icon__choose-sp.png&quot; /&gt;&lt;input type=&quot;file&quot; accept=&quot;video/*&quot; /&gt;&lt;/span&gt;&lt;em&gt;视频&lt;/em&gt;&lt;/a&gt;&lt;/li&gt;
-                    &lt;li&gt;&lt;a class=&quot;J__wchatHb&quot; href=&quot;javascript:;&quot;&gt;&lt;span class=&quot;img&quot;&gt;&lt;img src=&quot;img/wchat/icon__choose-hb.png&quot; /&gt;&lt;/span&gt;&lt;em&gt;红包&lt;/em&gt;&lt;/a&gt;&lt;/li&gt;
-                    &lt;li&gt;&lt;a class=&quot;J__wchatSc&quot; href=&quot;javascript:;&quot;&gt;&lt;span class=&quot;img&quot;&gt;&lt;img src=&quot;img/wchat/icon__choose-sc.png&quot; /&gt;&lt;/span&gt;&lt;em&gt;我的收藏&lt;/em&gt;&lt;/a&gt;&lt;/li&gt;
-                    &lt;li&gt;&lt;a class=&quot;J__wchatWj&quot; href=&quot;javascript:;&quot;&gt;&lt;span class=&quot;img&quot;&gt;&lt;img src=&quot;img/wchat/icon__choose-wj.png&quot; /&gt;&lt;/span&gt;&lt;em&gt;文件&lt;/em&gt;&lt;/a&gt;&lt;/li&gt;
-                &lt;/ul&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div class=&quot;wc__choosePanel-tmpl&quot;&gt;
-    &lt;!-- //红包模板.begin --&gt;
-    &lt;div id=&quot;J__popupTmpl-Hongbao&quot; style=&quot;display:none;&quot;&gt;
-        &lt;div class=&quot;wc__popupTmpl tmpl-hongbao&quot;&gt;
-            &lt;i class=&quot;wc-xclose&quot;&gt;&lt;/i&gt;
-            &lt;ul class=&quot;clearfix&quot;&gt;
-                &lt;li class=&quot;item flexbox&quot;&gt;
-                    &lt;label class=&quot;txt&quot;&gt;总金额&lt;/label&gt;&lt;input class=&quot;ipt-txt flex1&quot; type=&quot;tel&quot; name=&quot;hbAmount&quot; placeholder=&quot;0.00&quot; /&gt;&lt;em class=&quot;unit&quot;&gt;元&lt;/em&gt;
-                &lt;/li&gt;
-                &lt;li class=&quot;item flexbox&quot;&gt;
-                    &lt;label class=&quot;txt&quot;&gt;红包个数&lt;/label&gt;&lt;input class=&quot;ipt-txt flex1&quot; type=&quot;tel&quot; name=&quot;hbNum&quot; placeholder=&quot;填写个数&quot; /&gt;&lt;em class=&quot;unit&quot;&gt;个&lt;/em&gt;
-                &lt;/li&gt;
-                &lt;li class=&quot;tips&quot;&gt;在线人数共&lt;em class=&quot;memNum&quot;&gt;186&lt;/em&gt;人&lt;/li&gt;
-                &lt;li class=&quot;item item-area&quot;&gt;
-                    &lt;textarea class=&quot;describe&quot; name=&quot;content&quot; placeholder=&quot;恭喜发财，大吉大利&quot;&gt;&lt;/textarea&gt;
-                &lt;/li&gt;
-                &lt;li class=&quot;amountTotal&quot;&gt;￥&lt;em class=&quot;num&quot;&gt;0.00&lt;/em&gt;&lt;/li&gt;
-            &lt;/ul&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;!-- //红包模板.end --&gt;
-&lt;/div&gt;
-</code></pre>
-
-<pre><code class="language-javascript">// ...长按弹出菜单
-$(&quot;#J__chatMsgList&quot;).on(&quot;longTap&quot;, &quot;li .msg&quot;, function(e){
-    var that = $(this), menuTpl, menuNode = $(&quot;&lt;div class=&#39;wc__chatTapMenu animated anim-fadeIn&#39;&gt;&lt;/div&gt;&quot;);
-    that.addClass(&quot;taped&quot;);
-    that.parents(&quot;li&quot;).siblings().find(&quot;.msg&quot;).removeClass(&quot;taped&quot;);
-    var isRevoke = that.parents(&quot;li&quot;).hasClass(&quot;me&quot;);
-    var _revoke = isRevoke ? &quot;&lt;a href=&#39;#&#39;&gt;&lt;i class=&#39;ico i4&#39;&gt;&lt;/i&gt;撤回&lt;/a&gt;&quot; : &quot;&quot;;
-    
-    if(that.hasClass(&quot;picture&quot;)){
-        console.log(&quot;图片长按&quot;);
-        menuTpl = &quot;&lt;div class=&#39;menu menu-picture&#39;&gt;&lt;a href=&#39;#&#39;&gt;&lt;i class=&#39;ico i1&#39;&gt;&lt;/i&gt;复制&lt;/a&gt;&lt;a href=&#39;#&#39;&gt;&lt;i class=&#39;ico i2&#39;&gt;&lt;/i&gt;收藏&lt;/a&gt;&lt;a href=&#39;#&#39;&gt;&lt;i class=&#39;ico i3&#39;&gt;&lt;/i&gt;另存为&lt;/a&gt;&quot;+ _revoke +&quot;&lt;a href=&#39;#&#39;&gt;&lt;i class=&#39;ico i5&#39;&gt;&lt;/i&gt;删除&lt;/a&gt;&lt;/div&gt;&quot;;
-    }else if(that.hasClass(&quot;video&quot;)){
-        console.log(&quot;视频长按&quot;);
-        menuTpl = &quot;&lt;div class=&#39;menu menu-video&#39;&gt;&lt;a href=&#39;#&#39;&gt;&lt;i class=&#39;ico i3&#39;&gt;&lt;/i&gt;另存为&lt;/a&gt;&quot; + _revoke +&quot;&lt;a href=&#39;#&#39;&gt;&lt;i class=&#39;ico i5&#39;&gt;&lt;/i&gt;删除&lt;/a&gt;&lt;/div&gt;&quot;;
-    }else{
-        console.log(&quot;文字长按&quot;);
-        menuTpl = &quot;&lt;div class=&#39;menu menu-text&#39;&gt;&lt;a href=&#39;#&#39;&gt;&lt;i class=&#39;ico i1&#39;&gt;&lt;/i&gt;复制&lt;/a&gt;&lt;a href=&#39;#&#39;&gt;&lt;i class=&#39;ico i2&#39;&gt;&lt;/i&gt;收藏&lt;/a&gt;&quot; + _revoke +&quot;&lt;a href=&#39;#&#39;&gt;&lt;i class=&#39;ico i5&#39;&gt;&lt;/i&gt;删除&lt;/a&gt;&lt;/div&gt;&quot;;
-    }
-
-    if(!$(&quot;.wc__chatTapMenu&quot;).length){
-        $(&quot;.wc__chatMsg-panel&quot;).append(menuNode.html(menuTpl));
-        autoPos();
-    }else{
-        $(&quot;.wc__chatTapMenu&quot;).hide().html(menuTpl).fadeIn(250);
-        autoPos();
-    }
-
-    function autoPos(){
-        console.log(that.position().top)
-        var _other = that.parents(&quot;li&quot;).hasClass(&quot;others&quot;);
-        $(&quot;.wc__chatTapMenu&quot;).css({
-            position: &quot;absolute&quot;,
-            left: that.position().left + parseInt(that.css(&quot;marginLeft&quot;)) + (_other ? 0 : that.outerWidth() - $(&quot;.wc__chatTapMenu&quot;).outerWidth()),
-            top: that.position().top - $(&quot;.wc__chatTapMenu&quot;).outerHeight() - 8
-        });
-    }
-});
-</code></pre>
-
-<p><img src="media/15508991872164/15508994793999.jpg" alt="" class="mw_img_left" style="width:200px;display: block; float: left; margin: 0px 8px 8px 0px;"/><img src="media/15508991872164/15508994870198.jpg" alt="" class="mw_img_left" style="width:200px;display: block; float: left; margin: 0px 8px 8px 0px;"/><img src="media/15508991872164/15508994947946.jpg" alt="" class="mw_img_left" style="width:200px;display: block; float: left; margin: 0px 8px 8px 0px;"/><br/>
-<img src="media/15508991872164/15508995011000.jpg" alt="" class="mw_img_left" style="width:200px;display: block; float: left; margin: 0px 8px 8px 0px;"/><br/>
-<img src="media/15508991872164/15508995078981.jpg" alt="" class="mw_img_left" style="width:200px;display: block; float: left; margin: 0px 8px 8px 0px;"/><br/>
-<img src="media/15508991872164/15508995144669.jpg" alt="" class="mw_img_left" style="width:200px;display: block; float: left; margin: 0px 8px 8px 0px;"/><br/>
-<img src="media/15508991872164/15508995204276.jpg" alt="" class="mw_img_left" style="width:200px;display: block; float: left; margin: 0px 8px 8px 0px;"/><br/>
-<img src="media/15508991872164/15508995255771.jpg" alt="" class="mw_img_left" style="width:200px;display: block; float: left; margin: 0px 8px 8px 0px;"/><br/>
-<img src="media/15508991872164/15508995347731.jpg" alt="" class="mw_img_left" style="width:200px;display: block; float: left; margin: 0px 8px 8px 0px;"/></p>
 
 ]]></content>
   </entry>
