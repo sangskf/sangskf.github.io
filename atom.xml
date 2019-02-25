@@ -4,7 +4,7 @@
   <title><![CDATA[见课就上的小婊砸]]></title>
   <link href="https://books.sangkf.cn/atom.xml" rel="self"/>
   <link href="https://books.sangkf.cn/"/>
-  <updated>2019-02-25T12:20:39+08:00</updated>
+  <updated>2019-02-25T12:21:23+08:00</updated>
   <id>https://books.sangkf.cn/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -81,17 +81,19 @@
     <updated>2019-02-25T11:16:28+08:00</updated>
     <id>https://books.sangkf.cn/15510645880732.html</id>
     <content type="html"><![CDATA[
-<p><a href="https://yq.aliyun.com/articles/679881?spm=a2c4e.11155472.0.0.ae1e42459WcIqo">原文地址</a><br/>
-<span id="more"></span><!-- more --></p>
+<p><a href="https://yq.aliyun.com/articles/679881?spm=a2c4e.11155472.0.0.ae1e42459WcIqo">原文地址</a></p>
 
 <h2 id="toc_0">单表优化方案</h2>
 
 <blockquote>
-<p>除非单表数据未来会一直不断上涨，否则不要一开始就考虑拆分，拆分会带来逻辑、部署、运维的各种复杂度，一般以整型值为主的表在千万级以下，字符串为主的表在五百万以下是没有太大问题的。而事实上很多时候MySQL单表的性能依然有不少优化空间，甚至能正常支撑千万级以上的数据量。</p>
-</blockquote>
+<p>除非单表数据未来会一直不断上涨，否则不要一开始就考虑拆分，拆分会带来逻辑、部署、运维的各种复杂度，一般以整型值为主的表在千万级以下，字符串为主的表在五百万以下是没有太大问题的。而事实上很多时候MySQL单表的性能依然有不少优化空间，甚至能正常支撑千万级以上的数据量。<br/>
+<span id="more"></span><!-- more --></p>
 
 <ol>
-<li><p><strong>字段优化总结</strong></p>
+<li><strong>字段优化总结</strong></li>
+</ol>
+</blockquote>
+
 <ul>
 <li>尽量使用TINYINT、SMALLINT、MEDIUM_INT作为整数类型而非INT，如果非负则加上UNSIGNED</li>
 <li>VARCHAR的长度只分配真正需要的空间</li>
@@ -99,8 +101,10 @@
 <li>尽量使用TIMESTAMP而非DATETIME</li>
 <li>单表不要有太多字段，建议在20以内</li>
 <li>避免使用NULL字段，很难查询优化且占用额外索引空间</li>
-<li>用整型来存IP</li>
-</ul></li>
+<li><p>用整型来存IP</p></li>
+</ul>
+
+<ol>
 <li><p><strong>索引优化总结</strong></p>
 <ul>
 <li>索引并不是越多越好，要根据查询有针对性的创建，考虑在WHERE和ORDER BY命令上涉及的列建立索引，可根据EXPLAIN来查看是否用了索引还是全表扫描</li>
