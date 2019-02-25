@@ -4,13 +4,1484 @@
   <title><![CDATA[见课就上的小婊砸]]></title>
   <link href="https://books.sangkf.cn/atom.xml" rel="self"/>
   <link href="https://books.sangkf.cn/"/>
-  <updated>2019-02-25T11:10:12+08:00</updated>
+  <updated>2019-02-25T11:18:20+08:00</updated>
   <id>https://books.sangkf.cn/</id>
   <author>
     <name><![CDATA[]]></name>
     
   </author>
   <generator uri="http://www.mweb.im/">MWeb</generator>
+  
+  <entry>
+    <title type="html"><![CDATA[JDK动态代理]]></title>
+    <link href="https://books.sangkf.cn/15510645880732.html"/>
+    <updated>2019-02-25T11:16:28+08:00</updated>
+    <id>https://books.sangkf.cn/15510645880732.html</id>
+    <content type="html"><![CDATA[
+<p><a href="https://blog.csdn.net/xiaokang123456kao/article/details/77679848">原文地址</a></p>
+
+<h2 id="toc_0">代理的含义</h2>
+
+<ul>
+<li><p>代理类的目的是为其他对象提供一个代理以控制对某个对象的访问。</p></li>
+<li><p>代理类负责为委托类预处理消息，过滤消息并转发消息，以及进行消息被委托类执行后的后续处理。</p></li>
+<li><p>为了保持行为的一致性，代理类和委托类通常会实现相同的接口，所以在访问者看来两者没有丝毫的区别。</p></li>
+<li><p>通过代理类这中间一层，能有效控制对委托类对象的直接访问，也可以很好的隐藏和保护委托类对象，同时也为实施不同控制策略预留了空间，从而在设计上获得了更大的灵活性。</p></li>
+</ul>
+
+<h2 id="toc_1">动态代理相关类介绍</h2>
+
+<ol>
+<li><p>InvocationHandler</p>
+<pre><code class="language-text">每一个动态代理类都必须要实现InvocationHandler这个接口，并且每个代理类的实例都关联了一个Handler,当我们通过代理对象调用一个方法的时候，这个方法的调用就会被转发为由InvocationHandler这个接口的Invoke方法来进行调用。
+</code></pre>
+<p>InvocationHandler这个接口的唯一一个方法invoke方法:</p>
+<pre><code class="language-java">Object invoke(Object proxy, Method method, Object[] args) throws Throwable
+</code></pre>
+<p>三个参数:</p>
+<ul>
+<li>proxy： 指代JDK动态生成的最终代理对象</li>
+<li>method：指代的是我们所要调用真是对象的某个方法的Method对象</li>
+<li>args: 指代的是调用真是对象的某个方法时接收的参数</li>
+</ul></li>
+<li><p>Proxy</p>
+<p>​    Proxy这个类的作用就是用来动态创建一个代理对象的类，它提供了许多的方法，但是我们用的最多的就是 newProxyInstance 这个方法</p>
+<pre><code class="language-java">public static Object newProxyInstance(ClassLoader loader,
+                                         Class&lt;?&gt;[] interfaces,<br/>
+                                         InvocationHandler h)<br/>
+       throws IllegalArgumentException
+</code></pre>
+<p>这个方法的作用就是得到一个动态的代理对象，其接收三个参数，我们来看看这三个参数所代表的含义：</p>
+<ul>
+<li>loader:　一个ClassLoader对象，定义了由哪个ClassLoader来对生成的代理对象进行加载</li>
+<li>interfaces:　　一个Interface对象的数组，表示的是我将要给我需要代理的对象提供一组什么接口，如果我提供了一组接口给它，那么这个代理对象就宣称实现了该接口(多态)，这样我就能调用这组接口中的方法了</li>
+<li>一个InvocationHandler对象，表示的是当我这个动态代理对象在调用方法的时候，会关联到哪一个InvocationHandler对象上</li>
+</ul>
+<p>其实我们所说的DynamicProxy（动态代理类）是这样一种class：它是在运行时生成的class，在生成它时你必须提供一组interface给它，然后该class就宣称它实现了这些 interface。如此一来，我们可以把该class的实例当作这些interface中的任何一个来用（可以强转为相应的接口类型）。当然，这个DynamicProxy其实就是一个Proxy，它不会做实质性的工作，在生成它的实例时你必须提供一个handler，由它接管实际的工作。</p></li>
+</ol>
+
+<h1 id="toc_2">Mysql大表优化方案</h1>
+
+<p><a href="https://yq.aliyun.com/articles/679881?spm=a2c4e.11155472.0.0.ae1e42459WcIqo">原文地址</a></p>
+
+<h2 id="toc_3">单表优化方案</h2>
+
+<blockquote>
+<p>除非单表数据未来会一直不断上涨，否则不要一开始就考虑拆分，拆分会带来逻辑、部署、运维的各种复杂度，一般以整型值为主的表在千万级以下，字符串为主的表在五百万以下是没有太大问题的。而事实上很多时候MySQL单表的性能依然有不少优化空间，甚至能正常支撑千万级以上的数据量。</p>
+</blockquote>
+
+<ol>
+<li><p><strong>字段优化总结</strong></p>
+<ul>
+<li>尽量使用TINYINT、SMALLINT、MEDIUM_INT作为整数类型而非INT，如果非负则加上UNSIGNED</li>
+<li>VARCHAR的长度只分配真正需要的空间</li>
+<li>使用枚举或整数代替字符串类型</li>
+<li>尽量使用TIMESTAMP而非DATETIME</li>
+<li>单表不要有太多字段，建议在20以内</li>
+<li>避免使用NULL字段，很难查询优化且占用额外索引空间</li>
+<li>用整型来存IP</li>
+</ul></li>
+<li><p><strong>索引优化总结</strong></p>
+<ul>
+<li>索引并不是越多越好，要根据查询有针对性的创建，考虑在WHERE和ORDER BY命令上涉及的列建立索引，可根据EXPLAIN来查看是否用了索引还是全表扫描</li>
+<li>应尽量避免在WHERE子句中对字段进行NULL值判断，否则将导致引擎放弃使用索引而进行全表扫描</li>
+<li>值分布很稀少的字段不适合建索引，例如&quot;性别&quot;这种只有两三个值的字段</li>
+<li>字符字段只建前缀索引</li>
+<li>字符字段最好不要做主键</li>
+<li>不用外键，由程序保证约束</li>
+<li>尽量不用UNIQUE，由程序保证约束</li>
+<li>使用多列索引时主意顺序和查询条件保持一致，同时删除不必要的单列索引</li>
+</ul></li>
+<li><p><strong>查询SQL优化总结</strong></p>
+<ul>
+<li>可通过开启慢查询日志来找出较慢的SQL</li>
+<li>不做列运算：SELECT id WHERE age + 1 = 10，任何对列的操作都将导致表扫描，它包括数据库教程函数、计算表达式等等，查询时要尽可能将操作移至等号右边</li>
+<li>sql语句尽可能简单：一条sql只能在一个cpu运算；大语句拆小语句，减少锁时间；一条大sql可以堵死整个库</li>
+<li>不用SELECT *</li>
+<li>OR改写成IN：OR的效率是n级别，IN的效率是log(n)级别，in的个数建议控制在200以内</li>
+<li>不用函数和触发器，在应用程序实现</li>
+<li>避免%xxx式查询</li>
+<li>少用JOIN</li>
+<li>使用同类型进行比较，比如用&#39;123&#39;和&#39;123&#39;比，123和123比</li>
+<li>尽量避免在WHERE子句中使用!=或&lt;&gt;操作符，否则引擎将放弃使用索引而进行全表扫描</li>
+<li>对于连续数值，使用BETWEEN不用IN：SELECT id FROM t WHERE num BETWEEN 1 AND 5</li>
+<li>列表数据不要拿全表，要使用LIMIT来分页，每页数量也不要太大</li>
+</ul></li>
+<li><p><strong>引擎的选择</strong></p>
+<p>目前广泛使用的是MyISAM和InnoDB两种引擎。</p>
+<ul>
+<li><p><strong>MyISAM</strong></p>
+<p><strong>MyISAM引擎是MySQL 5.1及之前版本的默认引擎，它的特点是：</strong></p>
+<ul>
+<li>不支持行锁，读取时对需要读到的所有表加锁，写入时则对表加排它锁</li>
+<li>不支持事务</li>
+<li>不支持外键</li>
+<li>不支持崩溃后的安全恢复</li>
+<li>在表有读取查询的同时，支持往表中插入新纪录</li>
+<li>支持BLOB和TEXT的前500个字符索引，支持全文索引</li>
+<li>支持延迟更新索引，极大提升写入性能</li>
+<li>对于不会进行修改的表，支持压缩表，极大减少磁盘空间占用</li>
+</ul></li>
+<li><p><strong>InnoDB</strong></p>
+<p><strong>InnoDB在MySQL 5.5后成为默认索引，它的特点是：</strong></p>
+<ul>
+<li>支持行锁，采用MVCC来支持高并发</li>
+<li>支持事务</li>
+<li>支持外键</li>
+<li>支持崩溃后的安全恢复</li>
+<li>不支持全文索引</li>
+</ul></li>
+</ul>
+<p>总体来讲，MyISAM适合SELECT密集型的表，而InnoDB适合INSERT和UPDATE密集型的表</p></li>
+<li><p><strong>系统调优参数</strong></p>
+<p>1）back_log：back_log值指出在MySQL暂时停止回答新请求之前的短时间内多少个请求可以被存在堆栈中。也就是说，如果MySql的连接数据达到max_connections时，新来的请求将会被存在堆栈中，以等待某一连接释放资源，该堆栈的数量即back_log，如果等待连接的数量超过back_log，将不被授予连接资源。可以从默认的50升至500；</p>
+<p>2）wait_timeout：数据库连接闲置时间，闲置连接会占用内存资源。可以从默认的8小时减到半小时；</p>
+<p>3）max_user_connection: 最大连接数，默认为0无上限，最好设一个合理上限；</p>
+<p>4）thread_concurrency：并发线程数，设为CPU核数的两倍；</p>
+<p>5）skip_name_resolve：禁止对外部连接进行DNS解析，消除DNS解析时间，但需要所有远程主机用IP访问；</p>
+<p>6）key_buffer_size：索引块的缓存大小，增加会提升索引处理速度，对MyISAM表性能影响最大。对于内存4G左右，可设为256M或384M，通过查询show status like &#39;key_read%&#39;，保证key_reads / key_read_requests在0.1%以下最好；</p>
+<p>7）innodb_buffer_pool_size：缓存数据块和索引块，对InnoDB表性能影响最大。通过查询show status like &#39;Innodb_buffer_pool_read%&#39;，保证 (Innodb_buffer_pool_read_requests – Innodb_buffer_pool_reads) / Innodb_buffer_pool_read_requests越高越好；</p>
+<p>8）innodb_additional_mem_pool_size：InnoDB存储引擎用来存放数据字典信息以及一些内部数据结构的内存空间大小，当数据库对象非常多的时候，适当调整该参数的大小以确保所有数据都能存放在内存中提高访问效率，当过小的时候，MySQL会记录Warning信息到数据库的错误日志中，这时就需要该调整这个参数大小；</p>
+<p>9）innodb_log_buffer_size：InnoDB存储引擎的事务日志所使用的缓冲区，一般来说不建议超过32MB；</p>
+<p>10）query_cache_size：缓存MySQL中的ResultSet，也就是一条SQL语句执行的结果集，所以仅仅只能针对select语句。当某个表的数据有任何变化，都会导致所有引用了该表的select语句在Query Cache中的缓存数据失效。所以，当我们的数据变化非常频繁的情况下，使用Query Cache可能会得不偿失。根据命中率(Qcache_hits/(Qcache_hits+Qcache_inserts)*100))进行调整，一般不建议太大，256MB可能已经差不多了，大型的配置型静态数据可适当调大；</p>
+<p>11）可以通过命令show status like &#39;Qcache_%&#39;查看目前系统Query catch使用大小；</p>
+<p>12）read_buffer_size：MySql读入缓冲区大小。对表进行顺序扫描的请求将分配一个读入缓冲区，MySql会为它分配一段内存缓冲区。如果对表的顺序扫描请求非常频繁，可以通过增加该变量值以及内存缓冲区大小提高其性能；</p>
+<p>13）sort_buffer_size：MySql执行排序使用的缓冲大小。如果想要增加ORDER BY的速度，首先看是否可以让MySQL使用索引而不是额外的排序阶段。如果不能，可以尝试增加sort_buffer_size变量的大小；</p>
+<p>14）read_rnd_buffer_size：MySql的随机读缓冲区大小。当按任意顺序读取行时(例如，按照排序顺序)，将分配一个随机读缓存区。进行排序查询时，MySql会首先扫描一遍该缓冲，以避免磁盘搜索，提高查询速度，如果需要排序大量数据，可适当调高该值。但MySql会为每个客户连接发放该缓冲空间，所以应尽量适当设置该值，以避免内存开销过大；</p>
+<p>15）record_buffer：每个进行一个顺序扫描的线程为其扫描的每张表分配这个大小的一个缓冲区。如果你做很多顺序扫描，可能想要增加该值；</p>
+<p>16）thread_cache_size：保存当前没有与连接关联但是准备为后面新的连接服务的线程，可以快速响应连接的线程请求而无需创建新的；</p>
+<p>17）table_cache：类似于thread_cache_size，但用来缓存表文件，对InnoDB效果不大，主要用于MyISAM。</p></li>
+<li><p><strong>升级硬件</strong></p>
+<p>Scale up，这个不多说了，根据MySQL是CPU密集型还是I/O密集型，通过提升CPU和内存、使用SSD，都能显著提升MySQL性能。</p></li>
+</ol>
+
+<h2 id="toc_4">读写分离</h2>
+
+<p>也是目前常用的优化，从库读主库写，一般不要采用双主或多主引入很多复杂性，尽量采用文中的其他方案来提高性能。同时目前很多拆分的解决方案同时也兼顾考虑了读写分离</p>
+
+<h2 id="toc_5">缓存</h2>
+
+<p><strong>缓存可以发生在这些层次：</strong></p>
+
+<p>1）MySQL内部：在系统调优参数介绍了相关设置；</p>
+
+<p>2）数据访问层：比如MyBatis针对SQL语句做缓存，而Hibernate可以精确到单个记录，这里缓存的对象主要是持久化对象Persistence Object；</p>
+
+<p>3）应用服务层：这里可以通过编程手段对缓存做到更精准的控制和更多的实现策略，这里缓存的对象是数据传输对象Data Transfer Object；</p>
+
+<p>4）Web层：针对web页面做缓存；</p>
+
+<p>5）浏览器客户端：用户端的缓存。</p>
+
+<p>可以根据实际情况在一个层次或多个层次结合加入缓存。</p>
+
+<p><strong>这里重点介绍下服务层的缓存实现，目前主要有两种方式：</strong></p>
+
+<p><strong>1）直写式（Write Through）：</strong>在数据写入数据库后，同时更新缓存，维持数据库与缓存的一致性。这也是当前大多数应用缓存框架如Spring Cache的工作方式。这种实现非常简单，同步好，但效率一般；</p>
+
+<p><strong>2）回写式（Write Back）：</strong>当有数据要写入数据库时，只会更新缓存，然后异步批量的将缓存数据同步到数据库上。这种实现比较复杂，需要较多的应用逻辑，同时可能会产生数据库与缓存的不同步，但效率非常高。</p>
+
+<h2 id="toc_6">表分区</h2>
+
+<p>MySQL在5.1版引入的分区是一种简单的水平拆分，用户需要在建表的时候加上分区参数，对应用是透明的无需修改代码。</p>
+
+<p>对用户来说，分区表是一个独立的逻辑表，但是底层由多个物理子表组成，实现分区的代码实际上是通过对一组底层表的对象封装，但对SQL层来说是一个完全封装底层的黑盒子。MySQL实现分区的方式也意味着索引也是按照分区的子表定义，没有全局索引</p>
+
+<p><img src="/Users/sangkuofeng/Library/Application%20Support/typora-user-images/image-20190218160702113.png" alt="image-20190218160702113"/></p>
+
+<p>用户的SQL语句是需要针对分区表做优化，SQL条件中要带上分区条件的列，从而使查询定位到少量的分区上，否则就会扫描全部分区，可以通过EXPLAIN PARTITIONS来查看某条SQL语句会落在那些分区上，从而进行SQL优化，如下图5条记录落在两个分区上：</p>
+
+<p><img src="/Users/sangkuofeng/Library/Application%20Support/typora-user-images/image-20190218160739457.png" alt="image-20190218160739457"/></p>
+
+<p><strong>分区的好处是：</strong></p>
+
+<p>1）可以让单表存储更多的数据；</p>
+
+<p>2）分区表的数据更容易维护，可以通过清楚整个分区批量删除大量数据，也可以增加新的分区来支持新插入的数据。另外，还可以对一个独立分区进行优化、检查、修复等操作；</p>
+
+<p>3）部分查询能够从查询条件确定只落在少数分区上，速度会很快；</p>
+
+<p>4）分区表的数据还可以分布在不同的物理设备上，从而搞笑利用多个硬件设备；</p>
+
+<p>5）可以使用分区表赖避免某些特殊瓶颈，例如InnoDB单个索引的互斥访问、ext3文件系统的inode锁竞争；</p>
+
+<p>6）可以备份和恢复单个分区。</p>
+
+<p><strong>分区的限制和缺点：</strong></p>
+
+<p>1）一个表最多只能有1024个分区；</p>
+
+<p>2）如果分区字段中有主键或者唯一索引的列，那么所有主键列和唯一索引列都必须包含进来；</p>
+
+<p>3）分区表无法使用外键约束；</p>
+
+<p>4）NULL值会使分区过滤无效；</p>
+
+<p>5）所有分区必须使用相同的存储引擎。</p>
+
+<p><strong>分区的类型：</strong></p>
+
+<p>1）RANGE分区：基于属于一个给定连续区间的列值，把多行分配给分区；</p>
+
+<p>2）LIST分区：类似于按RANGE分区，区别在于LIST分区是基于列值匹配一个离散值集合中的某个值来进行选择；</p>
+
+<p>3）HASH分区：基于用户定义的表达式的返回值来进行选择的分区，该表达式使用将要插入到表中的这些行的列值进行计算。这个函数可以包含MySQL中有效的、产生非负整数值的任何表达式；</p>
+
+<p>4）KEY分区：类似于按HASH分区，区别在于KEY分区只支持计算一列或多列，且MySQL服务器提供其自身的哈希函数。必须有一列或多列包含整数值。</p>
+
+<p><strong>分区最适合的场景数据的时间序列性比较强，则可以按时间来分区，如下所示：</strong></p>
+
+<p><img src="/Users/sangkuofeng/Library/Application%20Support/typora-user-images/image-20190218160812843.png" alt="image-20190218160812843"/></p>
+
+<p>查询时加上时间范围条件效率会非常高，同时对于不需要的历史数据能很容的批量删除。</p>
+
+<p>如果数据有明显的热点，而且除了这部分数据，其他数据很少被访问到，那么可以将热点数据单独放在一个分区，让这个分区的数据能够有机会都缓存在内存中，查询时只访问一个很小的分区表，能够有效使用索引和缓存。</p>
+
+<p>另外MySQL有一种早期的简单的分区实现 - 合并表（merge table），限制较多且缺乏优化，不建议使用，应该用新的分区机制来替代。</p>
+
+<h2 id="toc_7">垂直拆分</h2>
+
+<p>垂直分库是根据数据库里面的数据表的相关性进行拆分，比如：一个数据库里面既存在用户数据，又存在订单数据，那么垂直拆分可以把用户数据放到用户库、把订单数据放到订单库。垂直分表是对数据表进行垂直拆分的一种方式，常见的是把一个多字段的大表按常用字段和非常用字段进行拆分，每个表里面的数据记录数一般情况下是相同的，只是字段不一样，使用主键关联。</p>
+
+<p><strong>比如原始的用户表是：</strong></p>
+
+<p><img src="/Users/sangkuofeng/Library/Application%20Support/typora-user-images/image-20190218162154213.png" alt="image-20190218162154213"/></p>
+
+<p><strong>垂直拆分后是：</strong></p>
+
+<p><img src="/Users/sangkuofeng/Library/Application%20Support/typora-user-images/image-20190218162129833.png" alt="image-20190218162129833"/></p>
+
+<p><strong>垂直拆分的优点是：</strong></p>
+
+<p>1）可以使得行数据变小，一个数据块(Block)就能存放更多的数据，在查询时就会减少I/O次数(每次查询时读取的Block 就少)；</p>
+
+<p>2）可以达到最大化利用Cache的目的，具体在垂直拆分的时候可以将不常变的字段放一起，将经常改变的放一起；</p>
+
+<p>3）数据维护简单。</p>
+
+<p><strong>缺点是：</strong></p>
+
+<p>1）主键出现冗余，需要管理冗余列；</p>
+
+<p>2）会引起表连接JOIN操作（增加CPU开销）可以通过在业务服务器上进行join来减少数据库压力；</p>
+
+<p>3）依然存在单表数据量过大的问题（需要水平拆分）；</p>
+
+<p>4）事务处理复杂。</p>
+
+<h2 id="toc_8">水平拆分</h2>
+
+<h4 id="toc_9">概述</h4>
+
+<p>水平拆分是通过某种策略将数据分片来存储，分库内分表和分库两部分，每片数据会分散到不同的MySQL表或库，达到分布式的效果，能够支持非常大的数据量。前面的表分区本质上也是一种特殊的库内分表。</p>
+
+<p>库内分表，仅仅是单纯的解决了单一表数据过大的问题，由于没有把表的数据分布到不同的机器上，因此对于减轻MySQL服务器的压力来说，并没有太大的作用，大家还是竞争同一个物理机上的IO、CPU、网络，这个就要通过分库来解决。</p>
+
+<p><strong>前面垂直拆分的用户表如果进行水平拆分，结果是：</strong></p>
+
+<p><img src="/Users/sangkuofeng/Library/Application%20Support/typora-user-images/image-20190218162027582.png" alt="image-20190218162027582"/></p>
+
+<p>实际情况中往往会是垂直拆分和水平拆分的结合，即将Users_A_M和Users_N_Z再拆成Users和UserExtras，这样一共四张表。</p>
+
+<p><strong>水平拆分的优点是:</strong></p>
+
+<p>1）不存在单库大数据和高并发的性能瓶颈；</p>
+
+<p>2）应用端改造较少；</p>
+
+<p>3）提高了系统的稳定性和负载能力。</p>
+
+<p><strong>缺点是：</strong></p>
+
+<p>1）分片事务一致性难以解决；</p>
+
+<p>2）跨节点Join性能差，逻辑复杂；</p>
+
+<p>3）数据多次扩展难度跟维护量极大。</p>
+
+<h4 id="toc_10">分片原则</h4>
+
+<p>1）能不分就不分，参考“单表优化”；</p>
+
+<p>2）分片数量尽量少，分片尽量均匀分布在多个数据结点上，因为一个查询SQL跨分片越多，则总体性能越差，虽然要好于所有数据在一个分片的结果，只在必要的时候进行扩容，增加分片数量；</p>
+
+<p>3）分片规则需要慎重选择做好提前规划，分片规则的选择，需要考虑数据的增长模式，数据的访问模式，分片关联性问题，以及分片扩容问题，最近的分片策略为范围分片，枚举分片，一致性Hash分片，这几种分片都有利于扩容；</p>
+
+<p>4）尽量不要在一个事务中的SQL跨越多个分片，分布式事务一直是个不好处理的问题；</p>
+
+<p>5）查询条件尽量优化，尽量避免Select * 的方式，大量数据结果集下，会消耗大量带宽和CPU资源，查询尽量避免返回大量结果集，并且尽量为频繁使用的查询语句建立索引；</p>
+
+<p>6）通过数据冗余和表分区赖降低跨库Join的可能。</p>
+
+<p>这里特别强调一下分片规则的选择问题，如果某个表的数据有明显的时间特征，比如订单、交易记录等，则他们通常比较合适用时间范围分片，因为具有时效性的数据，我们往往关注其近期的数据，查询条件中往往带有时间字段进行过滤，比较好的方案是，当前活跃的数据，采用跨度比较短的时间段进行分片，而历史性的数据，则采用比较长的跨度存储。</p>
+
+<p>总体上来说，分片的选择是取决于最频繁的查询SQL的条件，因为不带任何Where语句的查询SQL，会遍历所有的分片，性能相对最差，因此这种SQL越多，对系统的影响越大，所以我们要尽量避免这种SQL的产生。</p>
+
+<h4 id="toc_11">解决方案</h4>
+
+<p>由于水平拆分牵涉的逻辑比较复杂，当前也有了不少比较成熟的解决方案。这些方案分为两大类：客户端架构和代理架构。</p>
+
+<p>*<strong>【客户端架构】：*</strong></p>
+
+<p>通过修改数据访问层，如JDBC、Data Source、MyBatis，通过配置来管理多个数据源，直连数据库，并在模块内完成数据的分片整合，一般以Jar包的方式呈现。</p>
+
+<p>这是一个客户端架构的例子：</p>
+
+<p><img src="/Users/sangkuofeng/Library/Application%20Support/typora-user-images/image-20190218161958669.png" alt="image-20190218161958669"/></p>
+
+<p>可以看到分片的实现是和应用服务器在一起的，通过修改Spring JDBC层来实现</p>
+
+<p>客户端架构的优点是：</p>
+
+<p>1）应用直连数据库，降低外围系统依赖所带来的宕机风险；</p>
+
+<p>2）集成成本低，无需额外运维的组件。</p>
+
+<p>缺点是：</p>
+
+<p>1）限于只能在数据库访问层上做文章，扩展性一般，对于比较复杂的系统可能会力不从心；</p>
+
+<p>2）将分片逻辑的压力放在应用服务器上，造成额外风险。</p>
+
+<p>*<strong>【代理架构】：*</strong></p>
+
+<p>通过独立的中间件来统一管理所有数据源和数据分片整合，后端数据库集群对前端应用程序透明，需要独立部署和运维代理组件。</p>
+
+<p>这是一个代理架构的例子：</p>
+
+<p><img src="/Users/sangkuofeng/Library/Application%20Support/typora-user-images/image-20190218161928361.png" alt="image-20190218161928361"/></p>
+
+<p>代理组件为了分流和防止单点，一般以集群形式存在，同时可能需要Zookeeper之类的服务组件来管理。</p>
+
+<p>代理架构的优点是：</p>
+
+<p>能够处理非常复杂的需求，不受数据库访问层原来实现的限制，扩展性强；</p>
+
+<p>对于应用服务器透明且没有增加任何额外负载。</p>
+
+<p>缺点是：</p>
+
+<p>需部署和运维独立的代理中间件，成本高；</p>
+
+<p>应用需经过代理来连接数据库，网络上多了一跳，性能有损失且有额外风险。</p>
+
+<h4 id="toc_12">各方案比较</h4>
+
+<p><img src="/Users/sangkuofeng/Library/Application%20Support/typora-user-images/image-20190218161825489.png" alt="image-20190218161825489"/></p>
+
+<p><strong>如此多的方案，如何进行选择？可以按以下思路来考虑：</strong></p>
+
+<p>1）确定是使用代理架构还是客户端架构。中小型规模或是比较简单的场景倾向于选择客户端架构，复杂场景或大规模系统倾向选择代理架构；</p>
+
+<p>2）具体功能是否满足，比如需要跨节点ORDER BY，那么支持该功能的优先考虑；</p>
+
+<p>3）不考虑一年内没有更新的产品，说明开发停滞，甚至无人维护和技术支持；</p>
+
+<p>4）最好按大公司-&gt;社区-&gt;小公司-&gt;个人这样的出品方顺序来选择；</p>
+
+<p>5）选择口碑较好的，比如github星数、使用者数量质量和使用者反馈；</p>
+
+<p>6）开源的优先，往往项目有特殊需求可能需要改动源代码。</p>
+
+<p><strong>按照上述思路，推荐以下选择：</strong></p>
+
+<p>1）客户端架构：ShardingJDBC；</p>
+
+<p>2）代理架构：MyCat或者Atlas。</p>
+
+<h2 id="toc_13">兼容MySQL且可水平扩展的数据库</h2>
+
+<p><strong>目前也有一些开源数据库兼容MySQL协议，如：</strong></p>
+
+<p>1）<a href="https://github.com/pingcap/tidb">TiDB</a>；</p>
+
+<p>2）<a href="http://www.cubrid.org/">Cubrid</a>。</p>
+
+<p>但其工业品质和MySQL尚有差距，且需要较大的运维投入。</p>
+
+<p><strong>如果想将原始的MySQL迁移到可水平扩展的新数据库中，可以考虑一些云数据库：</strong></p>
+
+<p>1）阿里云<a href="https://cn.aliyun.com/product/petadata/?spm=5176.7960203.237031.38.cAzx5r">PetaData</a>；</p>
+
+<p>2）阿里云<a href="https://cn.aliyun.com/product/oceanbase?spm=5176.7960203.237031.40.cAzx5r">OceanBase</a>；</p>
+
+<p>3）腾讯云<a href="https://cloud.tencent.com/product/dcdb_for_tdsql">DCDB</a>。</p>
+
+<p>10、NoSQL</p>
+
+<p>在MySQL上做Sharding是一种戴着镣铐的跳舞，事实上很多大表本身对MySQL这种RDBMS的需求并不大，并不要求ACID，可以考虑将这些表迁移到NoSQL，彻底解决水平扩展问题。</p>
+
+<p><strong>例如：</strong></p>
+
+<p>1）日志类、监控类、统计类数据；</p>
+
+<p>2）非结构化或弱结构化数据；</p>
+
+<p>3）对事务要求不强，且无太多关联操作的数据。</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Java知识点]]></title>
+    <link href="https://books.sangkf.cn/15510645390936.html"/>
+    <updated>2019-02-25T11:15:39+08:00</updated>
+    <id>https://books.sangkf.cn/15510645390936.html</id>
+    <content type="html"><![CDATA[
+<p><strong>基础篇</strong></p>
+
+<p><strong>01面向对象</strong></p>
+
+<p><strong>→ 什么是面向对象</strong><br/>
+面向对象、面向过程</p>
+
+<p>面向对象的三大基本特征和五大基本原则</p>
+
+<p><strong>→ 平台无关性</strong><br/>
+Java 如何实现的平台无关</p>
+
+<p>JVM 还支持哪些语言（Kotlin、Groovy、JRuby、Jython、Scala）</p>
+
+<p><strong>→ 值传递</strong><br/>
+值传递、引用传递</p>
+
+<p>为什么说 Java 中只有值传递</p>
+
+<p><strong>→ 封装、继承、多态</strong><br/>
+什么是多态、方法重写与重载</p>
+
+<p>Java 的继承与实现</p>
+
+<p>构造函数与默认构造函数</p>
+
+<p>类变量、成员变量和局部变量</p>
+
+<p>成员变量和方法作用域</p>
+
+<p><strong>02 Java 基础知识</strong></p>
+
+<p><strong>→ 基本数据类型</strong><br/>
+7 种基本数据类型：整型、浮点型、布尔型、字符型</p>
+
+<p>整型中 byte、short、int、long 的取值范围</p>
+
+<p>什么是浮点型？什么是单精度和双精度？为什么不能用浮点型表示金额？</p>
+
+<p><strong>→ 自动拆装箱</strong><br/>
+什么是包装类型、什么是基本类型、什么是自动拆装箱</p>
+
+<p>Integer 的缓存机制</p>
+
+<p><strong>→ String</strong><br/>
+字符串的不可变性</p>
+
+<p>JDK 6 和 JDK 7 中 substring 的原理及区别、</p>
+
+<p>replaceFirst、replaceAll、replace 区别、</p>
+
+<p>String 对“+”的重载、字符串拼接的几种方式和区别</p>
+
+<p>String.valueOf 和 Integer.toString 的区别、</p>
+
+<p>switch 对 String 的支持</p>
+
+<p>字符串池、常量池（运行时常量池、Class 常量池）、intern</p>
+
+<p><strong>→ 熟悉 Java 中各种关键字</strong><br/>
+transient、instanceof、final、static、volatile、synchronized、const 原理及用法</p>
+
+<p><strong>→ 集合类</strong><br/>
+常用集合类的使用、ArrayList 和 LinkedList 和 Vector 的区别 、SynchronizedList 和 Vector 的区别、HashMap、HashTable、ConcurrentHashMap 区别、</p>
+
+<p>Set 和 List 区别？Set 如何保证元素不重复？</p>
+
+<p>Java 8 中 stream 相关用法、apache 集合处理工具类的使用、不同版本的 JDK 中 HashMap 的实现的区别以及原因</p>
+
+<p>Collection 和 Collections 区别</p>
+
+<p>Arrays.asList 获得的 List 使用时需要注意什么</p>
+
+<p>Enumeration 和 Iterator 区别</p>
+
+<p>fail-fast 和 fail-safe</p>
+
+<p>CopyOnWriteArrayList、ConcurrentSkipListMap</p>
+
+<p><strong>→ 枚举</strong><br/>
+枚举的用法、枚举的实现、枚举与单例、Enum 类</p>
+
+<p>Java 枚举如何比较</p>
+
+<p>switch 对枚举的支持</p>
+
+<p>枚举的序列化如何实现</p>
+
+<p>枚举的线程安全性问题</p>
+
+<p><strong>→ IO</strong><br/>
+字符流、字节流、输入流、输出流、</p>
+
+<p>同步、异步、阻塞、非阻塞、Linux 5 种 IO 模型</p>
+
+<p>BIO、NIO 和 AIO 的区别、三种 IO 的用法与原理、netty</p>
+
+<p><strong>→ 反射</strong><br/>
+反射与工厂模式、反射有什么用</p>
+
+<p>Class 类、java.lang.reflect.*</p>
+
+<p><strong>→ 动态代理</strong><br/>
+静态代理、动态代理</p>
+
+<p>动态代理和反射的关系</p>
+
+<p>动态代理的几种实现方式</p>
+
+<p>AOP</p>
+
+<p><strong>→ 序列化</strong><br/>
+什么是序列化与反序列化、为什么序列化、序列化底层原理、序列化与单例模式、protobuf、为什么说序列化并不安全</p>
+
+<p><strong>→ 注解</strong><br/>
+元注解、自定义注解、Java 中常用注解使用、注解与反射的结合</p>
+
+<p>Spring 常用注解</p>
+
+<p><strong>→ JMS</strong><br/>
+什么是 Java 消息服务、JMS 消息传送模型</p>
+
+<p><strong>→ JMX</strong><br/>
+java.lang.management.<em>、 javax.management.</em></p>
+
+<p><strong>→ 泛型</strong><br/>
+泛型与继承、类型擦除、泛型中 KTVE? object 等的含义、泛型各种用法</p>
+
+<p>限定通配符和非限定通配符、上下界限定符 extends 和 super</p>
+
+<p>List</p>
+
+<p>List&lt;?&gt; 和 List</p>
+
+<p><strong>→ 单元测试</strong><br/>
+junit、mock、mockito、内存数据库（h2）</p>
+
+<p><strong>→ 正则表达式</strong><br/>
+java.lang.util.regex.*</p>
+
+<p><strong>→ 常用的 Java 工具库</strong><br/>
+commons.lang、commons.*...、 guava-libraries、 netty</p>
+
+<p><strong>→ API &amp; SPI</strong><br/>
+API、API 和 SPI 的关系和区别</p>
+
+<p>如何定义 SPI、SPI 的实现原理</p>
+
+<p><strong>→ 异常</strong><br/>
+异常类型、正确处理异常、自定义异常</p>
+
+<p>Error 和 Exception</p>
+
+<p>异常链、try-with-resources</p>
+
+<p>finally 和 return 的执行顺序</p>
+
+<p><strong>→ 时间处理</strong><br/>
+时区、冬令时和夏令时、时间戳、Java 中时间 API</p>
+
+<p>格林威治时间、CET,UTC,GMT,CST 几种常见时间的含义和关系</p>
+
+<p>SimpleDateFormat 的线程安全性问题</p>
+
+<p>Java 8 中的时间处理</p>
+
+<p>如何在东八区的计算机上获取美国时间</p>
+
+<p><strong>→ 编码方式</strong><br/>
+Unicode、有了 Unicode 为啥还需要 UTF-8</p>
+
+<p>GBK、GB2312、GB18030 之间的区别</p>
+
+<p>UTF8、UTF16、UTF32 区别</p>
+
+<p>URL 编解码、Big Endian 和 Little Endian</p>
+
+<p>如何解决乱码问题</p>
+
+<p><strong>→ 语法糖</strong><br/>
+Java 中语法糖原理、解语法糖</p>
+
+<p>语法糖：switch 支持 String 与枚举、泛型、自动装箱与拆箱、方法变长参数、枚举、内部类、条件编译、 断言、数值字面量、for-each、try-with-resource、Lambda 表达式</p>
+
+<p><strong>03阅读源代码</strong></p>
+
+<p>String、Integer、Long、Enum、</p>
+
+<p>BigDecimal、ThreadLocal、ClassLoader &amp; URLClassLoader、</p>
+
+<p>ArrayList &amp; LinkedList、</p>
+
+<p>HashMap &amp; LinkedHashMap &amp; TreeMap &amp; CouncurrentHashMap、HashSet &amp; LinkedHashSet &amp; TreeSet</p>
+
+<p><strong>04 Java 并发编程</strong></p>
+
+<p><strong>→ 并发与并行</strong><br/>
+什么是并发、什么是并行</p>
+
+<p>并发与并行的区别</p>
+
+<p><strong>→ 什么是线程，与进程的区别</strong><br/>
+线程的实现、线程的状态、优先级、线程调度、创建线程的多种方式、守护线程</p>
+
+<p>线程与进程的区别</p>
+
+<p><strong>→ 线程池</strong><br/>
+自己设计线程池、submit() 和 execute()、线程池原理</p>
+
+<p>为什么不允许使用 Executors 创建线程池</p>
+
+<p><strong>→ 线程安全</strong><br/>
+死锁、死锁如何排查、线程安全和内存模型的关系</p>
+
+<p><strong>→ 锁</strong><br/>
+CAS、乐观锁与****悲观锁、数据库相关锁机制、分布式锁、偏向锁、轻量级锁、重量级锁、monitor、</p>
+
+<p>锁优化、锁消除、锁粗化、自旋锁、可重入锁、阻塞锁、死锁</p>
+
+<p><strong>→ 死锁</strong><br/>
+什么是死锁</p>
+
+<p>死锁如何解决</p>
+
+<p><strong>→ synchronized</strong><br/>
+synchronized 是如何实现的？</p>
+
+<p>synchronized 和 lock 之间关系、不使用 synchronized 如何实现一个线程安全的单例</p>
+
+<p>synchronized 和原子性、可见性和有序性之间的关系</p>
+
+<p><strong>→ volatile</strong><br/>
+happens-before、内存屏障、编译器指令重排和 CPU 指令重</p>
+
+<p>volatile 的实现原理</p>
+
+<p>volatile 和原子性、可见性和有序性之间的关系</p>
+
+<p>有了 symchronized 为什么还需要 volatile</p>
+
+<p><strong>→ sleep 和 wait</strong><br/>
+<strong>→ wait 和 notify</strong><br/>
+<strong>→ notify 和 notifyAll</strong><br/>
+<strong>→ ThreadLocal</strong><br/>
+<strong>→ 写一个死锁的程序</strong><br/>
+<strong>→ 写代码来解决生产者消费者问题</strong><br/>
+<strong>→ 并方包</strong><br/>
+Thread、Runnable、Callable、ReentrantLock、ReentrantReadWriteLock、Atomic*、Semaphore、CountDownLatch、ConcurrentHashMap、Executors</p>
+
+<p><strong>2底层篇</strong></p>
+
+<p><strong>01JVM</strong></p>
+
+<p><strong>→ JVM 内存结构</strong></p>
+
+<p>class 文件格式、运行时数据区：堆、栈、方法区、直接内存、运行时常量池、</p>
+
+<p>堆和栈区别</p>
+
+<p>Java 中的对象一定在堆上分配吗？</p>
+
+<p><strong>→ Java 内存模型</strong><br/>
+计算机内存模型、缓存一致性、MESI 协议</p>
+
+<p>可见性、原子性、顺序性、happens-before、</p>
+
+<p>内存屏障、synchronized、volatile、final、锁</p>
+
+<p><strong>→ 垃圾回收</strong><br/>
+GC 算法：标记清除、引用计数、复制、标记压缩、分代回收、增量式回收</p>
+
+<p>GC 参数、对象存活的判定、垃圾收集器（CMS、G1、ZGC、Epsilon）</p>
+
+<p><strong>→ JVM 参数及调优</strong><br/>
+-Xmx、-Xmn、-Xms、Xss、-XX:SurvivorRatio、</p>
+
+<p>-XX:PermSize、-XX:MaxPermSize、-XX:MaxTenuringThreshold</p>
+
+<p><strong>→ Java 对象模型</strong><br/>
+oop-klass、对象头</p>
+
+<p><strong>→ HotSpot</strong><br/>
+即时编译器、编译优化</p>
+
+<p><strong>→ 虚拟机性能监控与故障处理工具</strong><br/>
+jps, jstack, jmap, jstat, jconsole, jinfo, jhat, javap, btrace, TProfiler</p>
+
+<p>Arthas</p>
+
+<p><strong>02 类加载机制</strong></p>
+
+<p>classLoader、类加载过程、双亲委派（破坏双亲委派）、模块化（jboss modules、osgi、jigsaw）</p>
+
+<p><strong>03 编译与反编译</strong></p>
+
+<p>什么是编译（前端编译、后端编译）、什么是反编译</p>
+
+<p>JIT、JIT 优化（逃逸分析、栈上分配、标量替换、锁优化）</p>
+
+<p>编译工具：javac</p>
+
+<p>反编译工具：javap 、jad 、CRF</p>
+
+<p><strong>3进阶篇</strong></p>
+
+<p><strong>01 Java 底层知识</strong></p>
+
+<p><strong>→ 字节码、class 文件格式</strong><br/>
+<strong>→ CPU 缓存，L1，L2，L3 和伪共享</strong><br/>
+<strong>→ 尾递归</strong><br/>
+<strong>→ 位运算</strong><br/>
+用位运算实现加、减、乘、除、取余</p>
+
+<p><strong>02 设计模式</strong><br/>
+设计模式的六大原则：</p>
+
+<p>开闭原则（Open Close Principle）、里氏代换原则（Liskov Substitution Principle）、依赖倒转原则（Dependence Inversion Principle）</p>
+
+<p>接口隔离原则（Interface Segregation Principle）、迪米特法则（最少知道原则）（Demeter Principle）、合成复用原则（Composite Reuse Principle）</p>
+
+<p><strong>→ 了解 23 种设计模式</strong></p>
+
+<p>创建型模式：单例模式、抽象工厂模式、建造者模式、工厂模式、原型模式。</p>
+
+<p>结构型模式：适配器模式、桥接模式、装饰模式、组合模式、外观模式、享元模式、代理模式。</p>
+
+<p>行为型模式：模版方法模式、命令模式、迭代器模式、观察者模式、中介者模式、备忘录模式、解释器模式（Interpreter 模式）、状态模式、策略模式、职责链模式(责任链模式)、访问者模式。</p>
+
+<p><strong>→ 会使用常用设计模式</strong><br/>
+单例的七种写法：懒汉——线程不安全、懒汉——线程安全、饿汉、饿汉——变种、静态内部类、枚举、双重校验锁</p>
+
+<p>工厂模式、适配器模式、策略模式、模板方法模式、观察者模式、外观模式、代理模式等必会</p>
+
+<p><strong>→ 不用 synchronized 和 lock，实现线程安全的单例模式</strong><br/>
+<strong>→ 实现 AOP</strong><br/>
+<strong>→ 实现 IOC</strong><br/>
+<strong>→ nio 和 reactor 设计模式</strong></p>
+
+<p><strong>03 网络编程知识</strong></p>
+
+<p><strong>→ tcp、udp、http、https 等常用协议</strong></p>
+
+<p>三次握手与四次关闭、流量控制和拥塞控制、OSI 七层模型、tcp 粘包与拆包</p>
+
+<p><strong>→ http/1.0 http/1.1 http/2 之前的区别</strong><br/>
+http 中 get 和 post 区别</p>
+
+<p>常见的 web 请求返回的状态码</p>
+
+<p>404、302、301、500分别代表什么</p>
+
+<p><strong>→ http/3</strong><br/>
+<strong>→ Java RMI，Socket，HttpClient</strong><br/>
+<strong>→ cookie 与 session</strong><br/>
+cookie 被禁用，如何实现 session</p>
+
+<p><strong>→ 用 Java 写一个简单的静态文件的 HTTP 服务器</strong><br/>
+<strong>→ 了解 nginx 和 apache 服务器的特性并搭建一个对应的服务器</strong><br/>
+<strong>→ 用 Java 实现 FTP、SMTP 协议</strong><br/>
+<strong>→ 进程间通讯的方式</strong><br/>
+<strong>→ 什么是 CDN？如果实现？</strong><br/>
+<strong>→ DNS</strong><br/>
+什么是 DNS 、记录类型: A 记录、CNAME 记录、AAAA 记录等<br/>
+域名解析、根域名服务器</p>
+
+<p>DNS 污染、DNS 劫持、公共 DNS：114 DNS、Google DNS、OpenDNS</p>
+
+<p><strong>→ 反向代理</strong><br/>
+正向代理、反向代理</p>
+
+<p>反向代理服务器</p>
+
+<p><strong>04 框架知识</strong></p>
+
+<p><strong>→ Servlet</strong></p>
+
+<p>生命周期</p>
+
+<p>线程安全问题</p>
+
+<p>filter 和 listener</p>
+
+<p>web.xml 中常用配置及作用</p>
+
+<p><strong>→ Hibernate</strong><br/>
+什么是 OR Mapping</p>
+
+<p>Hibernate 的懒加载<br/>
+Hibernate 的缓存机制</p>
+
+<p>Hibernate / Ibatis / MyBatis 之间的区别</p>
+
+<p><strong>→ Spring</strong> <br/>
+Bean 的初始化<br/>
+AOP 原理<br/>
+实现 Spring 的IOC<br/>
+Spring 四种依赖注入方式<br/>
+<strong>→ Spring MVC</strong><br/>
+什么是 MVC</p>
+
+<p>Spring mvc 与 Struts mvc 的区别</p>
+
+<p><strong>→ Spring Boot</strong><br/>
+Spring Boot 2.0、起步依赖、自动配置、</p>
+
+<p>Spring Boot 的 starter 原理，自己实现一个 starter</p>
+
+<p><strong>→ Spring Security</strong><br/>
+<strong>→ Spring Cloud</strong><br/>
+服务发现与注册：Eureka、Zookeeper、Consul</p>
+
+<p>负载均衡：Feign、Spring Cloud Loadbalance</p>
+
+<p>服务配置：Spring Cloud Config</p>
+
+<p>服务限流与熔断：Hystrix</p>
+
+<p>服务链路追踪：Dapper</p>
+
+<p>服务网关、安全、消息</p>
+
+<p><strong>05 应用服务器知识</strong></p>
+
+<p><strong>→ JBoss</strong><br/>
+<strong>→ tomcat</strong><br/>
+<strong>→ jetty</strong><br/>
+<strong>→ Weblogic</strong></p>
+
+<p><strong>06 工具</strong></p>
+
+<p><strong>→ git &amp; svn</strong><br/>
+<strong>→ maven &amp; gradle</strong><br/>
+<strong>→ Intellij IDEA</strong><br/>
+常用插件：Maven Helper 、FindBugs-IDEA、阿里巴巴代码规约检测、GsonFormat</p>
+
+<p>Lombok plugin、.ignore、Mybatis plugin</p>
+
+<p><strong>4高级篇</strong></p>
+
+<p><strong>01 新技术</strong></p>
+
+<p><strong>→ Java 8</strong></p>
+
+<p>lambda 表达式、Stream API、时间 API</p>
+
+<p><strong>→ Java 9</strong><br/>
+Jigsaw、Jshell、Reactive Streams</p>
+
+<p><strong>→ Java 10</strong><br/>
+局部变量类型推断、G1 的并行 Full GC、ThreadLocal 握手机制</p>
+
+<p><strong>→ Java 11</strong><br/>
+ZGC、Epsilon、增强 var</p>
+
+<p><strong>→ Spring 5</strong><br/>
+响应式编程</p>
+
+<p><strong>→ Spring Boot 2.0</strong><br/>
+<strong>→ HTTP/2</strong><br/>
+<strong>→ HTTP/3</strong></p>
+
+<p><strong>02 性能优化</strong></p>
+
+<p>使用单例、使用 Future 模式、使用线程池</p>
+
+<p>选择就绪、减少上下文切换、减少锁粒度、数据压缩、结果缓存</p>
+
+<p><strong>03 线上问题分析</strong></p>
+
+<p><strong>→ dump 获取</strong></p>
+
+<p>线程 Dump、内存 Dump、gc 情况</p>
+
+<p><strong>→ dump 分析</strong><br/>
+分析死锁、分析内存泄露</p>
+
+<p><strong>→ dump 分析及获取工具</strong><br/>
+jstack、jstat、jmap、jhat、Arthas</p>
+
+<p><strong>→ 自己编写各种 outofmemory，stackoverflow 程序</strong><br/>
+HeapOutOfMemory、 Young OutOfMemory、</p>
+
+<p>MethodArea OutOfMemory、ConstantPool OutOfMemory、</p>
+
+<p>DirectMemory OutOfMemory、Stack OutOfMemory Stack OverFlow</p>
+
+<p><strong>→ Arthas</strong><br/>
+jvm 相关、class/classloader 相关、monitor/watch/trace 相关、</p>
+
+<p>options、管道、后台异步任务</p>
+
+<p>文档：<a href="https://alibaba.github.io/arthas/advanced-use.html">https://alibaba.github.io/arthas/advanced-use.html</a></p>
+
+<p><strong>→ 常见问题解决思路</strong><br/>
+内存溢出、线程死锁、类加载冲突</p>
+
+<p><strong>→ 使用工具尝试解决以下问题，并写下总结</strong><br/>
+当一个 Java 程序响应很慢时如何查找问题</p>
+
+<p>当一个 Java 程序频繁 FullGC 时如何解决问题</p>
+
+<p>如何查看垃圾回收日志</p>
+
+<p>当一个 Java 应用发生 OutOfMemory 时该如何解决</p>
+
+<p>如何判断是否出现死锁</p>
+
+<p>如何判断是否存在内存泄露</p>
+
+<p>使用 Arthas 快速排查 Spring Boot 应用404/401问题</p>
+
+<p>使用 Arthas 排查线上应用日志打满问题</p>
+
+<p>利用 Arthas 排查 Spring Boot 应用 NoSuchMethodError</p>
+
+<p><strong>04编译原理知识</strong></p>
+
+<p><strong>→ 编译与反编译</strong><br/>
+<strong>→ Java 代码的编译与反编译</strong><br/>
+<strong>→ Java 的反编译工具</strong><br/>
+javap 、jad 、CRF</p>
+
+<p><strong>→ 即时编译器</strong><br/>
+<strong>→ 编译过程</strong><br/>
+词法分析，语法分析（LL 算法，递归下降算法，LR 算法）<br/>
+语义分析，运行时环境，中间代码，代码生成，代码优化</p>
+
+<p><strong>05 操作系统知识</strong></p>
+
+<p><strong>→ Linux 的常用命令</strong><br/>
+<strong>→ 进程间通信</strong><br/>
+<strong>→ 进程同步</strong><br/>
+生产者消费者问题、哲学家就餐问题、读者写者问题</p>
+
+<p><strong>→ 缓冲区溢出</strong><br/>
+<strong>→ 分段和分页</strong><br/>
+<strong>→ 虚拟内存与主存</strong><br/>
+<strong>→ 虚拟内存管理</strong><br/>
+<strong>→ 换页算法</strong></p>
+
+<p><strong>06 数据库知识</strong></p>
+
+<p><strong>→ MySQL 执行引擎</strong><br/>
+<strong>→ MySQL 执行计划</strong><br/>
+如何查看执行计划，如何根据执行计划进行 SQL 优化</p>
+
+<p><strong>→ 索引</strong><br/>
+Hash 索引、B 树索引（B+树、和B树、R树）</p>
+
+<p>普通索引、唯一索引</p>
+
+<p>覆盖索引、最左前缀原则、索引下推</p>
+
+<p><strong>→ SQL 优化</strong><br/>
+<strong>→ 数据库事务和隔离级别</strong><br/>
+事务的隔离级别、事务能不能实现锁的功能</p>
+
+<p><strong>→ 数据库锁</strong><br/>
+行锁、表锁、使用数据库锁实现乐观锁、</p>
+
+<p><strong>→ 连接</strong><br/>
+内连接，左连接，右连接</p>
+
+<p><strong>→ 数据库主备搭建</strong><br/>
+<strong>→ binlog</strong><br/>
+<strong>→ redolog</strong><br/>
+<strong>→ 内存数据库</strong><br/>
+h2</p>
+
+<p><strong>→ 分库分表</strong><br/>
+<strong>→ 读写分离</strong><br/>
+<strong>→ 常用的 NoSql 数据库</strong><br/>
+redis、memcached</p>
+
+<p><strong>→ 分别使用数据库锁、NoSql 实现分布式锁</strong><br/>
+<strong>→ 性能调优</strong><br/>
+<strong>→ 数据库连接池</strong></p>
+
+<p><strong>07 数据结构与算法知识</strong></p>
+
+<p><strong>→ 简单的数据结构</strong></p>
+
+<p>栈、队列、链表、数组、哈希表、</p>
+
+<p>栈和队列的相同和不同之处</p>
+
+<p>栈通常采用的两种存储结构</p>
+
+<p><strong>→ 树</strong><br/>
+二叉树、字典树、平衡树、排序树、</p>
+
+<p>B 树、B+ 树、R 树、多路树、红黑树</p>
+
+<p><strong>→ 堆</strong><br/>
+大根堆、小根堆</p>
+
+<p><strong>→ 图</strong><br/>
+有向图、无向图、拓扑</p>
+
+<p><strong>→ 排序算法</strong><br/>
+稳定的排序：冒泡排序、插入排序、鸡尾酒排序、桶排序、计数排序、归并排序、原地归并排序、二叉排序树排序、鸽巢排序、基数排序、侏儒排序、图书馆排序、块排序</p>
+
+<p>不稳定的排序：选择排序、希尔排序、Clover 排序算法、梳排序、堆排序、平滑排序、快速排序、内省排序、耐心排序</p>
+
+<p>各种排序算法和时间复杂度</p>
+
+<p><strong>→ 两个栈实现队列，和两个队列实现栈</strong><br/>
+<strong>→ 深度优先和广度优先搜索</strong><br/>
+<strong>→ 全排列、贪心算法、KMP 算法、hash 算法</strong><br/>
+<strong>→ 海量数据处理</strong><br/>
+分治，hash 映射，堆排序，双层桶划分，Bloom Filter，bitmap，数据库索引，mapreduce 等。</p>
+
+<p><strong>08大数据知识</strong></p>
+
+<p><strong>→ Zookeeper</strong></p>
+
+<p>基本概念、常见用法</p>
+
+<p><strong>→ Solr，Lucene，ElasticSearch</strong><br/>
+在 linux 上部署 solr，solrcloud，新增、删除、查询索引</p>
+
+<p><strong>→ Storm，流式计算，了解 Spark，S4</strong><br/>
+在 linux 上部署 storm，用 zookeeper 做协调，运行 storm hello world，local 和 remote 模式运行调试 storm topology。</p>
+
+<p><strong>→ Hadoop，离线计算</strong><br/>
+HDFS、MapReduce</p>
+
+<p><strong>→ 分布式日志收集 flume，kafka，logstash</strong><br/>
+<strong>→ 数据挖掘，mahout</strong></p>
+
+<p><strong>09 网络安全知识</strong></p>
+
+<p><strong>→ XSS</strong></p>
+
+<p>XSS 的防御</p>
+
+<p><strong>→ CSRF</strong><br/>
+<strong>→ 注入攻击</strong><br/>
+SQL 注入、XML 注入、CRLF 注入</p>
+
+<p><strong>→ 文件上传漏洞</strong><br/>
+<strong>→ 加密与解密</strong><br/>
+对称加密、非对称加密、哈希算法、加盐哈希算法</p>
+
+<p>MD5，SHA1、DES、AES、RSA、DSA</p>
+
+<p>彩虹表</p>
+
+<p><strong>→ DDOS攻击</strong><br/>
+DOS 攻击、DDOS 攻击</p>
+
+<p>memcached 为什么可以导致 DDos 攻击、什么是反射型 DDoS</p>
+
+<p>如何通过 Hash 碰撞进行 DOS 攻击</p>
+
+<p><strong>→ SSL、TLS，HTTPS</strong><br/>
+<strong>→ 用 openssl 签一个证书部署到 apache 或 nginx</strong></p>
+
+<p><strong>5架构篇</strong></p>
+
+<p><strong>01分布式</strong></p>
+
+<p>数据一致性、服务治理、服务降级</p>
+
+<p><strong>→ 分布式事务</strong></p>
+
+<p>2PC、3PC、CAP、BASE、 可靠消息最终一致性、最大努力通知、TCC</p>
+
+<p><strong>→ Dubbo</strong><br/>
+服务注册、服务发现，服务治理</p>
+<http://dubbo.apache.org/zh-cn/>
+<p><strong>→ 分布式数据库</strong><br/>
+怎样打造一个分布式数据库、什么时候需要分布式数据库、</p>
+
+<p>mycat、otter、HBase</p>
+
+<p><strong>→ 分布式文件系统</strong><br/>
+mfs、fastdfs</p>
+
+<p><strong>→ 分布式缓存</strong><br/>
+缓存一致性、缓存命中率、缓存冗余</p>
+
+<p><strong>→ 限流降级</strong><br/>
+Hystrix、Sentinal</p>
+
+<p><strong>→ 算法</strong><br/>
+共识算法、Raft 协议、Paxos 算法与 Raft 算法、</p>
+
+<p>拜占庭问题与算法、2PC、3PC</p>
+
+<p><strong>02 微服务</strong></p>
+
+<p>SOA、康威定律</p>
+
+<p><strong>→ ServiceMesh</strong><br/>
+sidecar</p>
+
+<p><strong>→ Docker &amp; Kubernets</strong><br/>
+<strong>→ Spring Boot</strong><br/>
+<strong>→ Spring Cloud</strong></p>
+
+<p><strong>03 高并发</strong></p>
+
+<p><strong>→ 分库分表</strong><br/>
+<strong>→ CDN 技术</strong><br/>
+<strong>→ 消息队列</strong><br/>
+ActiveMQ</p>
+
+<p><strong>04 监控</strong></p>
+
+<p><strong>→ 监控什么</strong></p>
+
+<p>CPU、内存、磁盘 I/O、网络 I/O 等</p>
+
+<p><strong>→ 监控手段</strong><br/>
+进程监控、语义监控、机器资源监控、数据波动</p>
+
+<p><strong>→ 监控数据采集</strong><br/>
+日志、埋点</p>
+
+<p><strong>→ Dapper</strong></p>
+
+<p><strong>05 负载均衡</strong></p>
+
+<p>tomcat 负载均衡、Nginx 负载均衡</p>
+
+<p>四层负载均衡、七层负载均衡</p>
+
+<p><strong>06 DNS</strong></p>
+
+<p>DNS 原理、DNS 的设计</p>
+
+<p><strong>07 CDN</strong></p>
+
+<p>数据一致性</p>
+
+<p><strong>6扩展篇</strong></p>
+
+<p><strong>01 云计算</strong></p>
+
+<p>IaaS、SaaS、PaaS、虚拟化技术、openstack、Serverlsess</p>
+
+<p><strong>02 搜索引擎</strong></p>
+
+<p>Solr、Lucene、Nutch、Elasticsearch</p>
+
+<p><strong>03权限管理</strong></p>
+
+<p>Shiro</p>
+
+<p><strong>04 区块链</strong></p>
+
+<p>哈希算法、Merkle 树、公钥密码算法、共识算法、</p>
+
+<p>Raft 协议、Paxos 算法与 Raft 算法、拜占庭问题与算法、消息认证码与数字签名</p>
+
+<p><strong>→ 比特币</strong><br/>
+挖矿、共识机制、闪电网络、侧链、热点问题、分叉</p>
+
+<p><strong>→ 以太坊</strong><br/>
+<strong>→ 超级账本</strong></p>
+
+<p><strong>05人工智能</strong></p>
+
+<p>数学基础、机器学习、人工神经网络、深度学习、应用场景。</p>
+
+<p><strong>→ 常用框架</strong><br/>
+TensorFlow、DeepLearning4J</p>
+
+<p><strong>06 loT</strong></p>
+
+<p><strong>07 量子计算</strong></p>
+
+<p><strong>08 AR &amp; VR</strong></p>
+
+<p><strong>09其他语言</strong></p>
+
+<p>Groovy、Python、Go、NodeJs、Swift、Rust</p>
+
+<p><strong>7推荐书籍</strong></p>
+
+<p>《深入理解 Java 虚拟机》 <br/>
+《Effective Java》 <br/>
+《深入分析 Java Web 技术内幕》 <br/>
+《大型网站技术架构》 <br/>
+《代码整洁之道》 <br/>
+《架构整洁之道》 <br/>
+《Head First 设计模式》 <br/>
+《maven 实战》 <br/>
+《区块链原理、设计与应用》 <br/>
+《Java 并发编程实战》 <br/>
+《鸟哥的 Linux 私房菜》 <br/>
+《从Paxos 到 Zookeeper》 <br/>
+《架构即未来》</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[JAVA8新特性]]></title>
+    <link href="https://books.sangkf.cn/15510645099182.html"/>
+    <updated>2019-02-25T11:15:09+08:00</updated>
+    <id>https://books.sangkf.cn/15510645099182.html</id>
+    <content type="html"><![CDATA[
+<p>原文地址 <a href="https://www.cnblogs.com/huyunfan/p/7456535.html">https://www.cnblogs.com/huyunfan/p/7456535.html</a></p>
+
+<ul>
+<li><p><strong>default拓展方法</strong></p>
+<p>default关键字为接口声明添加非抽象方法的实现,也称为拓展方法</p>
+<pre><code class="language-java">public interface Formula {
+  void doSomething();<br/>
+  default void before() {<br/>
+      System.out.println(&quot;我是拓展方法&quot;);<br/>
+  }<br/>
+}<br/>
+public class FormulaService implements Formula {<br/>
+  @Override<br/>
+  public void doSomething() {<br/>
+      before();<br/>
+      System.out.println(&quot;我是override方法&quot;);<br/>
+  }<br/>
+}
+</code></pre></li>
+<li><p><strong>Lambda表达式</strong></p>
+<p>java8引入函数式编程，Lambda则是函数式编程的基础。</p>
+<pre><code class="language-java">List&lt;String&gt; list = Arrays.asList(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;);
+// java8之前<br/>
+Collections.sort(list, new Comparator&lt;String&gt;(){<br/>
+  @Override<br/>
+  public int compare(String o1, String o2) {<br/>
+      return o1.compareTo(o2);<br/>
+  }<br/>
+});<br/>
+// lambda<br/>
+Collections.sort(list, (String o1, String o2) -&gt; {<br/>
+          return o2.compareTo(o1);<br/>
+});<br/>
+// 简洁lambda<br/>
+Collections.sort(list, (String o1, String o2) -&gt;  o2.compareTo(o1));<br/>
+// 更简洁lambda<br/>
+Collections.sort(list, (o1, o2) -&gt;  o2.compareTo(o1));<br/>
+// 也可以这样写<br/>
+Collections.sort(list, Comparator.comparing(String::toString));
+</code></pre></li>
+<li><p><strong>函数式接口</strong></p>
+<p>一个函数式接口有且只能有一个抽象方法申明，其中该注意的是 @FunctionalInterface 注解，此时如果在接口中定义了第二个抽象方法，编译器将会抛出异常。当然如果不加该注解也不是不行，如果接口中有多个抽象方法，而你又使用了lambda表达式，则在调用处会抛出异常。</p>
+<pre><code class="language-java">@FunctionalInterface
+public interface Formula&lt;F,T&gt;{<br/>
+  T convert(F var1);<br/>
+}<br/>
+Formula&lt;String,Integer&gt; function = (var1 -&gt; Integer.valueOf(var1));<br/>
+Integer var2 = function.convert(&quot;1000&quot;); 
+</code></pre></li>
+<li><p><strong>方法和构造函数引用</strong></p>
+<p>方法引用的标准语法是 <code>类名:方法名</code></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>引用静态方法</td>
+<td>targetClass :: staticMethodName</td>
+</tr>
+<tr>
+<td>引用某个对象的实例方法</td>
+<td>targetClass :: instanceMethodName</td>
+</tr>
+<tr>
+<td>引用某个类型的任意对象的实例方法</td>
+<td>targetType :: methodName</td>
+</tr>
+<tr>
+<td>引用构造方法</td>
+<td>className :: new</td>
+</tr>
+</tbody>
+</table></li>
+</ul>
+
+<ol>
+<li><p><strong>引用静态方法</strong></p>
+<pre><code class="language-java">Formula&lt;String,Integer&gt; function = (Integer::valueOf);
+Integer var2 = function.convert(&quot;1000&quot;);
+</code></pre></li>
+<li><p><strong>引用某个类型的任意对象的实例方法</strong></p>
+<pre><code class="language-java">public static void main(String[] args) {
+  String[] array = {&quot;贱明&quot;, &quot;学友&quot;};<br/>
+  Arrays.sort(array, String::compareTo);<br/>
+}
+</code></pre></li>
+<li><p><strong>引用构造方法</strong></p>
+<pre><code class="language-java">// 定义工厂
+interface PersonFactory&lt;P extends Person&gt;{<br/>
+   P create(String name);<br/>
+}<br/>
+// Person类的构造方法<br/>
+public Person(String name) {<br/>
+   this.name = name;<br/>
+}<br/>
+// 创建<br/>
+PersonFactory&lt;Person&gt; factory = Person::new;<br/>
+factory.create(&quot;贱明&quot;);
+</code></pre></li>
+</ol>
+
+<ul>
+<li><p><strong>Lambda的范围</strong></p>
+<p>lambda可以访问局部对应的外部区域的局部final变量，以及成员变量和静态变量。</p>
+<ol>
+<li><p><strong>访问成员变量</strong></p>
+<pre><code class="language-java">public void doSomething(){
+ final String p1 = &quot;贱明&quot;;<br/>
+ final String p2 = &quot;学友&quot;;<br/>
+ Formula function = (person1, person2) -&gt; p1.compareTo(p2);<br/>
+}
+</code></pre>
+<p>与java8以下版本不同的是，p1 p2你可以不修饰成final 也不会报错，但是如果你想修改他们，编译器则会告诉你这是不被允许的。</p></li>
+<li><p><strong>访问成员变量和静态变量</strong></p>
+<pre><code class="language-java">public void doSomething(){;
+Formula function = (person1, person2) -&gt;{<br/>
+    dehua = &quot;贱明&quot;;<br/>
+    xueyou=&quot;学友&quot;;<br/>
+    return dehua.compareTo(xueyou);<br/>
+};<br/>
+}
+</code></pre></li>
+</ol></li>
+<li><p><strong>内置函数式接口</strong></p>
+<p>​     java8 api中提供了很多内置函数式接口，而且有些接口其实在Google Guava中已经实现了，很大程  度的降低了程序员的工作负担。</p>
+<ol>
+<li><p><strong>Predicates</strong><br/>
+Predicate是一个布尔类型的函数，该函数只有一个输入参数，他包含了多种默认实现。</p>
+<pre><code class="language-java">public static void main(String[] args) {
+Predicate&lt;String&gt; predicate = (s) -&gt; s.contains(&quot;贱明&quot;);<br/>
+String var1 = &quot;牛贱明&quot;;<br/>
+predicate.test(var1);              // true<br/>
+predicate.negate().test(var1);     // false<br/>
+Predicate&lt;Boolean&gt; nonNull = Objects::nonNull;<br/>
+Predicate&lt;Boolean&gt; isNull = Objects::isNull;<br/>
+Predicate&lt;String&gt; isEmpty = String::isEmpty;<br/>
+Predicate&lt;String&gt; isNotEmpty = isEmpty.negate();<br/>
+isNotEmpty.and(isEmpty).test(var1);<br/>
+}
+</code></pre></li>
+<li><p><strong>Functions</strong></p>
+<p>Function接口接收一个参数，并返回单一的结果。默认方法可以将多个函数串在一起</p>
+<pre><code class="language-java">public static void main(String[] args) {
+Function&lt;String, Integer&gt; toInteger = Integer::valueOf;<br/>
+Function&lt;String, String&gt; backToString = toInteger.andThen(String::valueOf);<br/>
+System.out.println(toInteger.apply(&quot;123&quot;));<br/>
+System.out.println(backToString.apply(&quot;123&quot;));<br/>
+}
+</code></pre></li>
+<li><p><strong>Suppliers</strong></p>
+<p>Supplier接口产生一个给定类型的结果。与Function不同的是，Supplier没有输入参数。</p>
+<pre><code class="language-java">Supplier&lt;Person&gt; personSupplier = Person::new;
+Person p = personSupplier.get();   // new Person
+</code></pre></li>
+<li><p><strong>Consumers</strong></p>
+<p>Consumer代表了在一个输入参数上需要进行的操作。</p>
+<pre><code class="language-java">Consumer&lt;Person&gt; greeter = (p) -&gt; System.out.println(&quot;Hello, &quot; + p.getName());
+greeter.accept(new Person(&quot;贱明&quot;));
+</code></pre></li>
+<li><p><strong>Comparators</strong></p>
+<p>Comparator接口在早期的Java版本中非常著名。Java 8 为这个接口添加了不同的默认方法。</p>
+<pre><code class="language-java">Comparator&lt;Person&gt; comparator = (p1, p2) -&gt; p1.getName().compareTo(p2.getName());
+Person p1 = new Person(&quot;贱明&quot;);<br/>
+Person p2 = new Person(&quot;学友&quot;);<br/>
+System.out.println(comparator.compare(p1, p2));             // &gt; 1105<br/>
+System.out.println(comparator.reversed().compare(p1, p2));  // &lt; -1105
+</code></pre></li>
+<li><p><strong>Optionals</strong></p>
+<p>Optional不是一个函数式接口，而是一个精巧的工具接口，用来防止NullPointerException产生。<br/>
+Optional是一个简单的值容器，这个值可以是null，也可以是non-null。考虑到一个方法可能会返回一个non-null的值，也可能返回一个空值。为了不直接返回null，我们在Java 8中就返回一个Optional。</p>
+<pre><code class="language-java">Optional&lt;String&gt; optional = Optional.of(&quot;贱明&quot;);
+System.out.println(optional.isPresent()); // true      <br/>
+System.out.println(optional.get()); // 贱明   <br/>
+System.out.println(optional.orElse(&quot;学友&quot;)); // 贱明    <br/>
+optional.ifPresent((s) -&gt; System.out.println(s.charAt(0))); 
+</code></pre></li>
+</ol></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[SpringCloud服务治理，服务注册，服务发现]]></title>
+    <link href="https://books.sangkf.cn/15510642705827.html"/>
+    <updated>2019-02-25T11:11:10+08:00</updated>
+    <id>https://books.sangkf.cn/15510642705827.html</id>
+    <content type="html"><![CDATA[
+<h2 id="toc_0">服务治理</h2>
+
+<p>服务治理是微服务架构中最为核心和基础的模块，他主要用来实现各个微服务市里的自动化注册和发现。<br/>
+<span id="more"></span><!-- more --></p>
+
+<ul>
+<li><p>为什么需要服务治理？微服务没有他会怎样？</p>
+<p>​ 在最开始构建微服务系统的时候可能服务并不多，我们可以通过一些静态配置来完成服务的调用。比如，有两个服务A和服务B，其中服务A需要调用服务B来完成一个业务的操作时，为了实现服务B的高可用，不论采用服务端负载均衡还是客户端负载均衡，都需要手工维护服务B的具体实例清单。但是随着业务的发展，系统的功能越来越复杂，相应的微服务应用也不断增加，我们的静态配置会变得越来越难以维护。并且面对不断发展的业务，我们的集群规模，服务的位置，服务的命名等都可能发生变化，如果还是通过手工维护的方式，那么极易发生错误或者命名冲突等问题。同时，对于这类静态内容的维护也必将消耗大量的人力。</p>
+<p><u><strong>服务治理框架的实现都是围绕着服务注册与服务发现机制来完成微服务应用实例的自动化管理</strong></u></p></li>
+</ul>
+
+<h2 id="toc_1">服务注册</h2>
+
+<p>​   在服务治理框架中，通常都会构建一个注册中心，每个服务单元向注册中心登记自己提供的服务，将主机与端口号，版本号，通信协议等一些附加信息告知注册中心，注册中心按照服务名分类组织服务清单。</p>
+
+<p>当这些进程启动，并向注册中心注册自己的服务后，注册中心就会维护类似下面的一个服务清单。另外，服务注册中心还需要以心跳的方式去监测清单中的服务是否可用，如果不可用则需要从服务清单中提出，达到排除故障服务的效果。</p>
+
+<table>
+<thead>
+<tr>
+<th>服务名</th>
+<th>位置</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>服务A</td>
+<td>192.168.0.100:8000，192.168.0.101:8000</td>
+</tr>
+<tr>
+<td>服务B</td>
+<td>192.168.0.100:9000，192.168.0.101:9000，192.168.0.102:9000</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="toc_2">服务发现</h2>
+
+<p>​   由于在服务治理框架下运作，服务间的调用不再通过指定具体的实例地址来实现，而是通过向服务名发起请求调用实现。所以，服务调用方在调用服务提供方接口的时候，并不知道具体的服务实例位置。因此，调用方需要向服务注册中心咨询服务，并获取所有的服务的实例清单，以实现对具体服务实例的访问。</p>
+
+<p>比如，现有服务C希望调用服务A，服务C就向注册中心发起咨询服务的请求，服务注册中心就会将服务A的位置清单返回给服务C。如按上例服务A的的情况，C便获得了服务A的两个可用位置192.168.0.100:8000和192.168.0.101:8000。当服务C要发起调用的时候，便从该清单中以某种轮询策略取出一个位置来进行服务调用，这就是后续我们将会介绍的客户端负载均衡。</p>
+
+<ul>
+<li>
+<a href="#toc_0">服务治理</a>
+</li>
+<li>
+<a href="#toc_1">服务注册</a>
+</li>
+<li>
+<a href="#toc_2">服务发现</a>
+</li>
+</ul>
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[MarkDown常见图表，流程图书写✍️]]></title>

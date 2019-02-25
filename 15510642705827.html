@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  其他 - 见课就上的小婊砸
+  SpringCloud服务治理，服务注册，服务发现 - 见课就上的小婊砸
   
   </title>
   
@@ -124,235 +124,140 @@
        
 
  <script type="text/javascript">
-	$(function(){
-		$('#menu_item_index').addClass('is_active');
-	});
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
 </script>
 <div class="row">
-	<div class="large-8 medium-8 columns">
-		<div class="markdown-body home-categories">
-		
-			<div class="article">
-                <a class="clearlink" href="15509800202549.html">
-                
-                  <h1>MarkDown常见图表，流程图书写✍️</h1>
-                  <div class="a-content">
-                      
-                      <div class="a-content-text">
-                        
-                        	<p>利用MarkDown书写一些常用的流程图，Echarts图表，数学公式，点图等</p>
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>SpringCloud服务治理，服务注册，服务发现</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2019/2/25 11:11 上午</span>
+
+          <span>发布于分类&nbsp;</span> 
+          
+              <span class="posted-in"><a href='microservice.html'>微服务</a></span>
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <h2 id="toc_0">服务治理</h2>
+
+<p>服务治理是微服务架构中最为核心和基础的模块，他主要用来实现各个微服务市里的自动化注册和发现。<br/>
+<span id="more"></span><!-- more --></p>
+
+<ul>
+<li><p>为什么需要服务治理？微服务没有他会怎样？</p>
+<p>​ 在最开始构建微服务系统的时候可能服务并不多，我们可以通过一些静态配置来完成服务的调用。比如，有两个服务A和服务B，其中服务A需要调用服务B来完成一个业务的操作时，为了实现服务B的高可用，不论采用服务端负载均衡还是客户端负载均衡，都需要手工维护服务B的具体实例清单。但是随着业务的发展，系统的功能越来越复杂，相应的微服务应用也不断增加，我们的静态配置会变得越来越难以维护。并且面对不断发展的业务，我们的集群规模，服务的位置，服务的命名等都可能发生变化，如果还是通过手工维护的方式，那么极易发生错误或者命名冲突等问题。同时，对于这类静态内容的维护也必将消耗大量的人力。</p>
+<p><u><strong>服务治理框架的实现都是围绕着服务注册与服务发现机制来完成微服务应用实例的自动化管理</strong></u></p></li>
+</ul>
+
+<h2 id="toc_1">服务注册</h2>
+
+<p>​   在服务治理框架中，通常都会构建一个注册中心，每个服务单元向注册中心登记自己提供的服务，将主机与端口号，版本号，通信协议等一些附加信息告知注册中心，注册中心按照服务名分类组织服务清单。</p>
+
+<p>当这些进程启动，并向注册中心注册自己的服务后，注册中心就会维护类似下面的一个服务清单。另外，服务注册中心还需要以心跳的方式去监测清单中的服务是否可用，如果不可用则需要从服务清单中提出，达到排除故障服务的效果。</p>
+
+<table>
+<thead>
+<tr>
+<th>服务名</th>
+<th>位置</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>服务A</td>
+<td>192.168.0.100:8000，192.168.0.101:8000</td>
+</tr>
+<tr>
+<td>服务B</td>
+<td>192.168.0.100:9000，192.168.0.101:9000，192.168.0.102:9000</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="toc_2">服务发现</h2>
+
+<p>​   由于在服务治理框架下运作，服务间的调用不再通过指定具体的实例地址来实现，而是通过向服务名发起请求调用实现。所以，服务调用方在调用服务提供方接口的时候，并不知道具体的服务实例位置。因此，调用方需要向服务注册中心咨询服务，并获取所有的服务的实例清单，以实现对具体服务实例的访问。</p>
+
+<p>比如，现有服务C希望调用服务A，服务C就向注册中心发起咨询服务的请求，服务注册中心就会将服务A的位置清单返回给服务C。如按上例服务A的的情况，C便获得了服务A的两个可用位置192.168.0.100:8000和192.168.0.101:8000。当服务C要发起调用的时候，便从该清单中以某种轮询策略取出一个位置来进行服务调用，这就是后续我们将会介绍的客户端负载均衡。</p>
+
+<ul>
+<li>
+<a href="#toc_0">服务治理</a>
+</li>
+<li>
+<a href="#toc_1">服务注册</a>
+</li>
+<li>
+<a href="#toc_2">服务发现</a>
+</li>
+</ul>
 
 
-                        
-                      </div>
-                  </div>
-                </a>
-                <div class="read-more clearfix">
-                  <div class="more-left left">
-                   <a href="15509800202549.html">阅读更多&gt;&gt;</a>&nbsp;&nbsp; 
-                    <span class="date">2019/2/24 11:47 上午</span>
-                    <span>发布于分类&nbsp;</span> 
-          				  
-          					    <span class="posted-in"><a href='other.html'>其他</a></span>
-          				   
-                  </div>
-                  <div class="more-right right">
-                  <span class="comments">
-                      
 
-                       
-                  </span>
-                  </div>
-                </div>
-              </div><!-- article -->
-        
-			<div class="article">
-                <a class="clearlink" href="15509338125902.html">
-                
-                  <h1>使用脚本快速部署Java项目</h1>
-                  <div class="a-content">
-                      
-                      <div class="a-content-text">
-                        
-                        	<p>自己经常写一些小项目，有时候是自己写，更多时候是帮别人写。 一般都要部署到服务器上，最早使用的方法是本地 mvn clean package 打包好，上传到服务器上运行。有时候发现自己写了个bug，修复了，或者改了点/加了点需求，改完代码，又要重新打包，上传。 反反复复，很麻烦。之前在公司，用的是 jenkins，解决了这个痛点，<br/>
+    
 
-                        
-                      </div>
-                  </div>
-                </a>
-                <div class="read-more clearfix">
-                  <div class="more-left left">
-                   <a href="15509338125902.html">阅读更多&gt;&gt;</a>&nbsp;&nbsp; 
-                    <span class="date">2019/2/23 22:56 下午</span>
-                    <span>发布于分类&nbsp;</span> 
-          				  
-          					    <span class="posted-in"><a href='other.html'>其他</a></span>
-          				   
-                  </div>
-                  <div class="more-right right">
-                  <span class="comments">
-                      
+      </div>
 
-                       
-                  </span>
-                  </div>
-                </div>
-              </div><!-- article -->
-        
-			<div class="article">
-                <a class="clearlink" href="15509336304684.html">
-                
-                  <h1>地址收藏</h1>
-                  <div class="a-content">
-                      
-                      <div class="a-content-text">
-                        
-                        	<p>收藏一些发现的比较好的博客<br/>
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+          <a href="15510645099182.html" 
+          title="Previous Post: JAVA8新特性">&laquo; JAVA8新特性</a>
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="15509800202549.html" 
+          title="Next Post: MarkDown常见图表，流程图书写✍️">MarkDown常见图表，流程图书写✍️ &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script> 
+<div id="gitalk-container"></div>     <script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: `14d87c9522298bd378c3`,
+        clientSecret: `6639fcb9eef53d63c3f1c983313fafaa790e9e5f`,
+        repo: `sangskf.github.io`,
+        owner: 'sangskf',
+        admin: ['sangskf'],
+        id: location.href
+    });
+    gitalk.render('gitalk-container');
+</script> 
 
-                        
-                      </div>
-                  </div>
-                </a>
-                <div class="read-more clearfix">
-                  <div class="more-left left">
-                   <a href="15509336304684.html">阅读更多&gt;&gt;</a>&nbsp;&nbsp; 
-                    <span class="date">2019/2/23 22:53 下午</span>
-                    <span>发布于分类&nbsp;</span> 
-          				  
-          					    <span class="posted-in"><a href='other.html'>其他</a></span>
-          				   
-                  </div>
-                  <div class="more-right right">
-                  <span class="comments">
-                      
+          
 
-                       
-                  </span>
-                  </div>
-                </div>
-              </div><!-- article -->
-        
-			<div class="article">
-                <a class="clearlink" href="15509294487927.html">
-                
-                  <h1>Gitment：使用 GitHub Issues 搭建评论系统</h1>
-                  <div class="a-content">
-                      
-                      <div class="a-content-text">
-                        
-                        	<blockquote>
-<p>[转载]<a href="https://imsun.net/posts/gitment-introduction/">https://imsun.net/posts/gitment-introduction/</a></p>
-</blockquote>
-
-<p><a href="https://github.com/imsun/gitment">Gitment</a> 是作者实现的一款基于 GitHub Issues 的评论系统。支持在前端直接引入，不需要任何后端代码。可以在页面进行登录、查看、评论、点赞等操作，同时有完整的 Markdown / GFM 和代码高亮支持。尤为适合各种基于 GitHub Pages 的静态博客或项目页面。<br/>
-
-                        
-                      </div>
-                  </div>
-                </a>
-                <div class="read-more clearfix">
-                  <div class="more-left left">
-                   <a href="15509294487927.html">阅读更多&gt;&gt;</a>&nbsp;&nbsp; 
-                    <span class="date">2019/2/23 21:44 下午</span>
-                    <span>发布于分类&nbsp;</span> 
-          				  
-          					    <span class="posted-in"><a href='other.html'>其他</a></span>
-          				   
-                  </div>
-                  <div class="more-right right">
-                  <span class="comments">
-                      
-
-                       
-                  </span>
-                  </div>
-                </div>
-              </div><!-- article -->
-        
-			<div class="article">
-                <a class="clearlink" href="15509249440186.html">
-                
-                  <h1>如何使用“发布脚本”功能发布静态网站</h1>
-                  <div class="a-content">
-                      
-                      <div class="a-content-text">
-                        
-                        	<p>“发布脚本”这个功能 MWeb for Mac 2.2.3 版新增的，是为了让 MWeb 中的静态网站体验能达到 “新增文档并编辑” - “右键并选择执行发布脚本” 这样一个简单的流程。避免之前那样，生成网站后还要去敲命令进行发布。</p>
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
 
 
-                        
-                      </div>
-                  </div>
-                </a>
-                <div class="read-more clearfix">
-                  <div class="more-left left">
-                   <a href="15509249440186.html">阅读更多&gt;&gt;</a>&nbsp;&nbsp; 
-                    <span class="date">2019/2/23 20:29 下午</span>
-                    <span>发布于分类&nbsp;</span> 
-          				  
-          					    <span class="posted-in"><a href='other.html'>其他</a></span>
-          				   
-                  </div>
-                  <div class="more-right right">
-                  <span class="comments">
-                      
 
-                       
-                  </span>
-                  </div>
-                </div>
-              </div><!-- article -->
-        
-			<div class="article">
-                <a class="clearlink" href="15509248711452.html">
-                
-                  <h1>自定义预览样式，让 MWeb 支持 ECharts、mermaid、PlantUML 等任何 JS 画图库</h1>
-                  <div class="a-content">
-                      
-                      <div class="a-content-text">
-                        
-                        	<p>之前 MWeb 2.0 说要支持 PlantUML，后来又否定了，因为我发现大部分朋友只需要自定义预览样式就可以做到的这种 PlantUML 支持，而早在 MWeb 1.2 版都支持了自我增加这功能了，介绍文章为：<a href="http://zh.mweb.im/mweb-v1.2-release-zh.html">自定预览 CSS</a>。2.0 中的自定预览功能有所变化，这也是今天要介绍的内容。<br/>
-
-                        
-                      </div>
-                  </div>
-                </a>
-                <div class="read-more clearfix">
-                  <div class="more-left left">
-                   <a href="15509248711452.html">阅读更多&gt;&gt;</a>&nbsp;&nbsp; 
-                    <span class="date">2019/2/23 20:27 下午</span>
-                    <span>发布于分类&nbsp;</span> 
-          				  
-          					    <span class="posted-in"><a href='other.html'>其他</a></span>
-          				   
-                  </div>
-                  <div class="more-right right">
-                  <span class="comments">
-                      
-
-                       
-                  </span>
-                  </div>
-                </div>
-              </div><!-- article -->
-        
-              
-
-
-			<div class="row">
-			  <div class="large-6 columns">
-			  <p class="text-left" style="padding-top:25px;">
-			   
-			  </p>
-			  </div>
-			  <div class="large-6 columns">
-			<p class="text-right" style="padding-top:25px;">
-			 <a href="other_1.html">&raquo; 下一页</a> 
-			</p>
-			  </div>
-			</div>
-		</div>
-	</div><!-- large 8 -->
 
  <div class="large-4 medium-4 columns">
   <div class="hide-for-small">
