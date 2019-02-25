@@ -140,129 +140,7 @@
                       
                       <div class="a-content-text">
                         
-                        	<p>利用MarkDown书写一些常用的流程图，Echarts图表，数学公式，点图等<br/>
-<img src="http://image.sangkf.cn/15510633473570.jpg" alt="" class="mw_img_center" style="width:200px;display: block; clear:both; margin: 0 auto;"/></p>
-
-<h3 id="toc_0">mermaid</h3>
-
-<pre><code class="language-mermaid">sequenceDiagram
-    participant Alice
-    participant Bob
-    Alice-&gt;John: Hello John, how are you?
-    loop Healthcheck
-        John-&gt;John: Fight against hypochondria
-    end
-    Note right of John: Rational thoughts &lt;br/&gt;prevail...
-    John--&gt;Alice: Great!
-    John-&gt;Bob: How about you?
-    Bob--&gt;John: Jolly good!
-</code></pre>
-
-<p><img src="media/15509800202549/15510632566254.jpg" alt="" style="width:500px;"/></p>
-
-<h3 id="toc_1">dot</h3>
-
-<pre><code class="language-dot"># http://www.graphviz.org/content/cluster
-digraph G {
-
-    subgraph cluster_0 {
-        style=filled;
-        color=lightgrey;
-        node [style=filled,color=white];
-        a0 -&gt; a1 -&gt; a2 -&gt; a3;
-        label = &quot;process #1&quot;;
-    }
-
-    subgraph cluster_1 {
-        node [style=filled];
-        b0 -&gt; b1 -&gt; b2 -&gt; b3;
-        label = &quot;process #2&quot;;
-        color=blue
-    }
-    start -&gt; a0;
-    start -&gt; b0;
-    a1 -&gt; b3;
-    b2 -&gt; a3;
-    a3 -&gt; a0;
-    a3 -&gt; end;
-    b3 -&gt; end;
-
-    start [shape=Mdiamond];
-    end [shape=Msquare];
-}
-</code></pre>
-
-<p><img src="media/15509800202549/15510633206455.jpg" alt="" style="width:293px;"/></p>
-
-<h3 id="toc_2">echarts</h3>
-
-<pre><code class="language-echarts">option = {
-    xAxis: {
-        type: &#39;category&#39;,
-        data: [&#39;Mon&#39;, &#39;Tue&#39;, &#39;Wed&#39;, &#39;Thu&#39;, &#39;Fri&#39;, &#39;Sat&#39;, &#39;Sun&#39;]
-    },
-    yAxis: {
-        type: &#39;value&#39;
-    },
-    series: [{
-        data: [820, 932, 901, 934, 1290, 1330, 1320],
-        type: &#39;line&#39;
-    }]
-};
-</code></pre>
-
-<p><img src="media/15509800202549/15510633473570.jpg" alt="" style="width:500px;"/></p>
-
-<h3 id="toc_3">顺序图和流程图</h3>
-
-<pre><code class="language-sequence">张三-&gt;李四: 嘿，小四儿, 写博客了没?
-Note right of 李四: 李四愣了一下，说：
-李四--&gt;张三: 忙得吐血，哪有时间写。
-</code></pre>
-
-<pre><code class="language-flow">st=&gt;start: 开始
-e=&gt;end: 结束
-op=&gt;operation: 我的操作
-cond=&gt;condition: 确认？
-
-st-&gt;op-&gt;cond
-cond(yes)-&gt;e
-cond(no)-&gt;op
-</code></pre>
-
-<p><img src="media/15509800202549/15510633802834.jpg" alt="" style="width:436px;"/></p>
-
-<h3 id="toc_4">LaTeX （MathJax 渲染）</h3>
-
-<pre><code class="language-text">块级公式：
-$$  x = \dfrac{-b \pm \sqrt{b^2 - 4ac}}{2a} $$
-
-\\[ \frac{1}{\Bigl(\sqrt{\phi \sqrt{5}}-\phi\Bigr) e^{\frac25 \pi}} =
-1+\frac{e^{-2\pi}} {1+\frac{e^{-4\pi}} {1+\frac{e^{-6\pi}}
-{1+\frac{e^{-8\pi}} {1+\ldots} } } } \\]
-
-行内公式： $\Gamma(n) = (n-1)!\quad\forall n\in\mathbb N$
-</code></pre>
-
-<p><img src="media/15509800202549/15510634028669.jpg" alt="" style="width:500px;"/></p>
-
-<ul>
-<li>
-<a href="#toc_0">mermaid</a>
-</li>
-<li>
-<a href="#toc_1">dot</a>
-</li>
-<li>
-<a href="#toc_2">echarts</a>
-</li>
-<li>
-<a href="#toc_3">顺序图和流程图</a>
-</li>
-<li>
-<a href="#toc_4">LaTeX （MathJax 渲染）</a>
-</li>
-</ul>
+                        	<p>利用MarkDown书写一些常用的流程图，Echarts图表，数学公式，点图等</p>
 
 
                         
@@ -271,7 +149,7 @@ $$  x = \dfrac{-b \pm \sqrt{b^2 - 4ac}}{2a} $$
                 </a>
                 <div class="read-more clearfix">
                   <div class="more-left left">
-                  
+                   <a href="15509800202549.html">阅读更多&gt;&gt;</a>&nbsp;&nbsp; 
                     <span class="date">2019/2/24 11:47 上午</span>
                     <span>发布于分类&nbsp;</span> 
           				  

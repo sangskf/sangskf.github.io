@@ -4,7 +4,7 @@
   <title><![CDATA[见课就上的小婊砸]]></title>
   <link href="https://books.sangkf.cn/atom.xml" rel="self"/>
   <link href="https://books.sangkf.cn/"/>
-  <updated>2019-02-25T11:08:49+08:00</updated>
+  <updated>2019-02-25T11:10:12+08:00</updated>
   <id>https://books.sangkf.cn/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -18,8 +18,9 @@
     <updated>2019-02-24T11:47:00+08:00</updated>
     <id>https://books.sangkf.cn/15509800202549.html</id>
     <content type="html"><![CDATA[
-<p>利用MarkDown书写一些常用的流程图，Echarts图表，数学公式，点图等<br/>
-<img src="http://image.sangkf.cn/15510633473570.jpg" alt="" class="mw_img_center" style="width:200px;display: block; clear:both; margin: 0 auto;"/></p>
+<p>利用MarkDown书写一些常用的流程图，Echarts图表，数学公式，点图等</p>
+
+<span id="more"></span><!-- more -->
 
 <h3 id="toc_0">mermaid</h3>
 
