@@ -4,13 +4,221 @@
   <title><![CDATA[见课就上的小婊砸]]></title>
   <link href="https://books.sangkf.cn/atom.xml" rel="self"/>
   <link href="https://books.sangkf.cn/"/>
-  <updated>2019-02-25T16:40:24+08:00</updated>
+  <updated>2019-02-25T17:07:55+08:00</updated>
   <id>https://books.sangkf.cn/</id>
   <author>
     <name><![CDATA[]]></name>
     
   </author>
   <generator uri="http://www.mweb.im/">MWeb</generator>
+  
+  <entry>
+    <title type="html"><![CDATA[Java 生态圈知识汇总]]></title>
+    <link href="https://books.sangkf.cn/15510844326202.html"/>
+    <updated>2019-02-25T16:47:12+08:00</updated>
+    <id>https://books.sangkf.cn/15510844326202.html</id>
+    <content type="html"><![CDATA[
+<p>原文地址：<a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk">github.com/aalansehaiy…</a></p>
+
+<h3 id="toc_0"><a href="https://juejin.im/entry/5b2b02986fb9a00e9402abb5?utm_source=gold_browser_extension#%E5%89%8D%E8%A8%80"></a>前言</h3>
+
+<p>有人认为编程是一门技术活，要有一定的天赋，非天资聪慧者不能及也。其实不然，笔者虽是计算机专业出身，但工作年限并不长，对于技术这碗饭有一些心得体会，大多数人成为某领域顶级专家可能会有些难度，但应对日常工作，成长为资深研发工程师、技术专家、甚至成为小团队的Team Leader，其实并不难。</p>
+
+<p><strong>多读书、多看报，多研究常用开源框架的源码，比如：github.com，这里汇集了全球工程师的智慧！</strong></p>
+
+<p>言归正传，下文会列举工作中常用的一些技术，以及如何锻炼提升自己的架构能力。</p>
+
+<p>由于每块技术市场上基本都有对应的网络资料或书籍，所以本文只是少篇幅列举工作中用到的核心知识点，抛砖引玉，属于进阶型，不适用初学者。</p>
+
+<h3 id="toc_1"><a href="https://juejin.im/entry/5b2b02986fb9a00e9402abb5?utm_source=gold_browser_extension#%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"></a>基础知识</h3>
+
+<ul>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fbasic-knowledge%2Fjava.md">java</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fbasic-knowledge%2Fspring.md">spring</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fbasic-knowledge%2Fspringboot.md">spring boot</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fbasic-knowledge%2Fspringcloud.md">spring cloud</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fbasic-knowledge%2Fibatis.md">ibatis</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fbasic-knowledge%2F%25E5%25B8%25B8%25E7%2594%25A8%25E7%259A%2584%25E8%25AE%25BE%25E8%25AE%25A1%25E6%25A8%25A1%25E5%25BC%258F.md">设计模式</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fbasic-knowledge%2FLog4j.md">Log日志</a></li>
+</ul>
+
+<h3 id="toc_2"><a href="https://juejin.im/entry/5b2b02986fb9a00e9402abb5?utm_source=gold_browser_extension#%E6%95%B0%E6%8D%AE%E5%BA%93"></a>数据库</h3>
+
+<p>目前使用最多还是mysql，虽然单机性能比不上oracle，但免费开源，单机成本低且借助于分布式集群，可以有强大的输出能力。</p>
+
+<ul>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fdata-base%2Fdatabase-connection-pool.md">连接池</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fdata-base%2Ftransaction.md">事务</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fdata-base%2F%25E5%2588%2586%25E5%25BA%2593%25E5%2588%2586%25E8%25A1%25A8.md">分库分表</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fdata-base%2Fid-generate.md">id生成器</a></li>
+<li><a href="https://link.juejin.im/?target=http%3A%2F%2Fblog.csdn.net%2Fitomge%2Farticle%2Fdetails%2F6909240">读写分离</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fdata-base%2Fsql-optimize.md">SQL调优</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fdata-base%2Fother.md">其它</a></li>
+</ul>
+
+<h3 id="toc_3"><a href="https://juejin.im/entry/5b2b02986fb9a00e9402abb5?utm_source=gold_browser_extension#web%E5%AE%B9%E5%99%A8%E5%8D%8F%E8%AE%AE%E7%BD%91%E7%BB%9C"></a>web容器/协议/网络</h3>
+
+<ul>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fweb%2Fload-balance.md">负载均衡</a></li>
+<li>服务器
+<ul>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fweb%2FNginx.md">Nginx</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fweb%2Ftomcat.md">Tomcat</a></li>
+</ul></li>
+<li>协议
+<ul>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fweb%2Fhttp%25E5%258D%258F%25E8%25AE%25AE.md">HTTP 协议</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fweb%2Ftcp.md">TCP 协议</a></li>
+</ul></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fweb%2FCDN.md">CDN</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fweb%2Fother.md">其它</a></li>
+</ul>
+
+<h3 id="toc_4"><a href="https://juejin.im/entry/5b2b02986fb9a00e9402abb5?utm_source=gold_browser_extension#%E5%B8%B8%E7%94%A8%E4%B8%89%E6%96%B9%E5%B7%A5%E5%85%B7%E5%8C%85"></a>常用三方工具包</h3>
+
+<ul>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fopen-source-framework%2FGoole-Guava.md">Google Guava</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fopen-source-framework%2FfastJson.md">fastJson</a></li>
+<li><a href="https://link.juejin.im/?target=http%3A%2F%2Fblog.csdn.net%2Fitomge%2Farticle%2Fdetails%2F17913607">log4J</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fopen-source-framework%2Fcommons-codec.md">commons-codec</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fopen-source-framework%2Fcommons-lang3.md">commons-lang3</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fopen-source-framework%2Fcommons-io.md">commons-io</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fopen-source-framework%2FQuartz.md">Quartz</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fopen-source-framework%2FHttpClient.md">HttpClient</a></li>
+<li><a href="https://link.juejin.im/?target=http%3A%2F%2Fblog.csdn.net%2Fitomge%2Farticle%2Fdetails%2F7671294">Javassist</a></li>
+</ul>
+
+<h3 id="toc_5"><a href="https://juejin.im/entry/5b2b02986fb9a00e9402abb5?utm_source=gold_browser_extension#%E4%B8%AD%E9%97%B4%E4%BB%B6"></a>中间件</h3>
+
+<ul>
+<li><p>RPC框架</p>
+<ul>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fmiddle-software%2Fdubbo.md">dubbo</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fwww.oschina.net%2Fp%2Fdubbox">dubbox</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Fweibocom%2Fmotan">motan</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Fapache%2Fthrift">Thrift</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fmiddle-software%2Frpc-compare.md">RPC框架性能比较</a></li>
+</ul></li>
+<li><p>MQ消息</p>
+<ul>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Fapache%2Factivemq">ActiveMQ</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fmiddle-software%2FRabbitMQ.md">RabbitMQ</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fmiddle-software%2Fkafka.md">Kafka</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fmiddle-software%2FRocketMQ.md">RocketMQ</a></li>
+</ul></li>
+<li><p>分布式缓存</p>
+<ul>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fopen-source-framework%2Fredis.md">redis</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster">codis</a></li>
+<li><a href="https://link.juejin.im/?target=http%3A%2F%2Fblog.csdn.net%2Fitomge%2Farticle%2Fdetails%2F8035197">memcache</a></li>
+</ul></li>
+<li><p>本地缓存</p>
+<ul>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fmiddle-software%2Fguava.md">Guava</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fmiddle-software%2Fehcache.md">ehcache</a></li>
+</ul></li>
+<li><p>搜索</p>
+<ul>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fmiddle-software%2Felasticsearch.md">Elasticsearch</a></li>
+</ul></li>
+<li><p>分布式数据框架</p>
+<ul>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fmiddle-software%2Fcobar.md">cobar</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fmiddle-software%2Fmycat.md">Mycat</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fmiddle-software%2Ftsharding.md">tsharding</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Falibaba%2Ftb_tddl">tddl</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fmiddle-software%2Fsharding-jdbc.md">sharding-jdbc</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgitee.com%2Frobertleepeak%2Fdbsplit">dbsplit</a></li>
+</ul></li>
+<li><p>分布式协调服务</p>
+<ul>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fmiddle-software%2Fzookeeper.md">zookeeper</a></li>
+</ul></li>
+<li><p>配置管理</p>
+<ul>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fother%2Fsuper-diamond%25E6%25BA%2590%25E7%25A0%2581%25E5%2588%2586%25E6%259E%2590.md">super-diamond</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fwww.oschina.net%2Fp%2Fdisconf">disconf</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fmiddle-software%2Fapollo.md">apollo</a></li>
+</ul></li>
+<li><p>分布式文件系统</p>
+<ul>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fmiddle-software%2FFastDFS.md">FastDFS</a></li>
+</ul></li>
+<li><p>分布式任务调度框架</p>
+<ul>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Felasticjob%2Felastic-job">Elastic-Job</a></li>
+<li><a href="https://link.juejin.im/?target=http%3A%2F%2Fwww.infoq.com%2Fcn%2Farticles%2Fdangdang-distributed-work-framework-elastic-job">详解当当网的分布式作业框架elastic-job</a></li>
+<li><a href="https://link.juejin.im/?target=http%3A%2F%2Fblog.csdn.net%2Ftaosir_zhang%2Farticle%2Fdetails%2F50728362">TBSchedule</a></li>
+</ul></li>
+<li><p>大数据</p>
+<ul>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fmiddle-software%2FHbase.md">Hbase</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fmiddle-software%2FSpark.md">Spark</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fmiddle-software%2FHadoop.md">Hadoop</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fmiddle-software%2FHive.md">Hive</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fmiddle-software%2Fbig-data.md">other框架</a></li>
+</ul></li>
+<li><p>其它</p>
+<ul>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Falibaba%2Fcanal">数据库binlog的增量订阅&amp;消费组件</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Falibaba%2Fotter">数据库同步系统</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fmiddle-software%2FTCC-Transaction.md">TCC-Transaction</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fmiddle-software%2FNetty.md">Netty</a></li>
+</ul></li>
+</ul>
+
+<h3 id="toc_6"><a href="https://juejin.im/entry/5b2b02986fb9a00e9402abb5?utm_source=gold_browser_extension#%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84"></a>系统架构</h3>
+
+<ul>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fsystem-architecture%2Farchitecture-experience.md">架构经验</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fsystem-architecture%2Farchitecture-good-case.md">经典案例</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fsystem-architecture%2Ftechnology-selection.md">通用技术方案选型</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fsystem-architecture%2F%25E7%25BC%2596%25E7%25A0%2581%25E5%2589%258D3000%25E9%2597%25AE.md">编码前3000问</a></li>
+</ul>
+
+<h3 id="toc_7"><a href="https://juejin.im/entry/5b2b02986fb9a00e9402abb5?utm_source=gold_browser_extension#%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86"></a>项目管理</h3>
+
+<ul>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fproject-management%2F%25E8%25AE%25BA%25E9%259C%2580%25E6%25B1%2582%25E8%25B0%2583%25E7%25A0%2594%25E7%259A%2584%25E9%2587%258D%25E8%25A6%2581%25E6%2580%25A7.md">论需求调研的重要性</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fproject-management%2Fproject-management.md">项目管理</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fproject-management%2Fcode.md">代码管理</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fproject-management%2Ftest.md">测试相关</a></li>
+</ul>
+
+<h3 id="toc_8"><a href="https://juejin.im/entry/5b2b02986fb9a00e9402abb5?utm_source=gold_browser_extension#%E8%BF%90%E7%BB%B4"></a>运维</h3>
+
+<ul>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fops%2Fonline-question.md">快速排查线上问题</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fops%2Flinux-commands.md">linux常用命令</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fops%2F%25E6%259C%25AC%25E5%259C%25B0%25E4%25BB%25A3%25E7%25A0%2581%25E8%25B0%2583%25E8%25AF%2595.md">本地代码调试</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fops%2Fdocker.md">Docker</a></li>
+</ul>
+
+<h3 id="toc_9"><a href="https://juejin.im/entry/5b2b02986fb9a00e9402abb5?utm_source=gold_browser_extension#%E4%B8%AA%E4%BA%BA%E6%88%90%E9%95%BF"></a>个人成长</h3>
+
+<ul>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fother%2Fstudy.md">学习网站</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fother%2Fbook.md">Tom哥的读书单</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fother%2Fperson.md">个人成长与职业规划</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fother%2Fprogramer.md">程序员素养</a></li>
+</ul>
+
+<h3 id="toc_10"><a href="https://juejin.im/entry/5b2b02986fb9a00e9402abb5?utm_source=gold_browser_extension#%E5%85%B6%E5%AE%83"></a>其它</h3>
+
+<ul>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fother%2Ftool.md">常用软件工具</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fother%2F%25E4%25B8%2580%25E8%2587%25B4%25E6%2580%25A7hash.md">一致性hash算法</a></li>
+<li>面试
+<ul>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fother%2Fjava-interview.md">java面试题</a></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fother%2Fbigdata-interview.md">大数据面试题</a></li>
+</ul></li>
+<li><a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk%2Fblob%2Fmaster%2Fother%2F%25E5%259B%259E%25E8%25BD%25A6%25E4%25B8%258E%25E6%258D%25A2%25E8%25A1%258C%25E7%259A%2584%25E5%258C%25BA%25E5%2588%25AB.md">回车与换行的区别</a></li>
+<li><a href="https://link.juejin.im/?target=http%3A%2F%2Fblog.csdn.net%2Fqq1332479771%2Farticle%2Fdetails%2F56087333">github上fork项目后，如何同步更新后面提交</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[限流设计]]></title>
