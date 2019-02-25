@@ -4,7 +4,7 @@
   <title><![CDATA[见课就上的小婊砸]]></title>
   <link href="https://books.sangkf.cn/atom.xml" rel="self"/>
   <link href="https://books.sangkf.cn/"/>
-  <updated>2019-02-25T22:45:27+08:00</updated>
+  <updated>2019-02-25T22:53:02+08:00</updated>
   <id>https://books.sangkf.cn/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -1188,15 +1188,13 @@
     <updated>2019-02-25T12:18:15+08:00</updated>
     <id>https://books.sangkf.cn/15510682951931.html</id>
     <content type="html"><![CDATA[
-<blockquote>
-<p>[转载]<a href="https://blog.csdn.net/xiaokang123456kao/article/details/77679848">https://blog.csdn.net/xiaokang123456kao/article/details/77679848</a></p>
-</blockquote>
+<p><a href="">代理类的目的是为其他对象提供一个代理以控制对某个对象的访问。</a><br/>
+<span id="more"></span><!-- more --></p>
 
 <h2 id="toc_0">代理的含义</h2>
 
 <ul>
-<li>代理类的目的是为其他对象提供一个代理以控制对某个对象的访问。
-<span id="more"></span><!-- more --></li>
+<li>代理类的目的是为其他对象提供一个代理以控制对某个对象的访问。</li>
 <li>代理类负责为委托类预处理消息，过滤消息并转发消息，以及进行消息被委托类执行后的后续处理。</li>
 <li>为了保持行为的一致性，代理类和委托类通常会实现相同的接口，所以在访问者看来两者没有丝毫的区别。</li>
 <li>通过代理类这中间一层，能有效控制对委托类对象的直接访问，也可以很好的隐藏和保护委托类对象，同时也为实施不同控制策略预留了空间，从而在设计上获得了更大的灵活性。</li>
@@ -1230,7 +1228,13 @@
 <li>interfaces:　　一个Interface对象的数组，表示的是我将要给我需要代理的对象提供一组什么接口，如果我提供了一组接口给它，那么这个代理对象就宣称实现了该接口(多态)，这样我就能调用这组接口中的方法了</li>
 <li>一个InvocationHandler对象，表示的是当我这个动态代理对象在调用方法的时候，会关联到哪一个InvocationHandler对象上</li>
 </ul>
-<p>其实我们所说的DynamicProxy（动态代理类）是这样一种class：它是在运行时生成的class，在生成它时你必须提供一组interface给它，然后该class就宣称它实现了这些 interface。如此一来，我们可以把该class的实例当作这些interface中的任何一个来用（可以强转为相应的接口类型）。当然，这个DynamicProxy其实就是一个Proxy，它不会做实质性的工作，在生成它的实例时你必须提供一个handler，由它接管实际的工作。</p>
+<p>其实我们所说的DynamicProxy（动态代理类）是这样一种class：它是在运行时生成的class，在生成它时你必须提供一组interface给它，然后该class就宣称它实现了这些 interface。如此一来，我们可以把该class的实例当作这些interface中的任何一个来用（可以强转为相应的接口类型）。当然，这个DynamicProxy其实就是一个Proxy，它不会做实质性的工作，在生成它的实例时你必须提供一个handler，由它接管实际的工作。</p></li>
+</ol>
+
+<blockquote>
+<p>[转载]<a href="https://blog.csdn.net/xiaokang123456kao/article/details/77679848">https://blog.csdn.net/xiaokang123456kao/article/details/77679848</a></p>
+</blockquote>
+
 <ul>
 <li>
 <a href="#toc_0">代理的含义</a>
@@ -1239,8 +1243,7 @@
 <a href="#toc_1">动态代理相关类介绍</a>
 </li>
 </ul>
-</li>
-</ol>
+
 
 ]]></content>
   </entry>
