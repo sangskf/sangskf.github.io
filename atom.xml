@@ -4,13 +4,395 @@
   <title><![CDATA[见课就上的小婊砸]]></title>
   <link href="https://books.sangkf.cn/atom.xml" rel="self"/>
   <link href="https://books.sangkf.cn/"/>
-  <updated>2019-02-25T22:10:11+08:00</updated>
+  <updated>2019-02-25T22:43:09+08:00</updated>
   <id>https://books.sangkf.cn/</id>
   <author>
     <name><![CDATA[]]></name>
     
   </author>
   <generator uri="http://www.mweb.im/">MWeb</generator>
+  
+  <entry>
+    <title type="html"><![CDATA[微服务架构下处理分布式事务的典型方案]]></title>
+    <link href="https://books.sangkf.cn/15511042581022.html"/>
+    <updated>2019-02-25T22:17:38+08:00</updated>
+    <id>https://books.sangkf.cn/15511042581022.html</id>
+    <content type="html"><![CDATA[
+<p>根据微服务架构的鼻祖Martin Fowler的忠告，微服务架构中应当尽量避免分布式事务。然而，在某些领域，分布式事务如同宿命中的对手无法避免。在工程领域，分布式事务的讨论主要聚焦于强一致性和最终一致性的解决方案。典型方案包括：<br/>
+<span id="more"></span><!-- more --></p>
+
+<ul>
+<li>两阶段提交（2PC, Two-phase Commit）方案；</li>
+<li>eBay 事件队列方案；</li>
+<li>TCC 补偿模式；</li>
+<li>缓存数据最终一致性。</li>
+</ul>
+
+<h2 id="toc_0">一致性理论</h2>
+
+<p>分布式事务的目的是保障分库数据一致性，而跨库事务会遇到各种不可控制的问题，如个别节点永久性宕机，像单机事务一样的ACID是无法奢望的。另外，业界著名的CAP理论也告诉我们，对分布式系统，需要将数据一致性和系统可用性、分区容忍性放在天平上一起考虑。</p>
+
+<p>两阶段提交协议（简称2PC）是实现分布式事务较为经典的方案，但2PC 的可扩展性很差，在分布式架构下应用代价较大，eBay 架构师Dan Pritchett 提出了BASE 理论，用于解决大规模分布式系统下的数据一致性问题。BASE 理论告诉我们：可以通过放弃系统在每个时刻的强一致性来换取系统的可扩展性。</p>
+
+<ul>
+<li><p>CAP理论</p>
+<ul>
+<li><p>在分布式系统中，一致性（Consistency）、可用性（Availability）和分区容忍性（Partition Tolerance）3 个要素最多只能同时满足两个，不可兼得。其中，分区容忍性又是不可或缺的。</p>
+<ul>
+<li>一致性：分布式环境下多个节点的数据是否强一致。</li>
+<li>可用性：分布式服务能一直保证可用状态。当用户发出一个请求后，服务能在有限时间内返回结果。</li>
+<li>分区容忍性：特指对网络分区的容忍性。</li>
+</ul></li>
+</ul></li>
+</ul>
+
+<p>举例：Cassandra、Dynamo 等，默认优先选择AP，弱化C；HBase、MongoDB 等，默认优先选择CP，弱化A。</p>
+
+<ul>
+<li><p>BASE 理论</p>
+<ul>
+<li><p>核心思想：</p>
+<ul>
+<li>基本可用（Basically Available）：指分布式系统在出现故障时，允许损失部分的可用性来保证核心可用。</li>
+<li>软状态（Soft State）：指允许分布式系统存在中间状态，该中间状态不会影响到系统的整体可用性。</li>
+<li>最终一致性（Eventual Consistency）：指分布式系统中的所有副本数据经过一定时间后，最终能够达到一致的状态。</li>
+</ul></li>
+<li><p>一致性模型</p>
+<ul>
+<li><p>数据的一致性模型可以分成以下 3 类：</p>
+<ul>
+<li>强一致性：数据更新成功后，任意时刻所有副本中的数据都是一致的，一般采用同步的方式实现。</li>
+<li>弱一致性：数据更新成功后，系统不承诺立即可以读到最新写入的值，也不承诺具体多久之后可以读到。</li>
+<li>最终一致性：弱一致性的一种形式，数据更新成功后，系统不承诺立即可以返回最新写入的值，但是保证最终会返回上一次更新操作的值。</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+
+<p>分布式系统数据的强一致性、弱一致性和最终一致性可以通过Quorum NRW算法分析。</p>
+
+<h2 id="toc_1">分布式事务解决方案</h2>
+
+<h3 id="toc_2">1、2PC方案——强一致性</h3>
+
+<p>2PC的核心原理是通过提交分阶段和记日志的方式，记录下事务提交所处的阶段状态，在组件宕机重启后，可通过日志恢复事务提交的阶段状态，并在这个状态节点重试，如Coordinator重启后，通过日志可以确定提交处于Prepare还是PrepareAll状态，若是前者，说明有节点可能没有Prepare成功，或所有节点Prepare成功但还没有下发Commit，状态恢复后给所有节点下发RollBack；若是PrepareAll状态，需要给所有节点下发Commit，数据库节点需要保证Commit幂等。</p>
+
+<ul>
+<li><p>2PC方案的问题：</p>
+<ul>
+<li>同步阻塞；</li>
+<li>数据不一致；</li>
+<li>单点问题。</li>
+</ul></li>
+<li><p>升级的3PC方案旨在解决这些问题，主要有两个改进：</p>
+<ul>
+<li>增加超时机制。</li>
+<li>两阶段之间插入准备阶段。</li>
+</ul></li>
+</ul>
+
+<p>但三阶段提交也存在一些缺陷，要彻底从协议层面避免数据不一致，可以采用Paxos或者Raft 算法。</p>
+
+<h3 id="toc_3">eBay 事件队列方案——最终一致性</h3>
+
+<p>eBay 的架构师Dan Pritchett，曾在一篇解释BASE 原理的论文《Base：An Acid Alternative》中提到一个eBay 分布式系统一致性问题的解决方案。它的核心思想是将需要分布式处理的任务通过消息或者日志的方式来异步执行，消息或日志可以存到本地文件、数据库或消息队列，再通过业务规则进行失败重试，它要求各服务的接口是幂等的。</p>
+
+<p>描述的场景为，有用户表user 和交易表transaction，用户表存储用户信息、总销售额和总购买额，交易表存储每一笔交易的流水号、买家信息、卖家信息和交易金额。如果产生了一笔交易，需要在交易表增加记录，同时还要修改用户表的金额。</p>
+
+<p>论文中提出的解决方法是将更新交易表记录和用户表更新消息放在一个本地事务来完成，为了避免重复消费用户表更新消息带来的问题，增加一个操作记录表updates_applied来记录已经完成的交易相关的信息。</p>
+
+<p>这个方案的核心在于第二阶段的重试和幂等执行。失败后重试，这是一种补偿机制，它是能保证系统最终一致的关键流程。</p>
+
+<h3 id="toc_4">TCC （Try-Confirm-Cancel）补偿模式——最终一致性</h3>
+
+<p>某业务模型如图，由服务 A、服务B、服务C、服务D 共同组成的一个微服务架构系统。服务A 需要依次调用服务B、服务C 和服务D 共同完成一个操作。当服务A 调用服务D 失败时，若要保证整个系统数据的一致性，就要对服务B 和服务C 的invoke 操作进行回滚，执行反向的revert 操作。回滚成功后，整个微服务系统是数据一致的。</p>
+
+<ul>
+<li><p>实现关键要素：</p>
+<ol>
+<li>服务调用链必须被记录下来；</li>
+<li>每个服务提供者都需要提供一组业务逻辑相反的操作，互为补偿，同时回滚操作要保证幂等；</li>
+<li>必须按失败原因执行不同的回滚策略。</li>
+</ol></li>
+<li><p>实现难点：</p></li>
+</ul>
+
+<p>补偿模式的特点是实现简单，但是想形成一定程度的通用方案比较困难，特别是服务链的记录，因为大部分时候，业务参数或者业务逻辑千差万别。</p>
+
+<p>另外，很多业务特征使得该服务无法提供一个安全的回滚操作。</p>
+
+<h3 id="toc_5">缓存数据最终一致性</h3>
+
+<p>在我们的业务系统中，缓存（Redis 或者Memcached）通常被用在数据库前面，作为数据读取的缓冲，使得I/O 操作不至于直接落在数据库上。以商品详情页为例，假如卖家修改了商品信息，并写回到数据库，但是这时候用户从商品详情页看到的信息还是从缓存中拿到的过时数据，这就出现了缓存系统和数据库系统中的数据不一致的现象。</p>
+
+<ul>
+<li>要解决该场景下缓存和数据库数据不一致的问题我们有以下两种解决方案：</li>
+</ul>
+
+<p>为缓存数据设置过期时间。当缓存中数据过期后，业务系统会从数据库中获取数据，并将新值放入缓存。这个过期时间就是系统可以达到最终一致的容忍时间。</p>
+
+<p>更新数据库数据后同时清除缓存数据。数据库数据更新后，同步删除缓存中数据，使得下次对商品详情的获取直接从数据库中获取，并同步到缓存。</p>
+
+<blockquote>
+<p>选择建议</p>
+</blockquote>
+
+<p>在面临数据一致性问题的时候，首先要从业务需求的角度出发，确定我们对于3 种一致性模型的接受程度，再通过具体场景来决定解决方案。</p>
+
+<p>从应用角度看，分布式事务的现实场景常常无法规避，在有能力给出其他解决方案前，2PC也是一个不错的选择。</p>
+
+<p>对购物转账等电商和金融业务，中间件层的2PC最大问题在于业务不可见，一旦出现不可抗力或意想不到的一致性破坏，如数据节点永久性宕机，业务难以根据2PC的日志进行补偿。金融场景下，数据一致性是命根，业务需要对数据有百分之百的掌控力，建议使用TCC这类分布式事务模型，或基于消息队列的柔性事务框架，这两种方案都在业务层实现，业务开发者具有足够掌控力，可以结合SOA框架来架构，包括Dubbo、Spring Cloud等。</p>
+
+<ul>
+<li>
+<a href="#toc_0">一致性理论</a>
+</li>
+<li>
+<a href="#toc_1">分布式事务解决方案</a>
+<ul>
+<li>
+<a href="#toc_2">1、2PC方案——强一致性</a>
+</li>
+<li>
+<a href="#toc_3">eBay 事件队列方案——最终一致性</a>
+</li>
+<li>
+<a href="#toc_4">TCC （Try-Confirm-Cancel）补偿模式——最终一致性</a>
+</li>
+<li>
+<a href="#toc_5">缓存数据最终一致性</a>
+</li>
+</ul>
+</li>
+</ul>
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[分布式系统常见的事务处理机制]]></title>
+    <link href="https://books.sangkf.cn/15511041776834.html"/>
+    <updated>2019-02-25T22:16:17+08:00</updated>
+    <id>https://books.sangkf.cn/15511041776834.html</id>
+    <content type="html"><![CDATA[
+<p>为保障系统的可用性、可靠性以及性能，在分布式系统中，往往会设置数据冗余，即对数据进行复制。举例来说，当一个数据库的副本被破环以后，那么系统只需要转换到其他数据副本就能继续运行下去。<br/>
+<span id="more"></span><!-- more --><br/>
+另外一个例子，当访问单一服务器管理的数据的进程数不断增加时，系统就需要对服务器的数量进行扩充，此时，对服务器进行复制，随后让它们分担工作负荷，就可以提高性能。但同时，如何保障多个数据节点之间数据的一致以及如何处理分布式事务，将成为为一个复杂的话题。本文将介绍常用的事务处理机制。</p>
+
+<p><strong>CAP 定理</strong></p>
+
+<p>CAP 定理（也称为 Brewer 定理），是由计算机科学家 Eric Brewer 提出的，即在分布式计算机系统不可能同时提供以下全部三个保证：</p>
+
+<ul>
+<li><p><strong>一致性</strong>（Consistency）：所有节点同一时间看到是相同的数据；</p></li>
+<li><p><strong>可用性</strong>（Availability）：不管是否成功，确保每一个请求都能接收到响应；</p></li>
+<li><p><strong>分区容错性</strong>（Partition tolerance）：系统任意分区后，在网络故障时，仍能操作</p></li>
+</ul>
+
+<p>显然，为了保障性能和可靠性，我们将数据复制多份，分布到多个节点上，同时也带来了一个难点，那就是如何保持各个副本数据的一致性。换句话说，我们选择了 AP ，则必须要牺牲掉 C 了。</p>
+
+<p>但是，在实际的应用场景中，数据的一致性往往也是需要保证的。那么这是否违背了 CAP 定理呢？</p>
+
+<p><strong>一致性模型</strong></p>
+
+<p>其实，数据的一致性也分几种情况，大致可以分为：</p>
+
+<ul>
+<li><p>Weak 弱一致性：当你写入一个新值后，读操作在数据副本上可能读出来，也可能读不出来。比如：某些存储系统，搜索引擎，实时游戏，语音聊天等，这些数据本文对完整性要求不高，数据是否一致关系也不大。</p></li>
+<li><p>Eventually 最终一致性：当你写入一个新值后，并不一定能马上读出来，但在某个时间窗口之后保证最终能读出来。比如：DNS，电子邮件，消息中间件等系统，大部分分布式系统技术都采用这类模式。</p></li>
+<li><p>Strong 强一致性：新的数据一旦写入，在任意副本任意时刻都能读到新值。比如：文件系统，RDBMS都是强一致性的。</p></li>
+</ul>
+
+<p>也就是说，在设计分布式系统时，我们并不一定要求是强一致性的，根据应用场景可以选择弱一致性或者是最终一致性。</p>
+
+<p><strong>事务的作用</strong></p>
+
+<p>事务有如下作用：</p>
+
+<ul>
+<li><p>保证执行结果的正确性</p></li>
+<li><p>保证数据的一致性</p></li>
+<li><p>ACID</p></li>
+</ul>
+
+<p><strong>常见的事务处理机制</strong></p>
+
+<p><strong>Master-Slave 复制</strong></p>
+
+<p>Slave 一般是 Master 的备份。在这样的系统中，一般是如下设计的：</p>
+
+<ul>
+<li><p>读写请求都由 Master 负责。</p></li>
+<li><p>写请求写到 Master 上后，由 Master 同步到 Slave 上。</p></li>
+</ul>
+
+<p>这种机制的特点是：</p>
+
+<ul>
+<li><p>数据同步通常是异步的</p></li>
+<li><p>有良好的吞吐量，低延迟 *　在大多数　RDBMS　中支持，比如　MySQL二进制日志</p></li>
+<li><p>弱/最终一致性</p></li>
+</ul>
+
+<p>这种机制的缺点是，如果 Master 挂了，Slave 只能提供读服务，而没有写服务。</p>
+
+<p><strong>Master-Master 多主复制</strong></p>
+
+<p>指一个系统存在两个或多个Master，每个Master都提供读写服务。这个机制是Master-Slave的加强版，数据间同步一般是通过Master间的异步完成，所以是最终一致性。 Master-Master的好处是，一台Master挂了，别的Master可以正常做读写服务，他和Master-Slave一样，当数据没有被复制到别的Master上时，数据会丢失。很多数据库都支持Master-Master的Replication的机制。</p>
+
+<p>这种机制的特点是：</p>
+
+<ul>
+<li><p>异步</p></li>
+<li><p>最终的一致性</p></li>
+<li><p>多个节点间需要序列化协议</p></li>
+</ul>
+
+<p><strong>两阶段提交</strong></p>
+
+<p>两阶段提交协议 （Two-phase commit protocol，2PC）的过程涉及到协调者和参与者。协调者可以看做成事务的发起者，同时也是事务的一个参与者。对于一个分布式事务来说，一个事务是涉及到多个参与者的。具体的两阶段提交的过程如下：</p>
+
+<p><strong>第一阶段（准备阶段）</strong></p>
+
+<ul>
+<li><p>协调者节点向所有参与者节点询问是否可以执行提交操作(vote)，并开始等待各参与者节点的响应。</p></li>
+<li><p>参与者节点执行询问发起为止的所有事务操作，并将 Undo 信息和 Redo 信息写入日志。（注意：若成功这里其实每个参与者已经执行了事务操作）</p></li>
+<li><p>各参与者节点响应协调者节点发起的询问。如果参与者节点的事务操作实际执行成功，则它返回一个“同意”消息；如果参与者节点的事务操作实际执行失败，则它返回一个“中止”消息。</p></li>
+</ul>
+
+<p><strong>第二阶段（提交阶段）</strong></p>
+
+<p>如果协调者收到了参与者的失败消息或者超时，直接给每个参与者发送回滚(Rollback)消息；否则，发送提交(Commit)消息；参与者根据协调者的指令执行提交或者回滚操作，释放所有事务处理过程中使用的锁资源。(注意:必须在最后阶段释放锁资源)</p>
+
+<ul>
+<li><p>当协调者节点从所有参与者节点获得的相应消息都为“同意”时:</p></li>
+<li><p>协调者节点向所有参与者节点发出“正式提交(commit)”的请求。</p></li>
+<li><p>参与者节点正式完成操作，并释放在整个事务期间内占用的资源。</p></li>
+<li><p>参与者节点向协调者节点发送“完成”消息。</p></li>
+<li><p>如果任一参与者节点在第一阶段返回的响应消息为”中止”，或者 协调者节点在第一阶段的询问超时之前无法获取所有参与者节点的响应消息时：</p></li>
+<li><p>协调者节点向所有参与者节点发出”回滚操作(rollback)”的请求。</p></li>
+<li><p>参与者节点利用之前写入的Undo信息执行回滚，并释放在整个事务期间内占用的资源。</p></li>
+<li><p>参与者节点向协调者节点发送”回滚完成”消息。</p></li>
+<li><p>协调者节点受到所有参与者节点反馈的”回滚完成”消息后，取消事务。</p></li>
+<li><p>协调者节点受到所有参与者节点反馈的”完成”消息后，完成事务</p></li>
+</ul>
+
+<p>不管最后结果如何，第二阶段都会结束当前事务。</p>
+
+<p>二段式提交协议的优缺点：</p>
+
+<p>优点：原理简单，实现方便；</p>
+
+<p>缺点：</p>
+
+<ul>
+<li><p>同步阻塞问题。执行过程中，所有参与节点都是事务阻塞型的。</p></li>
+<li><p>单点故障。由于协调者的重要性，一旦协调者发生故障，参与者会一直阻塞下去。尤其在第二阶段，协调者发生故障，那么所有的参与者还都处于锁定事务资源的状态中，而无法继续完成事务操作。</p></li>
+<li><p>数据不一致。在阶段二中，当协调者向参与者发送 commit 请求之后，发生了局部网络异常或者在发送 commit 请求过程中协调者发生了故障，这回导致只有一部分参与者接受到了 commit 请求。而在这部分参与者接到 commit 请求之后就会执行 commit 操作。但是其他部分未接到 commit 请求的机器则无法执行事务提交。于是整个分布式系统便出现了数据部一致性的现象。</p></li>
+<li><p>二阶段无法解决的问题：协调者再发出 commit 消息之后宕机，而唯一接收到这条消息的参与者同时也宕机了。那么即使协调者通过选举协议产生了新的协调者，这条事务的状态也是不确定的，没人知道事务是否被已经提交。</p></li>
+</ul>
+
+<p>为了解决两阶段提交协议的种种问题，研究者们在二阶段提交的基础上做了改进，提出了三阶段提交。</p>
+
+<p><strong>三阶段提交</strong></p>
+
+<p>三阶段提交协议（Three-phase commit protocol，3PC），是二阶段提交（2PC）的改进版本。与两阶段提交不同的是，三阶段提交有两个改动点：</p>
+
+<ul>
+<li><p>引入超时机制。同时在协调者和参与者中都引入超时机制。</p></li>
+<li><p>在第一阶段和第二阶段中插入一个准备阶段。保证了在最后提交阶段之前各参与节点的状态是一致的。</p></li>
+</ul>
+
+<p>即 3PC 把 2PC 的准备阶段再次一分为二，这样三阶段提交就有 CanCommit、PreCommit、DoCommit 三个阶段。</p>
+
+<p><strong>CanCommit 阶段</strong></p>
+
+<p>CanCommit 阶段其实和 2PC 的准备阶段很像。协调者向参与者发送 commit 请求，参与者如果可以提交就返回 Yes 响应，否则返回 No 响应。</p>
+
+<ul>
+<li><p>事务询问：协调者向参与者发送 CanCommit 请求。询问是否可以执行事务提交操作。然后开始等待参与者的响应。</p></li>
+<li><p>响应反馈：参与者接到 CanCommit 请求之后，正常情况下，如果其自身认为可以顺利执行事务，则返回 Yes 响应，并进入预备状态。否则反馈 No</p></li>
+</ul>
+
+<p><strong>PreCommit 阶段</strong></p>
+
+<p>协调者根据参与者的反应情况来决定是否可以记性事务的 PreCommit 操作。根据响应情况，有以下两种可能。</p>
+
+<ul>
+<li><p>假如协调者从所有的参与者获得的反馈都是 Yes 响应，那么就会执行事务的预执行。</p></li>
+<li><p>发送预提交请求：协调者向参与者发送 PreCommit 请求，并进入Prepared 阶段。</p></li>
+<li><p>事务预提交：参与者接收到 PreCommit 请求后，会执行事务操作，并将undo 和 redo 信息记录到事务日志中。</p></li>
+<li><p>响应反馈：如果参与者成功的执行了事务操作，则返回 ACK 响应，同时开始等待最终指令。</p></li>
+<li><p>假如有任何一个参与者向协调者发送了 No 响应，或者等待超时之后，协调者都没有接到参与者的响应，那么就执行事务的中断。</p></li>
+<li><p>发送中断请求：协调者向所有参与者发送 abort 请求。</p></li>
+<li><p>中断事务：参与者收到来自协调者的 abort 请求之后（或超时之后，仍未收到协调者的请求），执行事务的中断。</p></li>
+</ul>
+
+<p><strong>doCommit 阶段</strong></p>
+
+<p>该阶段进行真正的事务提交，也可以分为以下两种情况。</p>
+
+<ul>
+<li><p>执行提交</p></li>
+<li><p>发送提交请求：协调接收到参与者发送的 ACK 响应，那么他将从预提交状态进入到提交状态。并向所有参与者发送 doCommit 请求。</p></li>
+<li><p>事务提交：参与者接收到 doCommit 请求之后，执行正式的事务提交。并在完成事务提交之后释放所有事务资源。</p></li>
+<li><p>响应反馈：事务提交完之后，向协调者发送 ACK 响应。</p></li>
+<li><p>完成事务：协调者接收到所有参与者的 ACK 响应之后，完成事务。</p></li>
+<li><p>中断事务：协调者没有接收到参与者发送的 ACK 响应（可能是接受者发送的不是 ACK 响应，也可能响应超时），那么就会执行中断事务。</p></li>
+<li><p>发送中断请求：协调者向所有参与者发送 abort 请求</p></li>
+<li><p>事务回滚：参与者接收到 abort 请求之后，利用其在阶段二记录的undo 信息来执行事务的回滚操作，并在完成回滚之后释放所有的事务资源。</p></li>
+<li><p>反馈结果：参与者完成事务回滚之后，向协调者发送 ACK 消息</p></li>
+<li><p>中断事务：协调者接收到参与者反馈的 ACK 消息之后，执行事务的中断。</p></li>
+</ul>
+
+<p>在 doCommit 阶段，如果参与者无法及时接收到来自协调者的 doCommit 或者 rebort 请求时，会在等待超时之后，会继续进行事务的提交。即当进入第三阶段时，由于网络超时等原因，虽然参与者没有收 到 commit 或者 abort 响应，事务仍然会提交。</p>
+
+<p>三阶段提交不会一直持有事务资源并处于阻塞状态。但是这种机制也会导致数据一致性问题，因为，由于网络原因，协调者发送的 abort 响应没有及时被参与者接收到，那么参与者在等待超时之后执行了 commit 操作，这样就和其他接到 abort 命令并执行回滚的参与者之间存在数据不一致的情况。</p>
+
+<p><strong>Paxos 算法</strong></p>
+
+<p>Paxos 算法是 Leslie Lamport 于1990年提出的一种基于消息传递且具有高度容错特性的一致性算法。Paxos 算法目前在 Google 的 Chubby、MegaStore、Spanner 等系统中得到了应用，Hadoop 中的 ZooKeeper 也使用了 Paxos 算法。</p>
+
+<p>在 Paxos 算法中，分为4种角色：</p>
+
+<ul>
+<li><p>Proposer ：提议者</p></li>
+<li><p>Acceptor：决策者</p></li>
+<li><p>Client：产生议题者</p></li>
+<li><p>Learner：最终决策学习者</p></li>
+</ul>
+
+<p>算法可以分为两个阶段来执行：</p>
+
+<p><strong>阶段1</strong></p>
+
+<ul>
+<li><p>Proposer 选择一个议案编号 n，向 acceptor 的多数派发送编号也为 n 的 prepare 请求。</p></li>
+<li><p>Acceptor：如果接收到的 prepare 请求的编号 n 大于它已经回应的任何prepare 请求，它就回应已经批准的编号最高的议案（如果有的话），并承诺不再回应任何编号小于 n 的议案；</p></li>
+</ul>
+
+<p><strong>阶段2</strong></p>
+
+<ul>
+<li><p>Proposer：如果收到了多数 acceptor 对 prepare 请求（编号为 n）的回应，它就向这些 acceptor 发送议案{n, v}的 accept 请求，其中 v 是所有回应中编号最高的议案的决议，或者是 proposer 选择的值，如果回应说还没有议案。</p></li>
+<li><p>Acceptor：如果收到了议案{n, v}的 accept 请求，它就批准该议案，除非它已经回应了一个编号大于 n 的议案。</p></li>
+<li><p>Proposer 可以提出多个议案，只要它遵循上面的算法。它可以在任何时刻放弃一个议案。（这不会破坏正确性，即使在议案被放弃后，议案的请求或者回应消息才到达目标）如果其它的 proposer 已经开始提出更高编号的议案，那么最好能放弃当前的议案。因此，如果 acceptor 忽略一个 prepare 或者 accept 请求（因为已经收到了更高编号的 prepare 请求），它应该告知 proposer 放弃议案。这是一个性能优化，而不影响正确性。</p></li>
+</ul>
+
+<p><strong>参考文献</strong></p>
+
+<ul>
+<li><p><a href="http://research.microsoft.com/en-us/um/people/lamport/pubs/lamport-paxos.pdf">http://research.microsoft.com/en-us/um/people/lamport/pubs/lamport-paxos.pdf</a></p></li>
+<li><p><a href="https://www.oschina.net/question/2720166_2235329">https://www.oschina.net/question/2720166_2235329</a></p></li>
+<li><p>《分布式系统常用技术及案例分析》</p>
+<p><a href="https://github.com/waylau/distributed-systems-technologies-and-cases-analysis">https://github.com/waylau/distributed-systems-technologies-and-cases-analysis</a></p></li>
+</ul>
+
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[😋 技术必备基础知识]]></title>
@@ -320,8 +702,8 @@
 
 <ul>
 <li><a href="15510945917129.html">分布式事务</a></li>
-<li>分布式系统常见的事务处理机制</li>
-<li>微服务架构下处理分布式事务的典型方案</li>
+<li><a href="15511041776834.html">分布式系统常见的事务处理机制</a></li>
+<li><a href="15511042581022.html">微服务架构下处理分布式事务的典型方案</a></li>
 <li>解决分布式系统事务一致性的几种方案对比</li>
 <li>多库多事务降低数据不一致概率</li>
 <li>蚂蚁技术专家：一篇文章带你学习分布式事务</li>
@@ -3768,394 +4150,6 @@ select name from B
 <a href="#toc_4"></a>
 </li>
 </ul>
-
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Springcloud各层框架注解含义]]></title>
-    <link href="https://books.sangkf.cn/15509183306420.html"/>
-    <updated>2019-02-23T18:38:50+08:00</updated>
-    <id>https://books.sangkf.cn/15509183306420.html</id>
-    <content type="html"><![CDATA[
-<h3 id="toc_0">声明Bean的注解:</h3>
-
-<ul>
-<li>@Component : 组件,没有明确的角色</li>
-<li><a href="https://my.oschina.net/service">@Service</a> : 在业务逻辑层(service层)使用</li>
-<li>@Repository : 在数据访问层(dao层)使用.</li>
-<li><a href="https://my.oschina.net/u/1774615">@Controller</a> : 在展现层(MVC--SpringMVC)使用
-<span id="more"></span><!-- more --></li>
-</ul>
-
-<h3 id="toc_1">注入Bean的注解:</h3>
-
-<ul>
-<li>@Autowired : Spring提供的注解.</li>
-<li>@Inject : JSR-330提供的注解</li>
-<li>@Resource : JSR-250提供的注解</li>
-</ul>
-
-<h3 id="toc_2">配置文件的注解:</h3>
-
-<ul>
-<li>@Configuration : 声明当前类是个配置类,相当于一个Spring配置的xml文件.</li>
-<li>@ComponentScan (cn.test.demo): 自动扫描包名下所有使用 @Component @Service  @Repository @Controller 的类,并注册为Bean</li>
-<li>@WiselyConfiguration : 组合注解 可以替代 @Configuration和@ComponentScan</li>
-<li>@Bean : 注解在方法上,声明当前方法的返回值为一个Bean.</li>
-<li>@Bean(initMethod=&quot;aa&quot;,destroyMethod=&quot;bb&quot;)--&gt; 指定 aa和bb方法在构造之后.Bean销毁之前执行.</li>
-</ul>
-
-<h3 id="toc_3">AOP<a href="https://www.baidu.com/s?wd=%E5%88%87%E9%9D%A2&amp;tn=24004469_oem_dg&amp;rsv_dl=gh_pl_sl_csd">切面</a>编程注解:</h3>
-
-<ul>
-<li>@Aspect : 声明这是一个切面 </li>
-<li>@After @Before. @Around 定义切面,可以直接将拦截规则(切入点 PointCut)作为参数</li>
-<li>@PointCut : 专门定义拦截规则 然后在 @After @Before. @Around 中调用</li>
-<li>@Transcational : 事务处理</li>
-<li>@Cacheable : 数据缓存</li>
-<li>@EnableAaspectJAutoProxy : 开启Spring 对 这个切面(Aspect )的支持</li>
-<li>@Target (ElementType.TYPE):元注解,用来指定注解修饰类的那个成员 --&gt;指定拦截规则</li>
-<li>@Retention(RetentionPolicy.RUNTIME) <br/>
----&gt;当定义的注解的@Retention为RUNTIME时，才能够通过运行时的反射机制来处理注解.--&gt;指定拦截规则</li>
-</ul>
-
-<h3 id="toc_4">Spring 常用配置:</h3>
-
-<ul>
-<li>@import :导入配置类</li>
-<li>@Scope : 新建Bean的实例 @Scope(&quot;prototype&quot;) 声明Scope 为 Prototype</li>
-<li>@Value : 属性注入</li>
-<li>@Value (&quot;我爱你&quot;)  --&gt; 普通字符串注入
-<ul>
-<li>@Value (&quot;#{systemProperties[&#39;os.name&#39;]}&quot;) --&gt;注入操作系统属性</li>
-<li>@Value (&quot;#{ T (java.lang.Math).random()  * 100.0 }&quot;) --&gt; 注入表达式结果</li>
-<li>@Value (&quot;#{demoService.another}&quot;) --&gt; 注入其他Bean属性</li>
-<li>@Value ( &quot;classpath:com/wisely/highlight_spring4/ch2/el/test.txt&quot; ) --&gt; 注入文件资源</li>
-<li>@Value (&quot;<a href="http://www.baidu.com%22)--%3E%E6%B3%A8%E5%85%A5%E7%BD%91%E5%9D%80%E8%B5%84%E6%BA%90">http://www.baidu.com&quot;)--&gt;注入网址资源</a></li>
-<li>@Value (&quot;\({book.name}&quot; ) --&gt; 注入配置文件  注意: 使用的是\) 而不是 #</li>
-</ul></li>
-<li>@PostConstruct : 在构造函数执行完之后执行</li>
-<li>@PreDestroy  : 在 Bean 销毁之前执行</li>
-<li>@ActiveProfiles : 用来声明活动的 profile</li>
-<li>@profile: 为不同环境下使用不同的配置提供了支持<br/>
-@Profile(&quot;dev&quot;) .......对方法名为 dev-xxxx的方法提供实例化Bean</li>
-<li>@EnableAsync : 开启异步任务的支持(多线程)</li>
-<li>@Asyns : 声明这是一个异步任务,可以在类级别 和方法级别声明.</li>
-<li>@EnableScheduling : 开启对计划任务的支持(定时器)</li>
-<li>@Scheduled : 声明这是一个计划任务 支持多种计划任务,包含 cron. fixDelay fixRate</li>
-<li>@Scheduled (dixedDelay = 5000) 通过注解 定时更新</li>
-<li>@Conditional : 条件注解,根据满足某一特定条件创建一个特定的Bean</li>
-<li>@ContextConfiguration : 加载配置文件</li>
-<li>@ContextConfiguration(classes = {TestConfig.class})<br/>
-@ContextConfiguration用来加载ApplicationContext <br/>
-classes属性用来加载配置类</li>
-<li>@WebAppCofiguration : 指定加载 ApplicationContext是一个WebApplicationContext</li>
-</ul>
-
-<h3 id="toc_5">@Enable*注解:</h3>
-
-<ul>
-<li>@EnableAsync : 开启异步任务的支持(多线程)</li>
-<li>@EnableScheduling : 开启对计划任务的支持(定时器)</li>
-<li>@EnableWebMVC : 开启对Web MVC 的配置支持</li>
-<li>@EnableAaspectJAutoProxy : 开启Spring 对 这个切面(Aspect )的支持</li>
-<li>@EnableConfigurationProperties 开启对@ConfigurationProperties注解配置Bean的支持</li>
-<li>@EnableJpaRepositories : 开启对Spring Data JAP Repository 的支持</li>
-<li>@EnableTransactionManagement 开启对注解式事物的支持</li>
-<li>@EnableCaching开启注解是缓存的支持.</li>
-<li>@EnableDiscoveryClient 让服务发现服务器,使用服务器.Spring cloud 实现服务发现</li>
-<li>@EnableEurekaServer 注册服务器 spring cloud 实现服务注册@</li>
-<li>@EnableScheduling 让spring可以进行任务调度,功能类似于spring.xml文件中的命名空间</li>
-<li>@EnableCaching 开启Cache缓存支持;</li>
-</ul>
-
-<h3 id="toc_6">SpringMVC 常用注解:</h3>
-
-<ul>
-<li>@Controller : 注解在类上 声明这个类是springmvc里的Controller,将其声明为一个spring的Bean.</li>
-<li>@RequestMapping :可以注解在类上和方法上 映射WEB请求(访问路径和参数)<br/>
-@RequestMapping(value= &quot;/convert&quot;,produces+{&quot;application/x-wisely&quot;}) 设置访问URL 返回值类型</li>
-<li>@ResponseBody : 支持将返回值放入response体内 而不是返回一个页面(返回的是一个组数据)</li>
-<li>@RequestBody : 允许request的参数在request体中,而不是直接连接在地址后面 次注解放置在参数前</li>
-<li>@Path Variable : 用来接收路径参数 如/test/001,001为参数,次注解放置在参数前</li>
-<li>@RestController : @Controller + @ResponseBody 组合注解</li>
-<li>@ControllerAdvice : 通过@ControllerAdvice可以将对已控制器的全局配置放置在同一个位置</li>
-<li>@ExceptionHandler : 用于全局处理控制器的异常</li>
-<li>@ExceptionHandier(value=Exception.class) --&gt;通过value属性可过滤拦截器条件,拦截所有的异常</li>
-<li>@InitBinder : 用来设置WebDataBinder , WebDataBinder用来自动绑定前台请求参数到Model中.</li>
-<li>@ModelAttrbuute : 绑定键值对到Model中,</li>
-<li>@RunWith : 运行器 </li>
-<li>@RunWith(JUnit4.class)就是指用JUnit4来运行<br/>
-@RunWith(SpringJUnit4ClassRunner.class),让测试运行于Spring测试环境<br/>
-@RunWith(Suite.class)的话就是一套测试集合，</li>
-<li>@WebAppConfiguration(&quot;src/main/resources&quot;) : 注解在类上,用来声明加载的ApplicationContex 是一个WebApplicationContext ,它的属性指定的是Web资源的位置,默认为 src/main/webapp ,自定义修改为 resource</li>
-<li>@Before : 在 xxx 前初始化</li>
-</ul>
-
-<h3 id="toc_7">Spring Boot 注解:</h3>
-
-<ul>
-<li>@SpringBootApplication : 是Spring Boot 项目的核心注解 主要目的是开启自动配置</li>
-<li>@SpringBootApplication注解是一个组合注解,主要组合了@Configuration .+@EnableAutoConfiguration.+@ComponentScan</li>
-<li>@Value : 属性注入,读取properties或者 Yml 文件中的属性</li>
-<li>@ConfigurationProperties : 将properties属性和一个Bean及其属性关联,从而实现类型安全的配置</li>
-<li>@ConfigurationProperties(prefix = &quot;author&quot;,locations = {&quot;classpath:config/author.properties&quot;}),通过@ConfigurationProperties加载配置,通过prefix属性指定配置前缀,通过location指定配置文件位置</li>
-<li>@EnableAutoConfiguration 注解:作用在于让 Spring Boot   根据应用所声明的依赖来对 Spring 框架进行自动配置,这个注解告诉Spring Boot根据添加的jar依赖猜测你想如何配置Spring。由于<code>spring-boot-starter-web</code>添加了Tomcat和Spring MVC，所以auto-configuration将假定你正在开发一个web应用并相应地对Spring进行设置。</li>
-<li>@Configuration @EnableAutoConfiguration (exclude={xxxx.class}) 禁用特定的自动配置</li>
-<li>@SpringBootApplication   注解等价于以默认属性使用 @Configuration，@EnableAutoConfiguration和     @ComponentScan。</li>
-</ul>
-
-<h3 id="toc_8">@SuppressWarnings注解</h3>
-
-<ul>
-<li>@SuppressWarnings(&quot;unchecked&quot;)<br/>
-告诉编译器忽略 unchecked 警告信息,如使用 list ArrayList等未进行参数化产生的警告信息</li>
-<li>@SuppressWarnings(&quot;serial&quot;)</li>
-<li>如果编译器出现这样的警告信息: The serializable class WmailCalendar does not declare a static final serialVersionUID field of type long     使用这个注释将警告信息去掉。</li>
-<li>@SuppressWarnings(&quot;deprecation&quot;)<br/>
-如果使用了使用@Deprecated注释的方法，编译器将出现警告信息。使用这个注释将警告信息去掉。</li>
-<li>@SuppressWarnings(&quot;unchecked&quot;, &quot;deprecation&quot;),告诉编译器同时忽略unchecked和deprecation的警告信息。</li>
-<li>@SuppressWarnings(value={&quot;unchecked&quot;, &quot;deprecation&quot;}), 等同于@SuppressWarnings(&quot;unchecked&quot;, &quot;deprecation&quot;)</li>
-</ul>
-
-<h4 id="toc_9">案例</h4>
-
-<pre><code class="language-java">@Entity
-@Table(name = &quot;S_PRODUCEINFO&quot; )
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class ProduceInfoEntity {
-
-    @Id
-    @Column(name = &quot;app_name&quot;, unique = true, length = 50)
-    private String name;
-    
-    @Column(name = &quot;status&quot;)
-    @Enumerated(EnumType. STRING)
-    private ProduceStatus status;
-    
-    @Column(name = &quot;create_time&quot;, updatable = false)
-    @Temporal(TemporalType. TIMESTAMP)
-    @CreationTimestamp
-    private Date createTime;
-
-    @Column(name = &quot;update_time&quot;)
-    @Temporal(TemporalType. TIMESTAMP)
-    @UpdateTimestamp
-    private Date updateTime;
-}
-</code></pre>
-
-<h3 id="toc_10">@Entity : 映射数据库实体类</h3>
-
-<ul>
-<li>@Table(name = &quot;S_PRODUCEINFO&quot; ) : 表名为 &quot;S_PRODUCEINFO&quot;</li>
-<li>@Id : 声明主键ID</li>
-<li>@Column(name = &quot;app_name&quot;, unique = true, length = 50) :对应数据库字段,属性</li>
-<li>@Enumerated(EnumType. STRING) : 采用枚举值类型和数据库字段进行交互 </li>
-<li>@Temporal : 时间格式 映射数据库会得到规定时间格式的日期</li>
-<li>@Enumerted(EnumType.STRING)  HH:MM:SS 格式的日期</li>
-<li>@Enumerted(EnumType.DATE) 获取年月日  yyyy-MM-dd </li>
-<li>@Enumerted(EnumType.TIME) 获取时分秒  HH:MM:<br/>
-       </li>
-</ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[JAVA8新特性]]></title>
-    <link href="https://books.sangkf.cn/15509161097880.html"/>
-    <updated>2019-02-23T18:01:49+08:00</updated>
-    <id>https://books.sangkf.cn/15509161097880.html</id>
-    <content type="html"><![CDATA[
-<p>原文地址 <a href="https://www.cnblogs.com/huyunfan/p/7456535.html">https://www.cnblogs.com/huyunfan/p/7456535.html</a></p>
-
-<ul>
-<li><p><strong>default拓展方法</strong></p>
-<p>default关键字为接口声明添加非抽象方法的实现,也称为拓展方法<br/>
-<span id="more"></span><!-- more --></p>
-<pre><code class="language-java">public interface Formula {
-  void doSomething();<br/>
-  default void before() {<br/>
-      System.out.println(&quot;我是拓展方法&quot;);<br/>
-  }<br/>
-}<br/>
-public class FormulaService implements Formula {<br/>
-  @Override<br/>
-  public void doSomething() {<br/>
-      before();<br/>
-      System.out.println(&quot;我是override方法&quot;);<br/>
-  }<br/>
-}
-</code></pre></li>
-<li><p><strong>Lambda表达式</strong></p>
-<p>java8引入函数式编程，Lambda则是函数式编程的基础。</p>
-<pre><code class="language-java">List&lt;String&gt; list = Arrays.asList(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;);
-// java8之前<br/>
-Collections.sort(list, new Comparator&lt;String&gt;(){<br/>
-  @Override<br/>
-  public int compare(String o1, String o2) {<br/>
-      return o1.compareTo(o2);<br/>
-  }<br/>
-});<br/>
-// lambda<br/>
-Collections.sort(list, (String o1, String o2) -&gt; {<br/>
-          return o2.compareTo(o1);<br/>
-});<br/>
-// 简洁lambda<br/>
-Collections.sort(list, (String o1, String o2) -&gt;  o2.compareTo(o1));<br/>
-// 更简洁lambda<br/>
-Collections.sort(list, (o1, o2) -&gt;  o2.compareTo(o1));<br/>
-// 也可以这样写<br/>
-Collections.sort(list, Comparator.comparing(String::toString));
-</code></pre></li>
-<li><p><strong>函数式接口</strong></p>
-<p>一个函数式接口有且只能有一个抽象方法申明，其中该注意的是 @FunctionalInterface 注解，此时如果在接口中定义了第二个抽象方法，编译器将会抛出异常。当然如果不加该注解也不是不行，如果接口中有多个抽象方法，而你又使用了lambda表达式，则在调用处会抛出异常。</p>
-<pre><code class="language-java">@FunctionalInterface
-public interface Formula&lt;F,T&gt;{<br/>
-  T convert(F var1);<br/>
-}<br/>
-Formula&lt;String,Integer&gt; function = (var1 -&gt; Integer.valueOf(var1));<br/>
-Integer var2 = function.convert(&quot;1000&quot;); 
-</code></pre></li>
-<li><p><strong>方法和构造函数引用</strong></p>
-<p>方法引用的标准语法是 <code>类名:方法名</code></p>
-<table>
-<thead>
-<tr>
-<th>类型</th>
-<th>示例</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>引用静态方法</td>
-<td>targetClass :: staticMethodName</td>
-</tr>
-<tr>
-<td>引用某个对象的实例方法</td>
-<td>targetClass :: instanceMethodName</td>
-</tr>
-<tr>
-<td>引用某个类型的任意对象的实例方法</td>
-<td>targetType :: methodName</td>
-</tr>
-<tr>
-<td>引用构造方法</td>
-<td>className :: new</td>
-</tr>
-</tbody>
-</table>
-<ol>
-<li><strong>引用静态方法</strong></li>
-</ol>
-<pre><code class="language-java">Formula&lt;String,Integer&gt; function = (Integer::valueOf);
-Integer var2 = function.convert(&quot;1000&quot;);
-</code></pre>
-<ol>
-<li><strong>引用某个类型的任意对象的实例方法</strong></li>
-</ol>
-<pre><code class="language-java">public static void main(String[] args) {
-   String[] array = {&quot;贱明&quot;, &quot;学友&quot;};<br/>
-   Arrays.sort(array, String::compareTo);<br/>
-}
-</code></pre>
-<ol>
-<li><strong>引用构造方法</strong></li>
-</ol>
-<pre><code class="language-java">// 定义工厂
-interface PersonFactory&lt;P extends Person&gt;{<br/>
-    P create(String name);<br/>
-}<br/>
-// Person类的构造方法<br/>
-public Person(String name) {<br/>
-    this.name = name;<br/>
-}<br/>
-// 创建<br/>
-PersonFactory&lt;Person&gt; factory = Person::new;<br/>
-factory.create(&quot;贱明&quot;);
-</code></pre></li>
-<li><p><strong>Lambda的范围</strong></p>
-<p>lambda可以访问局部对应的外部区域的局部final变量，以及成员变量和静态变量。</p>
-<ol>
-<li><p><strong>访问成员变量</strong></p>
-<pre><code class="language-java">public void doSomething(){
- final String p1 = &quot;贱明&quot;;<br/>
- final String p2 = &quot;学友&quot;;<br/>
- Formula function = (person1, person2) -&gt; p1.compareTo(p2);<br/>
-}
-</code></pre>
-<p>与java8以下版本不同的是，p1 p2你可以不修饰成final 也不会报错，但是如果你想修改他们，编译器则会告诉你这是不被允许的。</p></li>
-<li><p><strong>访问成员变量和静态变量</strong></p>
-<pre><code class="language-java">public void doSomething(){;
-Formula function = (person1, person2) -&gt;{<br/>
-    dehua = &quot;贱明&quot;;<br/>
-    xueyou=&quot;学友&quot;;<br/>
-    return dehua.compareTo(xueyou);<br/>
-};<br/>
-}
-</code></pre></li>
-</ol></li>
-<li><p><strong>内置函数式接口</strong></p>
-<p>​     java8 api中提供了很多内置函数式接口，而且有些接口其实在Google Guava中已经实现了，很大程  度的降低了程序员的工作负担。</p>
-<ol>
-<li><p><strong>Predicates</strong><br/>
-Predicate是一个布尔类型的函数，该函数只有一个输入参数，他包含了多种默认实现。</p>
-<pre><code class="language-java">public static void main(String[] args) {
-Predicate&lt;String&gt; predicate = (s) -&gt; s.contains(&quot;贱明&quot;);<br/>
-String var1 = &quot;牛贱明&quot;;<br/>
-predicate.test(var1);              // true<br/>
-predicate.negate().test(var1);     // false<br/>
-Predicate&lt;Boolean&gt; nonNull = Objects::nonNull;<br/>
-Predicate&lt;Boolean&gt; isNull = Objects::isNull;<br/>
-Predicate&lt;String&gt; isEmpty = String::isEmpty;<br/>
-Predicate&lt;String&gt; isNotEmpty = isEmpty.negate();<br/>
-isNotEmpty.and(isEmpty).test(var1);<br/>
-}
-</code></pre></li>
-<li><p><strong>Functions</strong></p>
-<p>Function接口接收一个参数，并返回单一的结果。默认方法可以将多个函数串在一起</p>
-<pre><code class="language-java">public static void main(String[] args) {
-Function&lt;String, Integer&gt; toInteger = Integer::valueOf;<br/>
-Function&lt;String, String&gt; backToString = toInteger.andThen(String::valueOf);<br/>
-System.out.println(toInteger.apply(&quot;123&quot;));<br/>
-System.out.println(backToString.apply(&quot;123&quot;));<br/>
-}
-</code></pre></li>
-<li><p><strong>Suppliers</strong></p>
-<p>Supplier接口产生一个给定类型的结果。与Function不同的是，Supplier没有输入参数。</p>
-<pre><code class="language-java">Supplier&lt;Person&gt; personSupplier = Person::new;
-Person p = personSupplier.get();   // new Person
-</code></pre></li>
-<li><p><strong>Consumers</strong></p>
-<p>Consumer代表了在一个输入参数上需要进行的操作。</p>
-<pre><code class="language-java">Consumer&lt;Person&gt; greeter = (p) -&gt; System.out.println(&quot;Hello, &quot; + p.getName());
-greeter.accept(new Person(&quot;贱明&quot;));
-</code></pre></li>
-<li><p><strong>Comparators</strong></p>
-<p>Comparator接口在早期的Java版本中非常著名。Java 8 为这个接口添加了不同的默认方法。</p>
-<pre><code class="language-java">Comparator&lt;Person&gt; comparator = (p1, p2) -&gt; p1.getName().compareTo(p2.getName());
-Person p1 = new Person(&quot;贱明&quot;);<br/>
-Person p2 = new Person(&quot;学友&quot;);<br/>
-System.out.println(comparator.compare(p1, p2));             // &gt; 1105<br/>
-System.out.println(comparator.reversed().compare(p1, p2));  // &lt; -1105
-</code></pre></li>
-<li><p><strong>Optionals</strong></p>
-<p>Optional不是一个函数式接口，而是一个精巧的工具接口，用来防止NullPointerException产生。<br/>
-Optional是一个简单的值容器，这个值可以是null，也可以是non-null。考虑到一个方法可能会返回一个non-null的值，也可能返回一个空值。为了不直接返回null，我们在Java 8中就返回一个Optional。</p>
-<pre><code class="language-java">Optional&lt;String&gt; optional = Optional.of(&quot;贱明&quot;);
-System.out.println(optional.isPresent()); // true      <br/>
-System.out.println(optional.get()); // 贱明   <br/>
-System.out.println(optional.orElse(&quot;学友&quot;)); // 贱明    <br/>
-optional.ifPresent((s) -&gt; System.out.println(s.charAt(0))); 
-</code></pre></li>
-</ol></li>
-</ul>
-
 
 
 ]]></content>
