@@ -155,7 +155,7 @@
 <span id="more"></span><!-- more --><br/>
 另外一个例子，当访问单一服务器管理的数据的进程数不断增加时，系统就需要对服务器的数量进行扩充，此时，对服务器进行复制，随后让它们分担工作负荷，就可以提高性能。但同时，如何保障多个数据节点之间数据的一致以及如何处理分布式事务，将成为为一个复杂的话题。本文将介绍常用的事务处理机制。</p>
 
-<p><strong>CAP 定理</strong></p>
+<h2 id="toc_0">CAP 定理</h2>
 
 <p>CAP 定理（也称为 Brewer 定理），是由计算机科学家 Eric Brewer 提出的，即在分布式计算机系统不可能同时提供以下全部三个保证：</p>
 
@@ -169,7 +169,7 @@
 
 <p>但是，在实际的应用场景中，数据的一致性往往也是需要保证的。那么这是否违背了 CAP 定理呢？</p>
 
-<p><strong>一致性模型</strong></p>
+<h2 id="toc_1">一致性模型</h2>
 
 <p>其实，数据的一致性也分几种情况，大致可以分为：</p>
 
@@ -181,7 +181,7 @@
 
 <p>也就是说，在设计分布式系统时，我们并不一定要求是强一致性的，根据应用场景可以选择弱一致性或者是最终一致性。</p>
 
-<p><strong>事务的作用</strong></p>
+<h2 id="toc_2">事务的作用</h2>
 
 <p>事务有如下作用：</p>
 
@@ -191,9 +191,9 @@
 <li><p>ACID</p></li>
 </ul>
 
-<p><strong>常见的事务处理机制</strong></p>
+<h2 id="toc_3">常见的事务处理机制</h2>
 
-<p><strong>Master-Slave 复制</strong></p>
+<h3 id="toc_4">Master-Slave 复制</h3>
 
 <p>Slave 一般是 Master 的备份。在这样的系统中，一般是如下设计的：</p>
 
@@ -212,7 +212,7 @@
 
 <p>这种机制的缺点是，如果 Master 挂了，Slave 只能提供读服务，而没有写服务。</p>
 
-<p><strong>Master-Master 多主复制</strong></p>
+<h3 id="toc_5">Master-Master 多主复制</h3>
 
 <p>指一个系统存在两个或多个Master，每个Master都提供读写服务。这个机制是Master-Slave的加强版，数据间同步一般是通过Master间的异步完成，所以是最终一致性。 Master-Master的好处是，一台Master挂了，别的Master可以正常做读写服务，他和Master-Slave一样，当数据没有被复制到别的Master上时，数据会丢失。很多数据库都支持Master-Master的Replication的机制。</p>
 
@@ -224,11 +224,11 @@
 <li><p>多个节点间需要序列化协议</p></li>
 </ul>
 
-<p><strong>两阶段提交</strong></p>
+<h3 id="toc_6">两阶段提交</h3>
 
 <p>两阶段提交协议 （Two-phase commit protocol，2PC）的过程涉及到协调者和参与者。协调者可以看做成事务的发起者，同时也是事务的一个参与者。对于一个分布式事务来说，一个事务是涉及到多个参与者的。具体的两阶段提交的过程如下：</p>
 
-<p><strong>第一阶段（准备阶段）</strong></p>
+<h4 id="toc_7">第一阶段（准备阶段）</h4>
 
 <ul>
 <li><p>协调者节点向所有参与者节点询问是否可以执行提交操作(vote)，并开始等待各参与者节点的响应。</p></li>
@@ -236,7 +236,7 @@
 <li><p>各参与者节点响应协调者节点发起的询问。如果参与者节点的事务操作实际执行成功，则它返回一个“同意”消息；如果参与者节点的事务操作实际执行失败，则它返回一个“中止”消息。</p></li>
 </ul>
 
-<p><strong>第二阶段（提交阶段）</strong></p>
+<h4 id="toc_8">第二阶段（提交阶段）</h4>
 
 <p>如果协调者收到了参与者的失败消息或者超时，直接给每个参与者发送回滚(Rollback)消息；否则，发送提交(Commit)消息；参与者根据协调者的指令执行提交或者回滚操作，释放所有事务处理过程中使用的锁资源。(注意:必须在最后阶段释放锁资源)</p>
 
@@ -270,7 +270,7 @@
 
 <p>为了解决两阶段提交协议的种种问题，研究者们在二阶段提交的基础上做了改进，提出了三阶段提交。</p>
 
-<p><strong>三阶段提交</strong></p>
+<h4 id="toc_9">三阶段提交</h4>
 
 <p>三阶段提交协议（Three-phase commit protocol，3PC），是二阶段提交（2PC）的改进版本。与两阶段提交不同的是，三阶段提交有两个改动点：</p>
 
@@ -281,7 +281,7 @@
 
 <p>即 3PC 把 2PC 的准备阶段再次一分为二，这样三阶段提交就有 CanCommit、PreCommit、DoCommit 三个阶段。</p>
 
-<p><strong>CanCommit 阶段</strong></p>
+<h4 id="toc_10">CanCommit 阶段</h4>
 
 <p>CanCommit 阶段其实和 2PC 的准备阶段很像。协调者向参与者发送 commit 请求，参与者如果可以提交就返回 Yes 响应，否则返回 No 响应。</p>
 
@@ -290,7 +290,7 @@
 <li><p>响应反馈：参与者接到 CanCommit 请求之后，正常情况下，如果其自身认为可以顺利执行事务，则返回 Yes 响应，并进入预备状态。否则反馈 No</p></li>
 </ul>
 
-<p><strong>PreCommit 阶段</strong></p>
+<h4 id="toc_11">PreCommit 阶段</h4>
 
 <p>协调者根据参与者的反应情况来决定是否可以记性事务的 PreCommit 操作。根据响应情况，有以下两种可能。</p>
 
@@ -304,7 +304,7 @@
 <li><p>中断事务：参与者收到来自协调者的 abort 请求之后（或超时之后，仍未收到协调者的请求），执行事务的中断。</p></li>
 </ul>
 
-<p><strong>doCommit 阶段</strong></p>
+<h4 id="toc_12">doCommit 阶段</h4>
 
 <p>该阶段进行真正的事务提交，也可以分为以下两种情况。</p>
 
@@ -325,7 +325,7 @@
 
 <p>三阶段提交不会一直持有事务资源并处于阻塞状态。但是这种机制也会导致数据一致性问题，因为，由于网络原因，协调者发送的 abort 响应没有及时被参与者接收到，那么参与者在等待超时之后执行了 commit 操作，这样就和其他接到 abort 命令并执行回滚的参与者之间存在数据不一致的情况。</p>
 
-<p><strong>Paxos 算法</strong></p>
+<h3 id="toc_13">Paxos 算法</h3>
 
 <p>Paxos 算法是 Leslie Lamport 于1990年提出的一种基于消息传递且具有高度容错特性的一致性算法。Paxos 算法目前在 Google 的 Chubby、MegaStore、Spanner 等系统中得到了应用，Hadoop 中的 ZooKeeper 也使用了 Paxos 算法。</p>
 
@@ -340,14 +340,14 @@
 
 <p>算法可以分为两个阶段来执行：</p>
 
-<p><strong>阶段1</strong></p>
+<h4 id="toc_14">阶段1</h4>
 
 <ul>
 <li><p>Proposer 选择一个议案编号 n，向 acceptor 的多数派发送编号也为 n 的 prepare 请求。</p></li>
 <li><p>Acceptor：如果接收到的 prepare 请求的编号 n 大于它已经回应的任何prepare 请求，它就回应已经批准的编号最高的议案（如果有的话），并承诺不再回应任何编号小于 n 的议案；</p></li>
 </ul>
 
-<p><strong>阶段2</strong></p>
+<h4 id="toc_15">阶段2</h4>
 
 <ul>
 <li><p>Proposer：如果收到了多数 acceptor 对 prepare 请求（编号为 n）的回应，它就向这些 acceptor 发送议案{n, v}的 accept 请求，其中 v 是所有回应中编号最高的议案的决议，或者是 proposer 选择的值，如果回应说还没有议案。</p></li>
@@ -355,15 +355,73 @@
 <li><p>Proposer 可以提出多个议案，只要它遵循上面的算法。它可以在任何时刻放弃一个议案。（这不会破坏正确性，即使在议案被放弃后，议案的请求或者回应消息才到达目标）如果其它的 proposer 已经开始提出更高编号的议案，那么最好能放弃当前的议案。因此，如果 acceptor 忽略一个 prepare 或者 accept 请求（因为已经收到了更高编号的 prepare 请求），它应该告知 proposer 放弃议案。这是一个性能优化，而不影响正确性。</p></li>
 </ul>
 
-<p><strong>参考文献</strong></p>
+<h2 id="toc_16">参考文献</h2>
 
 <ul>
-<li><p><a href="http://research.microsoft.com/en-us/um/people/lamport/pubs/lamport-paxos.pdf">http://research.microsoft.com/en-us/um/people/lamport/pubs/lamport-paxos.pdf</a></p></li>
-<li><p><a href="https://www.oschina.net/question/2720166_2235329">https://www.oschina.net/question/2720166_2235329</a></p></li>
-<li><p>《分布式系统常用技术及案例分析》</p>
-<p><a href="https://github.com/waylau/distributed-systems-technologies-and-cases-analysis">https://github.com/waylau/distributed-systems-technologies-and-cases-analysis</a></p></li>
+<li><a href="http://research.microsoft.com/en-us/um/people/lamport/pubs/lamport-paxos.pdf">http://research.microsoft.com/en-us/um/people/lamport/pubs/lamport-paxos.pdf</a></li>
+<li><a href="https://www.oschina.net/question/2720166_2235329">https://www.oschina.net/question/2720166_2235329</a></li>
+<li><a href="https://github.com/waylau/distributed-systems-technologies-and-cases-analysis">《分布式系统常用技术及案例分析》</a></li>
 </ul>
 
+<ul>
+<li>
+<a href="#toc_0">CAP 定理</a>
+</li>
+<li>
+<a href="#toc_1">一致性模型</a>
+</li>
+<li>
+<a href="#toc_2">事务的作用</a>
+</li>
+<li>
+<a href="#toc_3">常见的事务处理机制</a>
+<ul>
+<li>
+<a href="#toc_4">Master-Slave 复制</a>
+</li>
+<li>
+<a href="#toc_5">Master-Master 多主复制</a>
+</li>
+<li>
+<a href="#toc_6">两阶段提交</a>
+<ul>
+<li>
+<a href="#toc_7">第一阶段（准备阶段）</a>
+</li>
+<li>
+<a href="#toc_8">第二阶段（提交阶段）</a>
+</li>
+<li>
+<a href="#toc_9">三阶段提交</a>
+</li>
+<li>
+<a href="#toc_10">CanCommit 阶段</a>
+</li>
+<li>
+<a href="#toc_11">PreCommit 阶段</a>
+</li>
+<li>
+<a href="#toc_12">doCommit 阶段</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_13">Paxos 算法</a>
+<ul>
+<li>
+<a href="#toc_14">阶段1</a>
+</li>
+<li>
+<a href="#toc_15">阶段2</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_16">参考文献</a>
+</li>
+</ul>
 
 
 
