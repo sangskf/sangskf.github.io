@@ -4,7 +4,7 @@
   <title><![CDATA[见课就上的小婊砸]]></title>
   <link href="https://books.sangkf.cn/atom.xml" rel="self"/>
   <link href="https://books.sangkf.cn/"/>
-  <updated>2019-02-26T15:33:11+08:00</updated>
+  <updated>2019-02-26T15:35:27+08:00</updated>
   <id>https://books.sangkf.cn/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -3752,7 +3752,7 @@ echo &quot;SENS部署完毕，Enjoy！&quot;
 <p>收藏一些发现的比较好的博客<br/>
 <span id="more"></span><!-- more --></p>
 
-<h2 id="toc_0">精品博客收藏</h2>
+<h3 id="toc_0">精品博客收藏</h3>
 
 <ul>
 <li><p>言曌博客<br/>
@@ -3761,9 +3761,7 @@ echo &quot;SENS部署完毕，Enjoy！&quot;
 <a href="http://www.iocoder.cn/">http://www.iocoder.cn/</a></p></li>
 </ul>
 
-<hr/>
-
-<h2 id="toc_1">我的常用地址</h2>
+<h3 id="toc_1">我的常用地址</h3>
 
 <ul>
 <li><a href="http://blog.sangkf.cn">个人博客</a></li>
