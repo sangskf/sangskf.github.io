@@ -4,7 +4,7 @@
   <title><![CDATA[见课就上的小婊砸]]></title>
   <link href="https://books.sangkf.cn/atom.xml" rel="self"/>
   <link href="https://books.sangkf.cn/"/>
-  <updated>2019-02-27T14:57:00+08:00</updated>
+  <updated>2019-02-27T17:54:42+08:00</updated>
   <id>https://books.sangkf.cn/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -13,75 +13,406 @@
   <generator uri="http://www.mweb.im/">MWeb</generator>
   
   <entry>
-    <title type="html"><![CDATA[HashMap源码解析]]></title>
-    <link href="https://books.sangkf.cn/15512464830584.html"/>
-    <updated>2019-02-27T13:48:03+08:00</updated>
-    <id>https://books.sangkf.cn/15512464830584.html</id>
+    <title type="html"><![CDATA[HashMap源码解读(JDK1.7)]]></title>
+    <link href="https://books.sangkf.cn/15512563500691.html"/>
+    <updated>2019-02-27T16:32:30+08:00</updated>
+    <id>https://books.sangkf.cn/15512563500691.html</id>
     <content type="html"><![CDATA[
-<p>数据结构中有<code>数组</code>和<code>链表</code>这两个结构来存储数据。<br/>
+<p>哈希表（hash table）也叫散列表，是一种非常重要的数据结构，应用场景及其丰富，许多缓存技术（比如memcached）的核心其实就是在内存中维护一张大的哈希表，而HashMap的实现原理也常常出现在各类的面试题中，重要性可见一斑。本文会对java集合框架中的对应实现HashMap的实现原理进行讲解，然后会对JDK7的HashMap源码进行分析。<br/>
 <span id="more"></span><!-- more --></p>
 
-<h2 id="toc_0">数组和链表</h2>
+<h2 id="toc_0">什么是哈希表</h2>
+
+<p>在讨论哈希表之前，我们先大概了解下其他数据结构在新增，查找等基础操作执行性能</p>
+
+<h3 id="toc_1">数据结构</h3>
 
 <ul>
-<li><code>数组</code>存储区间是连续的，占用内存严重，故空间复杂度很大。但数组的二分查找时间复杂度小，为O(1);数组的特点是寻址容易，插入和删除困难。</li>
-<li><code>链表</code>存储区间离散，占用内存比较宽松，故空间复杂度很小，但是时间复杂度很大，达到O(n)。链表的特点是寻址困难，插入和删除容易。</li>
+<li><p><strong>数组</strong>：采用一段连续的存储单元来存储数据。对于指定下标的查找，时间复杂度为O(1)；通过给定值进行查找，需要遍历数组，逐一比对给定关键字和数组元素，时间复杂度为O(n)，当然，对于有序数组，则可采用二分查找，插值查找，斐波那契查找等方式，可将查找复杂度提高为O(logn)；对于一般的插入删除操作，涉及到数组元素的移动，其平均复杂度也为O(n)</p></li>
+<li><p><strong>线性链表</strong>：对于链表的新增，删除等操作（在找到指定操作位置后），仅需处理结点间的引用即可，时间复杂度为O(1)，而查找操作需要遍历链表逐一进行比对，复杂度为O(n)</p></li>
+<li><p><strong>二叉树</strong>：对一棵相对平衡的有序二叉树，对其进行插入，查找，删除等操作，平均复杂度均为O(logn)。</p></li>
+<li><p><strong>哈希表</strong>：相比上述几种数据结构，在哈希表中进行添加，删除，查找等操作，性能十分之高，不考虑哈希冲突的情况下，仅需一次定位即可完成，时间复杂度为O(1)，接下来我们就来看看哈希表是如何实现达到惊艳的常数阶O(1)的。</p></li>
 </ul>
 
-<p>哈希表是综合了两者的优点，既满足了数组查找方面的特点，占用的空间也不大。</p>
+<p>　　我们知道，数据结构的物理存储结构只有两种：<strong>顺序存储结构和链式存储结构</strong>（像栈，队列，树，图等是从逻辑结构去抽象的，映射到内存中，也这两种物理组织形式），而在上面我们提到过，在数组中根据下标查找某个元素，一次定位就可以达到，哈希表利用了这种特性，<strong>哈希表的主干就是数组</strong>。</p>
 
-<p><img src="media/15512464830584/15512484749990.jpg" alt="" style="width:500px;"/><br/>
-<img src="media/15512464830584/15512485189774.jpg" alt="" style="width:500px;"/></p>
+<p>　　比如我们要新增或查找某个元素，我们通过把当前元素的关键字 通过某个函数映射到数组中的某个位置，通过数组下标一次定位就可完成操作。</p>
 
-<p>哈希表是数组和链表的结合体。底层还是数组，但是数组的每一项就是一个链表。</p>
+<p>　　<strong>存储位置 = f(关键字)</strong></p>
 
-<p>在这个数组中，每个元素存储的其实是一个链表的头，元素的存储位置一般情况是通过hash(key)%len获得，也就是元素的key的哈希值对数组长度取模得到的。比如上述哈希表中，12%16=12,28%16=12,108%16=12,140%16=12。所以12、28、108以及140都存储在数组下标为12的位置。</p>
+<p>　　其中，这个函数f一般称为哈希函数，这个函数的设计好坏会直接影响到哈希表的优劣。举个例子，比如我们要在哈希表中执行插入操作：</p>
 
-<h2 id="toc_1">HashMap的构造函数</h2>
+<p>　　<img src="media/15512563500691/15512566971728.jpg" alt="" style="width:500px;"/></p>
 
-<p>HashMap实现了Map接口，继承AbstractMap。<br/>
-其中Map接口定义了键映射到值的规则，而AbstractMap类提供Map接口的骨干实现。</p>
+<p>　　查找操作同理，先通过哈希函数计算出实际存储地址，然后从数组中对应地址取出即可。</p>
 
-<p>HashMap提供了三个构造函数:</p>
+<h3 id="toc_2">哈希冲突</h3>
 
-<ul>
-<li>HashMap():构造一个具有默认初始容量(16)和默认加载因子(0.75)的空HashMap。</li>
-<li>HashMap(int initialCapacity):构造一个带指定初始容量和默认加载因子 (0.75) 的空 HashMap。</li>
-<li><p>HashMap(int initialCapacity, float loadFactor)：构造一个带指定初始容量和加载因子的空 HashMap。</p>
+<p>　　然而万事无完美，如果两个不同的元素，通过哈希函数得出的实际存储地址相同怎么办？也就是说，当我们对某个元素进行哈希运算，得到一个存储地址，然后要进行插入的时候，发现已经被其他元素占用了，其实这就是所谓的<strong>哈希冲突</strong>，也叫哈希碰撞。前面我们提到过，哈希函数的设计至关重要，好的哈希函数会尽可能地保证 <strong>计算简单和散列地址分布均匀</strong>,但是，我们需要清楚的是，数组是一块连续的固定长度的内存空间，再好的哈希函数也不能保证得到的存储地址绝对不发生冲突。那么哈希冲突如何解决呢？哈希冲突的解决方案有多种:开放定址法（发生冲突，继续寻找下一块未被占用的存储地址），再散列函数法，链地址法，而HashMap即是采用了链地址法，也就是<strong>数组+链表</strong>的方式，</p>
+
+<h2 id="toc_3">HashMap实现原理</h2>
+
+<p>HashMap的主干是一个Entry数组。Entry是HashMap的基本组成单元，每一个Entry包含一个key-value键值对。</p>
+
+<pre><code class="language-java">//HashMap的主干数组，可以看到就是一个Entry数组，初始值为空数组{}，主干数组的长度一定是2的次幂，至于为什么这么做，后面会有详细分析。
+transient Entry&lt;K,V&gt;[] table = (Entry&lt;K,V&gt;[]) EMPTY_TABLE;
+</code></pre>
+
+<p>Entry是HashMap中的一个静态内部类。代码如下</p>
+
+<pre><code class="language-java">static class Entry&lt;K,V&gt; implements Map.Entry&lt;K,V&gt; {
+        final K key;
+        V value;
+        Entry&lt;K,V&gt; next;//存储指向下一个Entry的引用，单链表结构
+        int hash;//对key的hashcode值进行hash运算后得到的值，存储在Entry，避免重复计算
+
+        /**
+         * Creates new entry.
+         */
+        Entry(int h, K k, V v, Entry&lt;K,V&gt; n) {
+            value = v;
+            next = n;
+            key = k;
+            hash = h;
+        } 
+}
+</code></pre>
+
+<p>所以，HashMap的整体结构如下<br/>
+<img src="media/15512563500691/15512580662636.jpg" alt="" style="width:700px;"/></p>
+
+<p>简单来说，<strong>HashMap由数组+链表组成的，数组是HashMap的主体，链表则是主要为了解决哈希冲突而存在的，如果定位到的数组位置不含链表（当前entry的next指向null）,那么对于查找，添加等操作很快，仅需一次寻址即可；如果定位到的数组包含链表，对于添加操作，其时间复杂度依然为O(1)，因为最新的Entry会插入链表头部，只需要简单改变引用链即可，而对于查找操作来讲，此时就需要遍历链表，然后通过key对象的equals方法逐一比对查找。所以，性能考虑，HashMap中的链表出现越少，性能才会越好。</strong></p>
+
+<p>其他几个重要字段</p>
+
+<pre><code class="language-java">//实际存储的key-value键值对的个数
+transient int size;
+//阈值，当table == {}时，该值为初始容量（初始容量默认为16）；当table被填充了，也就是为table分配内存空间后，threshold一般为 capacity*loadFactory。HashMap在进行扩容时需要参考threshold，后面会详细谈到
+int threshold;
+//负载因子，代表了table的填充度有多少，默认是0.75
+final float loadFactor;
+//用于快速失败，由于HashMap非线程安全，在对HashMap进行迭代时，如果期间其他线程的参与导致HashMap的结构发生变化了（比如put，remove等操作），需要抛出异常ConcurrentModificationException
+transient int modCount;
+</code></pre>
+
+<p>HashMap有4个构造器，其他构造器如果用户没有传入initialCapacity 和loadFactor这两个参数，会使用默认值。initialCapacity默认为16，loadFactory默认为0.75</p>
+
 <pre><code class="language-java">public HashMap(int initialCapacity, float loadFactor) {
-        if (initialCapacity &lt; 0)<br/>
-            throw new IllegalArgumentException(&quot;Illegal initial capacity: &quot; +<br/>
-                                               initialCapacity);<br/>
-        if (initialCapacity &gt; MAXIMUM_CAPACITY)<br/>
-            initialCapacity = MAXIMUM_CAPACITY;<br/>
-        if (loadFactor &lt;= 0 || Float.isNaN(loadFactor))<br/>
-            throw new IllegalArgumentException(&quot;Illegal load factor: &quot; +<br/>
-                                               loadFactor);<br/>
-        this.loadFactor = loadFactor;<br/>
-        this.threshold = tableSizeFor(initialCapacity);<br/>
-    }<br/>
-    //附上tableSizeFor<br/>
-    static final int tableSizeFor(int cap) {<br/>
-        int n = cap - 1;<br/>
-        n |= n &gt;&gt;&gt; 1;<br/>
-        n |= n &gt;&gt;&gt; 2;<br/>
-        n |= n &gt;&gt;&gt; 4;<br/>
-        n |= n &gt;&gt;&gt; 8;<br/>
-        n |= n &gt;&gt;&gt; 16;<br/>
-        return (n &lt; 0) ? 1 : (n &gt;= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;<br/>
+　　　　　//此处对传入的初始容量进行校验，最大不能超过MAXIMUM_CAPACITY = 1&lt;&lt;30(2的30次方)
+        if (initialCapacity &lt; 0)
+            throw new IllegalArgumentException(&quot;Illegal initial capacity: &quot; +
+                                               initialCapacity);
+        if (initialCapacity &gt; MAXIMUM_CAPACITY)
+            initialCapacity = MAXIMUM_CAPACITY;
+        if (loadFactor &lt;= 0 || Float.isNaN(loadFactor))
+            throw new IllegalArgumentException(&quot;Illegal load factor: &quot; +
+                                               loadFactor);
+
+        this.loadFactor = loadFactor;
+        threshold = initialCapacity;
+　　　　　
+        init();//init方法在HashMap中没有实际实现，不过在其子类如 linkedHashMap中就会有对应实现
     }
-</code></pre></li>
-</ul>
+</code></pre>
+
+<p>从上面这段代码我们可以看出，<strong>在常规构造器中，没有为数组table分配内存空间（有一个入参为指定Map的构造器例外），而是在执行put操作的时候才真正构建table数组</strong></p>
+
+<p>OK,接下来我们来看看put操作的实现吧</p>
+
+<pre><code class="language-java"> public V put(K key, V value) {
+        //如果table数组为空数组{}，进行数组填充（为table分配实际内存空间），入参为threshold，此时threshold为initialCapacity 默认是1&lt;&lt;4(2的4次方=16)
+        if (table == EMPTY_TABLE) {
+            inflateTable(threshold);
+        }
+       //如果key为null，存储位置为table[0]或table[0]的冲突链上
+        if (key == null)
+            return putForNullKey(value);
+        int hash = hash(key);//对key的hashcode进一步计算，确保散列均匀
+        int i = indexFor(hash, table.length);//获取在table中的实际位置
+        for (Entry&lt;K,V&gt; e = table[i]; e != null; e = e.next) {
+        //如果该对应数据已存在，执行覆盖操作。用新value替换旧value，并返回旧value
+            Object k;
+            if (e.hash == hash &amp;&amp; ((k = e.key) == key || key.equals(k))) {
+                V oldValue = e.value;
+                e.value = value;
+                e.recordAccess(this);
+                return oldValue;
+            }
+        }
+        modCount++;//保证并发访问时，若HashMap内部结构发生变化，快速响应失败
+        addEntry(hash, key, value, i);//新增一个entry
+        return null;
+    }  
+</code></pre>
+
+<p>先来看看inflateTable这个方法</p>
+
+<pre><code class="language-java">private void inflateTable(int toSize) {
+        int capacity = roundUpToPowerOf2(toSize);//capacity一定是2的次幂
+        threshold = (int) Math.min(capacity * loadFactor, MAXIMUM_CAPACITY + 1);//此处为threshold赋值，取capacity*loadFactor和MAXIMUM_CAPACITY+1的最小值，capaticy一定不会超过MAXIMUM_CAPACITY，除非loadFactor大于1
+        table = new Entry[capacity];
+        initHashSeedAsNeeded(capacity);
+    }
+</code></pre>
+
+<p>inflateTable这个方法用于为主干数组table在内存中分配存储空间，通过roundUpToPowerOf2(toSize)可以确保capacity为大于或等于toSize的最接近toSize的二次幂，比如toSize=13,则capacity=16;to_size=16,capacity=16;to_size=17,capacity=32.</p>
+
+<pre><code class="language-java">private static int roundUpToPowerOf2(int number) {
+        // assert number &gt;= 0 : &quot;number must be non-negative&quot;;
+        return number &gt;= MAXIMUM_CAPACITY
+                ? MAXIMUM_CAPACITY
+                : (number &gt; 1) ? Integer.highestOneBit((number - 1) &lt;&lt; 1) : 1;    
+</code></pre>
+
+<p>roundUpToPowerOf2中的这段处理使得数组长度一定为2的次幂，Integer.highestOneBit是用来获取最左边的bit（其他bit位为0）所代表的数值.</p>
+
+<h3 id="toc_4">hash函数</h3>
+
+<pre><code class="language-java">//这是一个神奇的函数，用了很多的异或，移位等运算，对key的hashcode进一步进行计算以及二进制位的调整等来保证最终获取的存储位置尽量分布均匀
+final int hash(Object k) {
+        int h = hashSeed;
+        if (0 != h &amp;&amp; k instanceof String) {
+            return sun.misc.Hashing.stringHash32((String) k);
+        }
+
+        h ^= k.hashCode();
+
+        h ^= (h &gt;&gt;&gt; 20) ^ (h &gt;&gt;&gt; 12);
+        return h ^ (h &gt;&gt;&gt; 7) ^ (h &gt;&gt;&gt; 4);
+    }
+</code></pre>
+
+<p>以上hash函数计算出的值，通过indexFor进一步处理来获取实际的存储位置</p>
+
+<pre><code class="language-java">/**
+ * 返回数组下标
+ */
+static int indexFor(int h, int length) {
+    return h &amp; (length-1);
+}
+</code></pre>
+
+<p>h&amp;（length-1）保证获取的index一定在数组范围内，举个例子，默认容量16，length-1=15，h=18,转换成二进制计算为</p>
+
+<pre><code class="language-java">    1  0  0  1  0
+&amp;   0  1  1  1  1
+__________________
+    0  0  0  1  0    = 2
+</code></pre>
+
+<p>最终计算出的index=2。有些版本的对于此处的计算会使用 取模运算，也能保证index一定在数组范围内，不过位运算对计算机来说，性能更高一些（HashMap中有大量位运算）</p>
+
+<p>所以最终存储位置的确定流程是这样的：</p>
+
+<p><img src="media/15512563500691/15512596171164.jpg" alt="" style="width:700px;"/></p>
+
+<p>再来看看addEntry的实现：</p>
+
+<pre><code class="language-java">void addEntry(int hash, K key, V value, int bucketIndex) {
+        if ((size &gt;= threshold) &amp;&amp; (null != table[bucketIndex])) {
+            resize(2 * table.length);//当size超过临界阈值threshold，并且即将发生哈希冲突时进行扩容
+            hash = (null != key) ? hash(key) : 0;
+            bucketIndex = indexFor(hash, table.length);
+        }
+
+        createEntry(hash, key, value, bucketIndex);
+    }
+</code></pre>
+
+<p>通过以上代码能够得知，当发生哈希冲突并且size大于阈值的时候，需要进行数组扩容，扩容时，需要新建一个长度为之前数组2倍的新的数组，然后将当前的Entry数组中的元素全部传输过去，扩容后的新数组长度为之前的2倍，所以扩容相对来说是个耗资源的操作。</p>
+
+<h2 id="toc_5">为何HashMap的数组长度一定是2的次幂？</h2>
+
+<p>我们来继续看上面提到的resize方法</p>
+
+<pre><code class="language-java">void resize(int newCapacity) {
+        Entry[] oldTable = table;
+        int oldCapacity = oldTable.length;
+        if (oldCapacity == MAXIMUM_CAPACITY) {
+            threshold = Integer.MAX_VALUE;
+            return;
+        }
+
+        Entry[] newTable = new Entry[newCapacity];
+        transfer(newTable, initHashSeedAsNeeded(newCapacity));
+        table = newTable;
+        threshold = (int)Math.min(newCapacity * loadFactor, MAXIMUM_CAPACITY + 1);
+    }
+</code></pre>
+
+<p>如果数组进行扩容，数组长度发生变化，而存储位置 index = h&amp;(length-1),index也可能会发生变化，需要重新计算index，我们先来看看transfer这个方法</p>
+
+<pre><code class="language-java">void transfer(Entry[] newTable, boolean rehash) {
+        int newCapacity = newTable.length;
+　　　　　//for循环中的代码，逐个遍历链表，重新计算索引位置，将老数组数据复制到新数组中去（数组不存储实际数据，所以仅仅是拷贝引用而已）
+        for (Entry&lt;K,V&gt; e : table) {
+            while(null != e) {
+                Entry&lt;K,V&gt; next = e.next;
+                if (rehash) {
+                    e.hash = null == e.key ? 0 : hash(e.key);
+                }
+                int i = indexFor(e.hash, newCapacity);
+　　　　　　　　　 //将当前entry的next链指向新的索引位置,newTable[i]有可能为空，有可能也是个entry链，如果是entry链，直接在链表头部插入。
+                e.next = newTable[i];
+                newTable[i] = e;
+                e = next;
+            }
+        }
+    }
+</code></pre>
+
+<p>这个方法将老数组中的数据逐个链表地遍历，扔到新的扩容后的数组中，我们的数组索引位置的计算是通过 对key值的hashcode进行hash扰乱运算后，再通过和 length-1进行位运算得到最终数组索引位置。</p>
+
+<p>　　hashMap的数组长度一定保持2的次幂，比如16的二进制表示为 10000，那么length-1就是15，二进制为01111，同理扩容后的数组长度为32，二进制表示为100000，length-1为31，二进制表示为011111。从下图可以我们也能看到这样会保证低位全为1，而扩容后只有一位差异，也就是多出了最左位的1，这样在通过 h&amp;(length-1)的时候，只要h对应的最左边的那一个差异位为0，就能保证得到的新的数组索引和老数组索引一致(大大减少了之前已经散列良好的老数组的数据位置重新调换)，个人理解。</p>
+
+<p>　　<img src="media/15512563500691/1024555-20161115215812138-679881037.png" alt="" style="width:600px;"/></p>
+
+<p> 还有，数组长度保持2的次幂，length-1的低位都为1，会使得获得的数组索引index更加均匀，比如：</p>
+
+<p><img src="media/15512563500691/1024555-20161116001404732-625340289.png" alt="" style="width:600px;"/></p>
+
+<p>　　我们看到，上面的&amp;运算，高位是不会对结果产生影响的（hash函数采用各种位运算可能也是为了使得低位更加散列），我们只关注低位bit，如果低位全部为1，那么对于h低位部分来说，任何一位的变化都会对结果产生影响，也就是说，要得到index=21这个存储位置，h的低位只有这一种组合。这也是数组长度设计为必须为2的次幂的原因。</p>
+
+<p><img src="media/15512563500691/1024555-20161116001717560-1455096254.png" alt="" style="width:600px;"/></p>
+
+<p>　　如果不是2的次幂，也就是低位不是全为1此时，要使得index=21，h的低位部分不再具有唯一性了，哈希冲突的几率会变的更大，同时，index对应的这个bit位无论如何不会等于1了，而对应的那些数组位置也就被白白浪费了。<br/>
+　　</p>
+
+<h3 id="toc_6">get方法</h3>
+
+<pre><code class="language-java"> public V get(Object key) {
+　　　　 //如果key为null,则直接去table[0]处去检索即可。
+        if (key == null)
+            return getForNullKey();
+        Entry&lt;K,V&gt; entry = getEntry(key);
+        return null == entry ? null : entry.getValue();
+ }
+</code></pre>
+
+<p>get方法通过key值返回对应value，如果key为null，直接去table[0]处检索。我们再看一下getEntry这个方法</p>
+
+<pre><code class="language-java">final Entry&lt;K,V&gt; getEntry(Object key) {
+            
+        if (size == 0) {
+            return null;
+        }
+        //通过key的hashcode值计算hash值
+        int hash = (key == null) ? 0 : hash(key);
+        //indexFor (hash&amp;length-1) 获取最终数组索引，然后遍历链表，通过equals方法比对找出对应记录
+        for (Entry&lt;K,V&gt; e = table[indexFor(hash, table.length)];
+             e != null;
+             e = e.next) {
+            Object k;
+            if (e.hash == hash &amp;&amp; 
+                ((k = e.key) == key || (key != null &amp;&amp; key.equals(k))))
+                return e;
+        }
+        return null;
+    }  
+</code></pre>
+
+<p>可以看出，get方法的实现相对简单，key(hashcode)--&gt;hash--&gt;indexFor--&gt;最终索引位置，找到对应位置table[i]，再查看是否有链表，遍历链表，通过key的equals方法比对查找对应的记录。要注意的是，有人觉得上面在定位到数组位置之后然后遍历链表的时候，e.hash == hash这个判断没必要，仅通过equals判断就可以。其实不然，试想一下，如果传入的key对象重写了equals方法却没有重写hashCode，而恰巧此对象定位到这个数组位置，如果仅仅用equals判断可能是相等的，但其hashCode和当前对象不一致，这种情况，根据Object的hashCode的约定，不能返回当前对象，而应该返回null，后面的例子会做出进一步解释。</p>
+
+<h2 id="toc_7">重写equals方法需同时重写hashCode方法</h2>
+
+<p>　　关于HashMap的源码分析就介绍到这儿了，最后我们再聊聊老生常谈的一个问题，各种资料上都会提到，“重写equals时也要同时覆盖hashcode”，我们举个小例子来看看，如果重写了equals而不重写hashcode会发生什么样的问题</p>
+
+<pre><code class="language-java">/**
+ * Created by chengxiao on 2016/11/15.
+ */
+public class MyTest {
+    private static class Person{
+        int idCard;
+        String name;
+
+        public Person(int idCard, String name) {
+            this.idCard = idCard;
+            this.name = name;
+        }
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()){
+                return false;
+            }
+            Person person = (Person) o;
+            //两个对象是否等值，通过idCard来确定
+            return this.idCard == person.idCard;
+        }
+
+    }
+    public static void main(String []args){
+        HashMap&lt;Person,String&gt; map = new HashMap&lt;Person, String&gt;();
+        Person person = new Person(1234,&quot;乔峰&quot;);
+        //put到hashmap中去
+        map.put(person,&quot;天龙八部&quot;);
+        //get取出，从逻辑上讲应该能输出“天龙八部”
+        System.out.println(&quot;结果:&quot;+map.get(new Person(1234,&quot;萧峰&quot;)));
+    }
+}
+</code></pre>
+
+<p>实际输出结果：</p>
+
+<pre><code class="language-java">结果：null
+</code></pre>
+
+<p>　　如果我们已经对HashMap的原理有了一定了解，这个结果就不难理解了。尽管我们在进行get和put操作的时候，使用的key从逻辑上讲是等值的（通过equals比较是相等的），但由于没有重写hashCode方法，所以put操作时，key(hashcode1)--&gt;hash--&gt;indexFor--&gt;最终索引位置 ，而通过key取出value的时候 key(hashcode1)--&gt;hash--&gt;indexFor--&gt;最终索引位置，由于hashcode1不等于hashcode2，导致没有定位到一个数组位置而返回逻辑上错误的值null（也有可能碰巧定位到一个数组位置，但是也会判断其entry的hash值是否相等，上面get方法中有提到。）</p>
+
+<p>　　所以，在重写equals的方法的时候，必须注意重写hashCode方法，同时还要保证通过equals判断相等的两个对象，调用hashCode方法要返回同样的整数值。而如果equals判断不相等的两个对象，其hashCode可以相同（只不过会发生哈希冲突，应尽量避免）。</p>
+
+<blockquote>
+<p>[转载]：<a href="https://www.cnblogs.com/chengxiao/p/6059914.html">https://www.cnblogs.com/chengxiao/p/6059914.html</a></p>
+</blockquote>
 
 <ul>
 <li>
-<a href="#toc_0">数组和链表</a>
+<a href="#toc_0">什么是哈希表</a>
+<ul>
+<li>
+<a href="#toc_1">数据结构</a>
 </li>
 <li>
-<a href="#toc_1">HashMap的构造函数</a>
+<a href="#toc_2">哈希冲突</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_3">HashMap实现原理</a>
+<ul>
+<li>
+<a href="#toc_4">hash函数</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_5">为何HashMap的数组长度一定是2的次幂？</a>
+<ul>
+<li>
+<a href="#toc_6">get方法</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_7">重写equals方法需同时重写hashCode方法</a>
 </li>
 </ul>
 
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[HashMap源码解读(JDK1.8)]]></title>
+    <link href="https://books.sangkf.cn/15512560778974.html"/>
+    <updated>2019-02-27T16:27:57+08:00</updated>
+    <id>https://books.sangkf.cn/15512560778974.html</id>
+    <content type="html"><![CDATA[
+<h2 id="toc_0">概述</h2>
+
+<p>在JDK1.8之前，HashMap采用<code>数组+链表</code>实现，即使用链表处理冲突，同一hash值的节点都存储在一个链表里。但是当位于一个桶中的元素较多，即hash值相等的元素较多时，通过key值依次查找的效率较低。而JDK1.8中，HashMap采用<code>数组+链表+红黑树</code>实现，当链表长度超过阈值（8）时，将链表转换为红黑树，这样大大减少了查找时间。</p>
 
 ]]></content>
   </entry>
@@ -3964,122 +4295,6 @@ gitment.render(&#39;container&#39;)
 <h3 id="toc_8"><a href="https://imsun.net/posts/gitment-introduction/#%E6%A0%B7%E5%BC%8F%E7%89%88%E6%9D%83" title="样式版权"></a>样式版权</h3>
 
 <p>在项目开源前作者曾实现了一个像素级抄袭 GitHub Issues 样式的界面，但在阅读 ToS 时发现违反了 <a href="https://help.github.com/articles/github-terms-of-service/#f-intellectual-property-notice">Section F</a>，并在和 GitHub 邮件沟通的过程中确认了这一行为是侵权的。因此便改成了现在的样式。请其他想要自定义样式的用户也留意版权问题。</p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[如何使用“发布脚本”功能发布静态网站]]></title>
-    <link href="https://books.sangkf.cn/15509249440186.html"/>
-    <updated>2019-02-23T20:29:04+08:00</updated>
-    <id>https://books.sangkf.cn/15509249440186.html</id>
-    <content type="html"><![CDATA[
-<p>“发布脚本”这个功能 MWeb for Mac 2.2.3 版新增的，是为了让 MWeb 中的静态网站体验能达到 “新增文档并编辑” - “右键并选择执行发布脚本” 这样一个简单的流程。避免之前那样，生成网站后还要去敲命令进行发布。</p>
-
-<span id="more"></span><!-- more -->
-
-<h2 id="toc_0">1. 开始前的准备</h2>
-
-<p>目前发布脚本只测试过使用 git 发布，所以当前介绍的是发布到 github pages 或者其它基于 git 的 pages 服务，比如说 coding.net 或者 OSChina 的 pages。开始之前假定你已经配置好 pages 服务，如果你还没配置好，然后想用的是 github pages，请参考这里：<a href="https://pages.github.com/">https://pages.github.com/</a>。</p>
-
-<h2 id="toc_1">2. Clone 你的 pages 到 MWeb 静态网站生成目录中</h2>
-
-<p><strong>注意：</strong>如果你之前都已经可以正常用 git 来发布静态网站了，可以跳过这一步。如果不是，请看下面的步骤：</p>
-
-<ol>
-<li>用 MWeb 生成静态网站。</li>
-<li>去 “MWeb 偏好设置” - “通用设置” - “生成的静态网站保存位置” 那里，点 “在 Finder 中显示” 按钮，进入 MWeb 的静态网站输出文件夹，在文件夹内应该可以看到你已生成的网站。比如说我生成的网站是 “MWeb中文官网”，就会看到一个 “MWeb中文官网” 的文件夹，文件夹内就是生成的静态网站了。下面会以 “MWeb中文官网” 做例子。</li>
-<li>在命令行中进入 “MWeb 的静态网站输出文件夹”。<br/>
-如果你不知道怎么做，可以在 Finder 中选择 “MWeb中文官网” 文件夹的上一级文件夹，按 <code>CMD + C</code> 复制，再打开命令行窗口，键入 cd 命令，加一个空格，再按 <code>CMD + V</code> 粘贴路径，再按 <code>Enter</code>。。</li>
-<li>删除 “MWeb中文官网” 文件夹，然后在命令行中执行：<code>git clone &#39;你的 git pages 的 repo&#39; &#39;MWeb中文官网&#39;</code>。 这里的 <code>&#39;你的 git pages 的 repo&#39; &#39;MWeb中文官网&#39;</code> 请换成你自己的。</li>
-<li>在 MWeb 中使用 “清理并重新生成” 命令，重新生成静态网站。</li>
-</ol>
-
-<p><strong>注意：</strong>在你 git 发布出问题的时候，也可以用上面的 3、4、5 这三个步骤进行初始化。</p>
-
-<h2 id="toc_2">3. 配置发布脚本</h2>
-
-<p>在下图，在 “MWeb 偏好设置” - “扩展” - “发布脚本” 中配置。<br/>
-<img src="media/15509249440186/15028630661421.jpg" alt="" class="mw_img_center" style="width:500px;display: block; clear:both; margin: 0 auto;"/></p>
-
-<p>我上图的是发布到 coding 的 pages，如果选择发布脚本执行前 “生成网站”，这样每次发布前都会生成网站，就能达到 “新增文档并编辑” - “右键并选择执行发布脚本” 这一简单的编辑和发布流程。实测没有问题。</p>
-
-<p>如果你点击 “加载例子” 按钮，加载出来的是以下的脚本样例：</p>
-
-<pre><code class="language-text">#!/bin/sh
-# Please set the name and email. 
-# Because MWeb can&#39;t get your github global setting.
-
-git config user.name &quot;Your github name&quot;
-git config user.email &quot;Your github email&quot;
-
-git add --ignore-removal .
-git commit -m &quot;{{year}}-{{month}}-{{day}} {{time}}&quot;
-git push -u origin master
-
-</code></pre>
-
-<p>注意：有些朋友使用的分支是 <strong>gh-pages</strong>，我这里是 <strong>master</strong>。</p>
-
-<p>在中国，github 一般情况下是无法正常发布的，如果你用 github，可以使用代理，比如说我发布 “MWeb英文官网” 就是使用 Surge 的代理，全部发布脚本如下：</p>
-
-<pre><code class="language-text">#!/bin/sh
-
-export https_proxy=http://127.0.0.1:6152;export http_proxy=http://127.0.0.1:6152
-
-git config user.name &quot;myname&quot;
-git config user.email &quot;myemail@gmail.com&quot;
-git add --ignore-removal .
-git commit -m &quot;{{input}} at {{year}}-{{month}}-{{day}} {{time}}&quot;
-git push -u origin master
-
-</code></pre>
-
-<h2 id="toc_3">4. 使用</h2>
-
-<p>使用方法非常简单，右键网站分类，选择 “复制发布脚本命令并打开终端（Terminal）...”，当终端打开后，在终端中按快捷键 <code>Command + V</code> 即可。如图：</p>
-
-<p><img src="media/15509249440186/15028632273692.jpg" alt="" class="mw_img_center" style="width:400px;display: block; clear:both; margin: 0 auto;"/></p>
-
-<h2 id="toc_4">5. 打开终端后自动执行发布脚本</h2>
-
-<p>这个方法是：<a href="https://github.com/bramblex/">https://github.com/bramblex/</a> 这位朋友分享的，非常感谢，这位朋友的原文如下：</p>
-
-<p>mweb 现在的只能复制执行脚本命令, 并且打开终端嘛.</p>
-
-<p>那么打开终端的时候会自动执行 bashrc / zshrc 文件, 那在 bashrc / zshrc 里面加入检测剪贴板并且自动发布的脚本就能实现打开终端后自动执行发布脚本了.</p>
-
-<pre><code class="language-text"># 在 ~/.zshrc 或 ~/.bashrc 添下面代码, 就能实现自动执行发布脚本
-# https://gist.github.com/bramblex/a6b12543a076e2c1fa5acecb95f51ead
-
-if (pbpaste  | grep -Eq  &#39;^cd &quot;[^&quot;]*&quot; &amp;&amp; sh &quot;[^&quot;]*/site_publish_logs/sh_\d*\.sh&quot; &amp;&amp; open &quot;[^&quot;]*&quot;&#39;) 
-then
-    echo &quot;========== MWEB AUTO PUBLISH START ==========&quot; 
-    echo &quot;Runing command:&quot;
-    pbpaste
-
-    if pbpaste | sh
-    then
-
-        echo &quot;Success!&quot;
-        echo &quot;Clean pasteboard...&quot;
-        echo -n &quot;&quot; | pbcopy
-        echo &quot;==========  MWEB AUTO PUBLISH END  ==========&quot;
-        echo &quot;Close terminal 5s later...&quot;
-        sleep 5
-        exit
-
-    else
-
-        echo &quot;Failed!&quot;
-        echo &quot;Clean pasteboard...&quot;
-        echo -n &quot;&quot; | pbcopy
-        echo &quot;==========  MWEB AUTO PUBLISH END  ==========&quot;
-
-    fi
-
-fi
-</code></pre>
 
 ]]></content>
   </entry>

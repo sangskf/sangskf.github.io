@@ -133,14 +133,14 @@
 		<div class="markdown-body home-categories">
 		
 			<div class="article">
-                <a class="clearlink" href="15512464830584.html">
+                <a class="clearlink" href="15512563500691.html">
                 
-                  <h1>HashMap源码解析</h1>
+                  <h1>HashMap源码解读(JDK1.7)</h1>
                   <div class="a-content">
                       
                       <div class="a-content-text">
                         
-                        	<p>数据结构中有<code>数组</code>和<code>链表</code>这两个结构来存储数据。<br/>
+                        	<p>哈希表（hash table）也叫散列表，是一种非常重要的数据结构，应用场景及其丰富，许多缓存技术（比如memcached）的核心其实就是在内存中维护一张大的哈希表，而HashMap的实现原理也常常出现在各类的面试题中，重要性可见一斑。本文会对java集合框架中的对应实现HashMap的实现原理进行讲解，然后会对JDK7的HashMap源码进行分析。<br/>
 
                         
                       </div>
@@ -148,8 +148,43 @@
                 </a>
                 <div class="read-more clearfix">
                   <div class="more-left left">
-                   <a href="15512464830584.html">阅读更多&gt;&gt;</a>&nbsp;&nbsp; 
-                    <span class="date">2019/2/27 13:48 下午</span>
+                   <a href="15512563500691.html">阅读更多&gt;&gt;</a>&nbsp;&nbsp; 
+                    <span class="date">2019/2/27 16:32 下午</span>
+                    <span>发布于分类&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='java.html'>后端</a></span>
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="15512560778974.html">
+                
+                  <h1>HashMap源码解读(JDK1.8)</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<h2 id="toc_0">概述</h2>
+
+<p>在JDK1.8之前，HashMap采用<code>数组+链表</code>实现，即使用链表处理冲突，同一hash值的节点都存储在一个链表里。但是当位于一个桶中的元素较多，即hash值相等的元素较多时，通过key值依次查找的效率较低。而JDK1.8中，HashMap采用<code>数组+链表+红黑树</code>实现，当链表长度超过阈值（8）时，将链表转换为红黑树，这样大大减少了查找时间。</p>
+
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                  
+                    <span class="date">2019/2/27 16:27 下午</span>
                     <span>发布于分类&nbsp;</span> 
           				  
           					    <span class="posted-in"><a href='java.html'>后端</a></span>
@@ -299,39 +334,6 @@
                 </div>
               </div><!-- article -->
         
-			<div class="article">
-                <a class="clearlink" href="15510945917129.html">
-                
-                  <h1>分布式事务</h1>
-                  <div class="a-content">
-                      
-                      <div class="a-content-text">
-                        
-                        	<p>分布式事务场景如何设计系统架构及解决数据一致性问题，个人理解最终方案把握以下原则就可以了，那就是：大事务=小事务（原子事务）+异步（消息通知），<br/>
-
-                        
-                      </div>
-                  </div>
-                </a>
-                <div class="read-more clearfix">
-                  <div class="more-left left">
-                   <a href="15510945917129.html">阅读更多&gt;&gt;</a>&nbsp;&nbsp; 
-                    <span class="date">2019/2/25 19:36 下午</span>
-                    <span>发布于分类&nbsp;</span> 
-          				  
-          					    <span class="posted-in"><a href='database.html'>数据库</a></span>
-          				   
-                  </div>
-                  <div class="more-right right">
-                  <span class="comments">
-                      
-
-                       
-                  </span>
-                  </div>
-                </div>
-              </div><!-- article -->
-        
               
 
 
@@ -411,7 +413,13 @@
 	      
 		      
 			      <li class="post">
-			        <a href="15512464830584.html">HashMap源码解析</a>
+			        <a href="15512563500691.html">HashMap源码解读(JDK1.7)</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15512560778974.html">HashMap源码解读(JDK1.8)</a>
 			      </li>
 		     
 		  
@@ -430,12 +438,6 @@
 		      
 			      <li class="post">
 			        <a href="15511041776834.html">分布式系统常见的事务处理机制</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="15511034481464.html">😋 技术必备基础知识</a>
 			      </li>
 		     
 		  
