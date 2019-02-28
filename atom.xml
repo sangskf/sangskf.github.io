@@ -4,7 +4,7 @@
   <title><![CDATA[见课就上的小婊砸]]></title>
   <link href="https://books.sangkf.cn/atom.xml" rel="self"/>
   <link href="https://books.sangkf.cn/"/>
-  <updated>2019-02-27T21:42:30+08:00</updated>
+  <updated>2019-02-28T21:20:18+08:00</updated>
   <id>https://books.sangkf.cn/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -13,14 +13,547 @@
   <generator uri="http://www.mweb.im/">MWeb</generator>
   
   <entry>
+    <title type="html"><![CDATA[Java中的volatile关键字解析]]></title>
+    <link href="https://books.sangkf.cn/15513224851488.html"/>
+    <updated>2019-02-28T10:54:45+08:00</updated>
+    <id>https://books.sangkf.cn/15513224851488.html</id>
+    <content type="html"><![CDATA[
+<blockquote>
+<p>volatile 变量是一种非常简单但同时又非常脆弱的同步机制，它在某些情况下将提供优于锁的性能和伸缩性。</p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">内存模型的相关概念</a>
+<ul>
+<li>
+<a href="#toc_1">高速缓存</a>
+</li>
+<li>
+<a href="#toc_2">缓存一致性协议</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_3">并发编程中的三个概念</a>
+</li>
+<li>
+<a href="#toc_4">Java内存模型</a>
+</li>
+<li>
+<a href="#toc_5">深入剖析volatile关键字</a>
+<ul>
+<li>
+<a href="#toc_6">volatile关键字的两层语义</a>
+</li>
+<li>
+<a href="#toc_7">volatile保证原子性吗</a>
+</li>
+<li>
+<a href="#toc_8">volatile能保证有序性吗</a>
+</li>
+<li>
+<a href="#toc_9">volatile的原理和实现机制</a>
+</li>
+<li>
+<a href="#toc_10">使用volatile关键字的场景</a>
+<ul>
+<li>
+<a href="#toc_11">volatile使用场景</a>
+</li>
+<li>
+<a href="#toc_12">正确使用volatile关键字</a>
+</li>
+<li>
+<a href="#toc_13">volatile 与 synchronized 的比较</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+<h2 id="toc_0">内存模型的相关概念</h2>
+
+<p>计算机的没一条指令都是在CPU中执行的，执行指令的过程中会涉及到数据的读取和写入。由于程序运行过程中的临时数据是放在主存（物理内存）中的，但是由于CPU的执行速度很快，而从内存读取数据和向内存写入数据的过程相对慢很多，因此任何时候对数据的操作会由于要和内存进行交互而拖慢了指令的执行速度。因此CPU里面就有了高速缓存。</p>
+
+<h3 id="toc_1">高速缓存</h3>
+
+<p>程序运行过程中，会将运算需要的数据从主存中复制一份到CPU的告诉缓存中，那么CPU进行计算时就可以直接从它的高速缓存中读取和写入数据，当运算结束时，再将高速缓存中的数据刷新到主存当中。<br/>
+但是，由于每个CPU都有自己的高速缓存，当一个变量存在多个CPU的高速缓存中（即多个线程访问共享变量），就可能出现缓存不一致的情况。</p>
+
+<p>所以就出现了缓存一致性协议。</p>
+
+<h3 id="toc_2">缓存一致性协议</h3>
+
+<p><strong>核心思想</strong>：当CPU写数据时，如果发现操作的变量是共享变量，即在其他CPU中也存在该变量的副本，会发信号通知其他CPU将该变量的缓存行置为无效的状态，因此当其他CPU需要读取这个变量时，发现自己缓存中该变量的缓存行是无效的，那么他就会从内存中重新读取。<br/>
+<img src="media/15513224851488/15513240773229.jpg" alt="" style="width:400px;"/></p>
+
+<h2 id="toc_3">并发编程中的三个概念</h2>
+
+<ul>
+<li><p><strong>原子性</strong><br/>
+即一个操作或者多个操作 要么全部执行并且执行的过程不会被任何因素打断，要么就都不执行。</p></li>
+<li><p><strong>可见性</strong><br/>
+可见性是指当多个线程访问同一个变量时，一个线程修改了这个变量的值，其他线程能够立即看得到修改的值。</p></li>
+<li><p><strong>有序性</strong><br/>
+程序执行的顺序按照代码的先后顺序执行。<br/>
+因为处理器为了提高程序的运行效率，可能会对代码进行优化，即指令重排序。它不保证程序中的各个语句的执行顺序同代码一致，但是它会保证程序的最终执行结果和代码顺序执行结果是一致的。</p></li>
+</ul>
+
+<h2 id="toc_4">Java内存模型</h2>
+
+<p>在Java虚拟机规范中试图定义一种Java内存模型来屏蔽各个硬件平台和操作系统的内存访问差异，以实现让Java程序在各种平台都达到一致的内存访问效果。</p>
+
+<p>Java内存模型规定了程序中变量的访问规则，往大了说也就是程序执行的次序。为了获得较好的执行性能，Java内存模型并没有限制执行引擎使用处理器的寄存器或者高速缓存来提升执行速度，也就没有限制编译器对指令进行重排序。因此，<strong><em>在Java内存模型中也存在缓存一致性和指令重排序的问题</em></strong>。</p>
+
+<p>Java内存模型规定所有的变量都存在与主存当中（类似前面说的物理内存），每个线程有自己的工作内存（类似前面说的高速缓存），线程对变量的所有操作都必须在工作内存中进行，而不能直接对主存进行操作。并且每个线程不能访问其他线程的工作内存。</p>
+
+<p>例：在java中，执行下面这个语句：</p>
+
+<pre><code class="language-java">i = 10
+</code></pre>
+
+<p><u>执行线程必须现在自己的工作内存中对变量i所在的缓存行进行赋值操作，然后再写入主存中。而不是直接将数值10写入到主存当中。</u></p>
+
+<p>那么Java语言本身对原子性，可见性以及有序性提供了那些保证呢？</p>
+
+<ul>
+<li><p><strong>原子性</strong><br/>
+对基本数据类型的变量的读取和赋值操作是原子性操作，即这些操作是不可被打断的，要么执行，要么不执行</p>
+<p>例：请分析下面那些操作是原子性操作</p>
+<pre><code class="language-java">x = 10;         //语句1
+y = x;         //语句2<br/>
+x++;           //语句3<br/>
+x = x + 1;     //语句4
+</code></pre>
+<p>上面4个语句只有语句1的操作具备原子性。</p>
+<p>也就是说, <u>只有简单的读取，赋值（而且必须是将数字赋值给某个变量，变量之间的相互赋值不是原子操作）才是原子操作。</u></p>
+<p>注意：在32位平台下，对64位数据的读取和赋值是需要通过两个操作来完成的，不能保证其原子性。但是好像在最新的JDK中，JVM已经保证对64位数据的读取和赋值也是原子性操作了。</p>
+<p>从上面可以看出，Java内存模型只保证了基本的读取和赋值是原子性操作，如果实现更大范围操作的原子性，可以通过synchronized和Lock来实现。由于synchronized和Lock能够保证任一时刻只有一个线程执行该代码块，那么自然就不存在原子性问题了，从而保证了原子性。</p></li>
+<li><p><strong>可见性</strong><br/>
+<strong>对于可见性，Java提供了volatile关键字来保证可见性。</strong></p>
+<p><strong>当一个共享变量被volatile修饰时，它会保证修改的值会立刻被更新到主存，当有其他线程需要读取时，它会从内存中读取新值。</strong></p>
+<p>而普通的共享变量不能保证可见性，因为普通共享变量被修改之后，什么时候写入主存是不确定的，当其他线程去读取时，此时内存中可能还是原来的旧值，因此无法保证可见性。</p>
+<p>另外，<strong>通过synchronized和Lock也能够保证可见性，synchronized和Lock能保证同一时刻只有一个线程获取锁然后执行同步代码，并且释放锁之前会将对变量的修改刷新到主存中</strong>，因此保证了可见性。</p></li>
+<li><p><strong>有序性</strong><br/>
+在Java内存模型中，允许编译器和处理器对指令进行重排序，但是重排序过程不会影响到单线程程序的执行，却会影响到多线程并发执行的正确性。</p>
+<p><strong>volatile关键字可以保证一定的有序性。另外通过synchronized和Lock来保证有序性，很显然，synchronized和Lock保证每个时刻只有一个线程执行同步代码，相当于是让线程顺序执行同步代码，自然保证了有序性。</strong></p></li>
+</ul>
+
+<h2 id="toc_5">深入剖析volatile关键字</h2>
+
+<h3 id="toc_6">volatile关键字的两层语义</h3>
+
+<p>一旦一个共享变量（类的成员变量、类的静态成员变量）被volatile修饰之后，那么就具备了两层语义：</p>
+
+<ul>
+<li><p><strong>保证了不同线程对变量操作时的可见性，即一个线程修改了某个变量的值，这新值对其他线程来说是立即可见的。</strong></p></li>
+<li><p><strong>禁止进行指令重排序。</strong></p></li>
+</ul>
+
+<p>先看一段代码，假如线程1先执行，线程2后执行：</p>
+
+<pre><code class="language-java">//线程1
+boolean stop = false;
+while(!stop){
+    doSomething();
+}
+ 
+//线程2
+stop = true;
+</code></pre>
+
+<p>这段代码是很典型的一段代码，很多人在中断线程时可能都会采用这种标记办法。但是事实上，这段代码会完全运行正确么？即一定会将线程中断么？不一定，也许在大多数时候，这个代码能够把线程中断，但是也有可能会导致无法中断线程（虽然这个可能性很小，但是只要一旦发生这种情况就会造成死循环了）。</p>
+
+<p>　　下面解释一下这段代码为何有可能导致无法中断线程。在前面已经解释过，每个线程在运行过程中都有自己的工作内存，那么线程1在运行的时候，会将stop变量的值拷贝一份放在自己的工作内存当中。</p>
+
+<p>　　那么当线程2更改了stop变量的值之后，但是还没来得及写入主存当中，线程2转去做其他事情了，那么线程1由于不知道线程2对stop变量的更改，因此还会一直循环下去。</p>
+
+<p>但是用volatile修饰之后就变得不一样了：　　</p>
+
+<ol>
+<li><strong>使用volatile关键字会强制将修改的值立即写入主存；</strong></li>
+<li><strong>使用volatile关键字的话，当线程2进行修改时，会导致线程1的工作内存中缓存变量stop的缓存行无效（反映到硬件层的话，就是CPU的L1或者L2缓存中对应的缓存行无效；</strong></li>
+<li><strong>由于线程1的工作内存中缓存变量stop的缓存行无效，所以线程1再次读取变量stop的值时会去主存读取。</strong></li>
+</ol>
+
+<p>那么在线程2修改stop值时（当然这里包括2个操作，修改线程2工作内存中的值，然后将修改后的值写入内存），会使得线程1的工作内存中缓存变量stop的缓存行无效，然后线程1读取时，发现自己的缓存行无效，它会等待缓存行对应的主存地址被更新之后，然后去对应的主存读取最新的值。</p>
+
+<p>那么线程1读取到的就是最新的正确的值。</p>
+
+<h3 id="toc_7">volatile保证原子性吗</h3>
+
+<p>下面看一个例子：</p>
+
+<pre><code class="language-java">public class Test {
+    public volatile int inc = 0;
+     
+    public void increase() {
+        inc++;
+    }
+     
+    public static void main(String[] args) {
+        final Test test = new Test();
+        for(int i=0;i&lt;10;i++){
+            new Thread(){
+                public void run() {
+                    for(int j=0;j&lt;1000;j++)
+                        test.increase();
+                };
+            }.start();
+        }
+         
+        while(Thread.activeCount()&gt;1)  //保证前面的线程都执行完
+            Thread.yield();
+        System.out.println(test.inc);
+    }
+}
+</code></pre>
+
+<p>大家想一下这段程序的输出结果是多少？也许有些朋友认为是10000。但是事实上运行它会发现每次运行结果都不一致，都是一个小于10000的数字。</p>
+
+<p>　　可能有的朋友就会有疑问，不对啊，上面是对变量inc进行自增操作，由于volatile保证了可见性，那么在每个线程中对inc自增完之后，在其他线程中都能看到修改后的值啊，所以有10个线程分别进行了1000次操作，那么最终inc的值应该是1000*10=10000。</p>
+
+<p>　　这里面就有一个误区了，volatile关键字能保证可见性没有错，但是上面的程序错在没能保证原子性。可见性只能保证每次读取的是最新的值，但是volatile没办法保证对变量的操作的原子性。</p>
+
+<p>　　在前面已经提到过，自增操作是不具备原子性的，它包括读取变量的原始值、进行加1操作、写入工作内存。那么就是说自增操作的三个子操作可能会分割开执行，就有可能导致下面这种情况出现：</p>
+
+<p>　　假如某个时刻变量inc的值为10，</p>
+
+<p>　　线程1对变量进行自增操作，线程1先读取了变量inc的原始值，然后线程1被阻塞了；</p>
+
+<p>　　然后线程2对变量进行自增操作，线程2也去读取变量inc的原始值，由于线程1只是对变量inc进行读取操作，而没有对变量进行修改操作，所以不会导致线程2的工作内存中缓存变量inc的缓存行无效，所以线程2会直接去主存读取inc的值，发现inc的值时10，然后进行加1操作，并把11写入工作内存，最后写入主存。</p>
+
+<p>　　然后线程1接着进行加1操作，由于已经读取了inc的值，注意此时在线程1的工作内存中inc的值仍然为10，所以线程1对inc进行加1操作后inc的值为11，然后将11写入工作内存，最后写入主存。</p>
+
+<p>　　那么两个线程分别进行了一次自增操作后，inc只增加了1。</p>
+
+<p>　　解释到这里，可能有朋友会有疑问，不对啊，前面不是保证一个变量在修改volatile变量时，会让缓存行无效吗？然后其他线程去读就会读到新的值，对，这个没错。这个就是上面的happens-before规则中的volatile变量规则，但是要注意，线程1对变量进行读取操作之后，被阻塞了的话，并没有对inc值进行修改。然后虽然volatile能保证线程2对变量inc的值读取是从内存中读取的，但是线程1没有进行修改，所以线程2根本就不会看到修改的值。</p>
+
+<p>　　根源就在这里，<strong>自增操作不是原子性操作，而且volatile也无法保证对变量的任何操作都是原子性的。</strong></p>
+
+<p>把上面的代码改成以下任何一种都可以达到效果：<br/>
+采用synchronized：</p>
+
+<pre><code class="language-java">public class Test {
+    public  int inc = 0;
+    
+    public synchronized void increase() {
+        inc++;
+    }
+    
+    public static void main(String[] args) {
+        final Test test = new Test();
+        for(int i=0;i&lt;10;i++){
+            new Thread(){
+                public void run() {
+                    for(int j=0;j&lt;1000;j++)
+                        test.increase();
+                };
+            }.start();
+        }
+        
+        while(Thread.activeCount()&gt;1)  //保证前面的线程都执行完
+            Thread.yield();
+        System.out.println(test.inc);
+    }
+}
+</code></pre>
+
+<p>采用Lock：</p>
+
+<pre><code class="language-java">public class Test {
+    public  int inc = 0;
+    Lock lock = new ReentrantLock();
+    
+    public  void increase() {
+        lock.lock();
+        try {
+            inc++;
+        } finally{
+            lock.unlock();
+        }
+    }
+    
+    public static void main(String[] args) {
+        final Test test = new Test();
+        for(int i=0;i&lt;10;i++){
+            new Thread(){
+                public void run() {
+                    for(int j=0;j&lt;1000;j++)
+                        test.increase();
+                };
+            }.start();
+        }
+        
+        while(Thread.activeCount()&gt;1)  //保证前面的线程都执行完
+            Thread.yield();
+        System.out.println(test.inc);
+    }
+}
+</code></pre>
+
+<p>采用AtomicInteger：</p>
+
+<pre><code class="language-java">public class Test {
+    public  AtomicInteger inc = new AtomicInteger();
+     
+    public  void increase() {
+        inc.getAndIncrement();
+    }
+    
+    public static void main(String[] args) {
+        final Test test = new Test();
+        for(int i=0;i&lt;10;i++){
+            new Thread(){
+                public void run() {
+                    for(int j=0;j&lt;1000;j++)
+                        test.increase();
+                };
+            }.start();
+        }
+        
+        while(Thread.activeCount()&gt;1)  //保证前面的线程都执行完
+            Thread.yield();
+        System.out.println(test.inc);
+    }
+}
+</code></pre>
+
+<p>在java 1.5的java.util.concurrent.atomic包下提供了一些原子操作类，即对基本数据类型的 自增（加1操作），自减（减1操作）、以及加法操作（加一个数），减法操作（减一个数）进行了封装，保证这些操作是原子性操作。atomic是利用CAS来实现原子性操作的（Compare And Swap），CAS实际上是利用处理器提供的CMPXCHG指令实现的，而处理器执行CMPXCHG指令是一个原子性操作。</p>
+
+<h3 id="toc_8">volatile能保证有序性吗</h3>
+
+<p>在前面提到volatile关键字能禁止指令重排序，所以volatile能在一定程度上保证有序性<br/>
+volatile关键字禁止指令重排序有两层意思：</p>
+
+<ul>
+<li><p><strong>当程序执行到volatile变量的读操作或者写操作时,在其前面的操作的更改肯定全部已经进行，且结果已经对后面的操作可见；在其后面的操作肯定还没有进行;</strong></p></li>
+<li><p><strong>在进行指令优化是，不能将在volatile变量访问的语句放在其后面执行，也不能把volatile变量后面的语句放到其前面执行。</strong></p></li>
+</ul>
+
+<p>可能上面说的比较绕，举个简单的例子：</p>
+
+<pre><code class="language-java">//x、y为非volatile变量
+//flag为volatile变量
+ 
+x = 2;        //语句1
+y = 0;        //语句2
+volatile flag = true;  //语句3
+x = 4;         //语句4
+y = -1;       //语句5
+</code></pre>
+
+<p>由于flag变量为volatile变量，那么在进行指令重排序的过程的时候，不会将语句3放到语句1、语句2前面，也不会将语句3放到语句4、语句5后面。但是要注意语句1和语句2的顺序、语句4和语句5的顺序是不作任何保证的。</p>
+
+<p>　　并且volatile关键字能保证，执行到语句3时，语句1和语句2必定是执行完毕了的，且语句1和语句2的执行结果对语句3、语句4、语句5是可见的。</p>
+
+<p>那么我们回到前面举的一个例子：</p>
+
+<pre><code class="language-java">//线程1:
+context = loadContext();   //语句1
+inited = true;             //语句2
+ 
+//线程2:
+while(!inited ){
+  sleep()
+}
+doSomethingwithconfig(context);
+</code></pre>
+
+<p>前面举这个例子的时候，提到有可能语句2会在语句1之前执行，那么就可能导致context还没被初始化，而线程2中就使用未初始化的context去进行操作，导致程序出错。</p>
+
+<p>　　这里如果用volatile关键字对inited变量进行修饰，就不会出现这种问题了，因为当执行到语句2时，必定能保证context已经初始化完毕。</p>
+
+<h3 id="toc_9">volatile的原理和实现机制</h3>
+
+<p>“观察加入volatile关键字和没有加入volatile关键字时所生成的汇编代码发现，加入volatile关键字时，会多出一个lock前缀指令”</p>
+
+<p>　　lock前缀指令实际上相当于一个内存屏障（也成内存栅栏），内存屏障会提供3个功能：</p>
+
+<p>　　1）<strong>它确保指令重排序时不会把其后面的指令排到内存屏障之前的位置，也不会把前面的指令排到内存屏障的后面；即在执行到内存屏障这句指令时，在它前面的操作已经全部完成；</strong></p>
+
+<p>　　2）<strong>它会强制将对缓存的修改操作立即写入主存；</strong></p>
+
+<p>　　3）<strong>如果是写操作，它会导致其他CPU中对应的缓存行无效。</strong></p>
+
+<h3 id="toc_10">使用volatile关键字的场景</h3>
+
+<p>synchronized关键字是防止多个线程同时执行一段代码，那么就会很影响程序执行效率，而volatile关键字在某些情况下性能要优于synchronized，但是要注意volatile关键字无法替代synchronized关键字的，因为volatile关键字无法保证操作的原子性。通常来说，使用volatile必须具备以下2个条件：</p>
+
+<ul>
+<li><p>对变量的写操作不依赖于当前值</p></li>
+<li><p>对变量没有包含在具有其他变量的不变式中</p></li>
+</ul>
+
+<p>实际上，这些条件表明，可以被写入 volatile 变量的这些有效值独立于任何程序的状态，包括变量的当前状态。</p>
+
+<p>　　事实上，我的理解就是上面的2个条件需要保证操作是原子性操作，才能保证使用volatile关键字的程序在并发时能够正确执行。</p>
+
+<h4 id="toc_11">volatile使用场景</h4>
+
+<p>下面列举几个Java中使用volatile的几个场景。</p>
+
+<ul>
+<li><p><strong>状态标记量</strong></p>
+<pre><code class="language-java">volatile boolean flag = false;
+while(!flag){<br/>
+    doSomething();<br/>
+}<br/>
+public void setFlag() {<br/>
+    flag = true;<br/>
+}
+</code></pre>
+<pre><code class="language-java">volatile boolean inited = false;
+//线程1:<br/>
+context = loadContext();  <br/>
+inited = true;            <br/>
+//线程2:<br/>
+while(!inited ){<br/>
+    sleep()<br/>
+}<br/>
+doSomethingwithconfig(context);
+</code></pre>
+<p>将volatile变量作为状态标志使用：线程以volatile变量作为循环控制变量（例如控制线程是否继续执行，控制线程的生命周期），由另外一个线程控制该变量的值（true or false）。这种情况下需要变量具有可见性，volatile变量适合。然而，使用synchnorized块编写循环要比使用volatile状态标志编写麻烦很多。由于volaitle简化了代码，并且状态标志不依赖于程序内任何其他状态，因此此处非常适合使用volatile。</p></li>
+<li><p><strong>double check</strong></p>
+<pre><code class="language-java">class Singleton{
+    private volatile static Singleton instance = null;<br/>
+    private Singleton() {<br/>
+    }<br/>
+    public static Singleton getInstance() {<br/>
+        if(instance==null) {<br/>
+            synchronized (Singleton.class) {<br/>
+                if(instance==null)<br/>
+                    instance = new Singleton();<br/>
+            }<br/>
+        }<br/>
+        return instance;<br/>
+    }<br/>
+}
+</code></pre></li>
+</ul>
+
+<h4 id="toc_12">正确使用volatile关键字</h4>
+
+<p>synchronized关键字是防止多个线程同时执行一段代码，那么就会很影响程序执行效率，而volatile关键字在某些情况下性能要优于synchronized，但是要注意volatile关键字是无法替代synchronized关键字的，因为volatile关键字无法保证操作的原子性。</p>
+
+<p>volatile变量具有synchronized的可见性特性，但是不具备原子性。这就是说线程能够自动发现volatile变量的最新值。volatile变量可用于提供线程安全，但是只能应用于非常有限的一组用例：多个变量之间或者某个变量的当前值与修改后值之间没有约束。因此，单独使用volatile还不足以实现计数器，互斥锁或任何具有多个变量相关的不变式的类。</p>
+
+<p>出于简易性或可伸缩性的考虑，您可能倾向于使用 volatile 变量而不是锁。当使用 volatile 变量而非锁时，某些习惯用法（idiom）更加易于编码和阅读。此外，volatile 变量不会像锁那样造成线程阻塞，因此也很少造成可伸缩性问题。在某些情况下，如果读操作远远大于写操作，volatile 变量还可以提供优于锁的性能优势。</p>
+
+<p><strong>使用条件</strong></p>
+
+<p>您只能在有限的一些情形下使用 volatile 变量替代锁。<strong>要使 volatile 变量提供理想的线程安全，必须同时满足下面两个条件</strong>：</p>
+
+<ul>
+<li>对变量的写操作不依赖于当前值。</li>
+<li>该变量没有包含在具有其他变量的不变式中。</li>
+</ul>
+
+<p>实际上，这些条件表明，可以被写入 volatile 变量的这些有效值独立于任何程序的状态，包括变量的当前状态。</p>
+
+<p>第一个条件就是不能是自增自减等操作。第一个条件的限制使 volatile 变量不能用作线程安全计数器。虽然增量操作（x++）看上去类似一个单独操作，实际上它是一个由（读取－修改－写入）操作序列组成的组合操作，必须以原子方式执行，而 volatile 不能提供必须的原子特性。</p>
+
+<p>第二个条件我们来举个例子它包含了一个不变式 ：下界总是小于或等于上界。</p>
+
+<pre><code class="language-java">public class NumberRange {  
+    private int lower, upper;  
+  
+    public int getLower() { return lower; }  
+    public int getUpper() { return upper; }  
+  
+    public void setLower(int value) {   
+        if (value &gt; upper)   
+            throw new IllegalArgumentException(...);  
+        lower = value;  
+    }  
+  
+    public void setUpper(int value) {   
+        if (value &lt; lower)   
+            throw new IllegalArgumentException(...);  
+        upper = value;  
+    }  
+}  
+</code></pre>
+
+<p>这种方式限制了范围的状态变量。因此将 lower 和 upper 字段定义为 volatile 类型不能够充分实现类的线程安全；而仍然需要使用同步——使 setLower() 和 setUpper() 操作原子化。</p>
+
+<p>否则，如果凑巧两个线程在同一时间使用不一致的值执行 setLower 和 setUpper 的话，则会使范围处于不一致的状态。例如，如果初始状态是(0, 5)，同一时间内，线程 A 调用setLower(4) 并且线程 B 调用setUpper(3)，显然这两个操作交叉存入的值是不符合条件的，那么两个线程都会通过用于保护不变式的检查，使得最后的范围值是(4, 3) —— 一个无效值，这显然是不对的。</p>
+
+<h4 id="toc_13">volatile 与 synchronized 的比较</h4>
+
+<p>（1）volatile本质是在告诉jvm当前变量在寄存器（工作内存）中的值是不确定的，需要从主存中读取；synchronized则是锁定当前变量，只有当前线程可以访问该变量，其他线程被阻塞住；</p>
+
+<p>（2）volatile仅能使用在变量级别；synchronized则可以使用在变量、方法、和类级别的；</p>
+
+<p>（3）volatile仅能实现变量的修改可见性，不能保证原子性；而synchronized则可以保证变量的修改可见性和原子性；</p>
+
+<p>（4）volatile不会造成线程的阻塞，即volatile不能用来同步，因为多个线程并发访问volatile修饰的变量不会阻塞；synchronized可能会造成线程的阻塞；</p>
+
+<p>（5）当一个域的值依赖于它之前的值时，volatile就无法工作了，如n=n+1,n++等。如果某个域的值受到其他域的值的限制，那么volatile也无法工作，如Range类的lower和upper边界，必须遵循lower&lt;=upper的限制。</p>
+
+<p>（6）volatile标记的变量不会被编译器优化；synchronized标记的变量可以被编译器优化。</p>
+
+<p><strong>总结</strong>：</p>
+
+<p>与锁相比，volatile 变量是一种非常简单但同时又非常脆弱的同步机制，它在某些情况下将提供优于锁的性能和伸缩性。如果严格遵循 volatile 的使用条件即变量真正独立于其他变量和自己以前的值 ，在某些情况下可以使用 volatile 代替 synchronized 来简化代码。然而，使用 volatile 的代码往往比使用锁的代码更加容易出错。</p>
+
+<p>[<strong>参考</strong>]  <a href="https://www.cnblogs.com/xiaoxi/p/7251171.html">https://www.cnblogs.com/xiaoxi/p/7251171.html</a></p>
+
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[HashMap源码解读(JDK1.7)]]></title>
     <link href="https://books.sangkf.cn/15512563500691.html"/>
     <updated>2019-02-27T16:32:30+08:00</updated>
     <id>https://books.sangkf.cn/15512563500691.html</id>
     <content type="html"><![CDATA[
-<p>哈希表（hash table）也叫散列表，是一种非常重要的数据结构，应用场景及其丰富，许多缓存技术（比如memcached）的核心其实就是在内存中维护一张大的哈希表，而HashMap的实现原理也常常出现在各类<br/>
-<span id="more"></span><!-- more --><br/>
-的面试题中，重要性可见一斑。本文会对java集合框架中的对应实现HashMap的实现原理进行讲解，然后会对JDK7的HashMap源码进行分析。</p>
+<blockquote>
+<p>哈希表（hash table）也叫散列表，是一种非常重要的数据结构，应用场景及其丰富，许多缓存技术（比如memcached）的核心其实就是在内存中维护一张大的哈希表，而HashMap的实现原理也常常出现在各类的面试题中，重要性可见一斑。</p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">什么是哈希表</a>
+<ul>
+<li>
+<a href="#toc_1">数据结构</a>
+</li>
+<li>
+<a href="#toc_2">哈希冲突</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_3">HashMap实现原理</a>
+<ul>
+<li>
+<a href="#toc_4">hash函数</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_5">为何HashMap的数组长度一定是2的次幂？</a>
+<ul>
+<li>
+<a href="#toc_6">get方法</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_7">重写equals方法需同时重写hashCode方法</a>
+</li>
+</ul>
+
+
+<p>哈希表（hash table）也叫散列表，是一种非常重要的数据结构，应用场景及其丰富，许多缓存技术（比如memcached）的核心其实就是在内存中维护一张大的哈希表，而HashMap的实现原理也常常出现在各类的面试题中，重要性可见一斑。本文会对java集合框架中的对应实现HashMap的实现原理进行讲解，然后会对JDK7的HashMap源码进行分析。</p>
 
 <h2 id="toc_0">什么是哈希表</h2>
 
@@ -364,43 +897,7 @@ public class MyTest {
 
 <p>　　所以，在重写equals的方法的时候，必须注意重写hashCode方法，同时还要保证通过equals判断相等的两个对象，调用hashCode方法要返回同样的整数值。而如果equals判断不相等的两个对象，其hashCode可以相同（只不过会发生哈希冲突，应尽量避免）。</p>
 
-<blockquote>
-<p>[转载]：<a href="https://www.cnblogs.com/chengxiao/p/6059914.html">https://www.cnblogs.com/chengxiao/p/6059914.html</a></p>
-</blockquote>
-
-<ul>
-<li>
-<a href="#toc_0">什么是哈希表</a>
-<ul>
-<li>
-<a href="#toc_1">数据结构</a>
-</li>
-<li>
-<a href="#toc_2">哈希冲突</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_3">HashMap实现原理</a>
-<ul>
-<li>
-<a href="#toc_4">hash函数</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_5">为何HashMap的数组长度一定是2的次幂？</a>
-<ul>
-<li>
-<a href="#toc_6">get方法</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_7">重写equals方法需同时重写hashCode方法</a>
-</li>
-</ul>
-
+<p>[<strong>转载</strong>]：<a href="https://www.cnblogs.com/chengxiao/p/6059914.html">https://www.cnblogs.com/chengxiao/p/6059914.html</a></p>
 
 ]]></content>
   </entry>
@@ -411,11 +908,79 @@ public class MyTest {
     <updated>2019-02-27T16:27:57+08:00</updated>
     <id>https://books.sangkf.cn/15512560778974.html</id>
     <content type="html"><![CDATA[
+<blockquote>
+<p>在JDK1.8之前，HashMap采用<code>数组+链表</code>实现，即使用链表处理冲突，同一hash值的节点都存储在一个链表里。但是当位于一个桶中的元素较多，即hash值相等的元素较多时，通过key值依次查找的效率较低。</p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">概述</a>
+</li>
+<li>
+<a href="#toc_1">涉及到的数据结构：处理hash冲突的链表和红黑树以及位桶</a>
+<ul>
+<li>
+<a href="#toc_2">链表的实现</a>
+</li>
+<li>
+<a href="#toc_3">红黑树</a>
+</li>
+<li>
+<a href="#toc_4">位桶</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_5">HashMap源码分析</a>
+<ul>
+<li>
+<a href="#toc_6">类的继承关系</a>
+</li>
+<li>
+<a href="#toc_7">类的属性</a>
+</li>
+<li>
+<a href="#toc_8">类的构造函数</a>
+<ul>
+<li>
+<a href="#toc_9">HashMap(int, float)型构造函数</a>
+</li>
+<li>
+<a href="#toc_10">HashMap(int)型构造函数</a>
+</li>
+<li>
+<a href="#toc_11">HashMap()型构造函数</a>
+</li>
+<li>
+<a href="#toc_12">HashMap(Map)型构造函数</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_13">hash算法</a>
+</li>
+<li>
+<a href="#toc_14">重要方法分析</a>
+<ul>
+<li>
+<ul>
+<li>
+<a href="#toc_15">HashMap的数据存储实现原理</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
 <h2 id="toc_0">概述</h2>
 
-<p>在JDK1.8之前，HashMap采用<code>数组+链表</code>实现，即使用链表处理冲突，同一hash值的节点都存储在一个链表里。但是当位于一个桶中的元素较多，即hash值相等的元素较多时，通过key值依次查找的效率较低。<br/>
-<span id="more"></span><!-- more --><br/>
-而JDK1.8中，HashMap采用<code>数组+链表+红黑树</code>实现，当链表长度超过阈值（8）时，将链表转换为红黑树，这样大大减少了查找时间。</p>
+<p>在JDK1.8之前，HashMap采用<code>数组+链表</code>实现，即使用链表处理冲突，同一hash值的节点都存储在一个链表里。但是当位于一个桶中的元素较多，即hash值相等的元素较多时，通过key值依次查找的效率较低。而JDK1.8中，HashMap采用<code>数组+链表+红黑树</code>实现，当链表长度超过阈值（8）时，将链表转换为红黑树，这样大大减少了查找时间。</p>
 
 <p>下图中代表jdk1.8之前的hashmap结构，左边部分即代表哈希表，也称为哈希数组，数组的每个元素都是一个单链表的头节点，链表是用来解决冲突的，如果不同的key映射到了数组的同一位置处，就将其放入单链表中。</p>
 
@@ -796,70 +1361,6 @@ System.out.println(map.put(&quot;a&quot;, &quot;AB&quot;)); // 打印AA
 }
 </code></pre>
 
-<ul>
-<li>
-<a href="#toc_0">概述</a>
-</li>
-<li>
-<a href="#toc_1">涉及到的数据结构：处理hash冲突的链表和红黑树以及位桶</a>
-<ul>
-<li>
-<a href="#toc_2">链表的实现</a>
-</li>
-<li>
-<a href="#toc_3">红黑树</a>
-</li>
-<li>
-<a href="#toc_4">位桶</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_5">HashMap源码分析</a>
-<ul>
-<li>
-<a href="#toc_6">类的继承关系</a>
-</li>
-<li>
-<a href="#toc_7">类的属性</a>
-</li>
-<li>
-<a href="#toc_8">类的构造函数</a>
-<ul>
-<li>
-<a href="#toc_9">HashMap(int, float)型构造函数</a>
-</li>
-<li>
-<a href="#toc_10">HashMap(int)型构造函数</a>
-</li>
-<li>
-<a href="#toc_11">HashMap()型构造函数</a>
-</li>
-<li>
-<a href="#toc_12">HashMap(Map)型构造函数</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_13">hash算法</a>
-</li>
-<li>
-<a href="#toc_14">重要方法分析</a>
-<ul>
-<li>
-<ul>
-<li>
-<a href="#toc_15">HashMap的数据存储实现原理</a>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-
 ]]></content>
   </entry>
   
@@ -869,12 +1370,64 @@ System.out.println(map.put(&quot;a&quot;, &quot;AB&quot;)); // 打印AA
     <updated>2019-02-26T09:54:11+08:00</updated>
     <id>https://books.sangkf.cn/15511460518747.html</id>
     <content type="html"><![CDATA[
-<ul>
-<li>不积跬步无以至千里，不积小流无以成江海</li>
-<li>千里之行，始于足下</li>
-</ul>
+<blockquote>
+<p>不积跬步无以至千里，不积小流无以成江海<br/>
+千里之行，始于足下</p>
+</blockquote>
 
 <span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">数据类型</a>
+</li>
+<li>
+<a href="#toc_1">String</a>
+</li>
+<li>
+<a href="#toc_2">运算</a>
+</li>
+<li>
+<a href="#toc_3">继承</a>
+</li>
+<li>
+<a href="#toc_4">Object 通用方法</a>
+</li>
+<li>
+<a href="#toc_5">关键字</a>
+</li>
+<li>
+<a href="#toc_6">反射</a>
+</li>
+<li>
+<a href="#toc_7">异常</a>
+</li>
+<li>
+<a href="#toc_8">泛型</a>
+</li>
+<li>
+<a href="#toc_9">注解</a>
+</li>
+<li>
+<a href="#toc_10">特性</a>
+</li>
+<li>
+<a href="#toc_11">Java 各版本的新特性</a>
+</li>
+<li>
+<a href="#toc_12">Java 与 C++ 的区别</a>
+</li>
+<li>
+<a href="#toc_13">JRE or JDK</a>
+</li>
+<li>
+<a href="#toc_14">参考资料</a>
+</li>
+<li>
+<a href="#toc_15">进阶指南</a>
+</li>
+</ul>
+
 
 <h2 id="toc_0">数据类型</h2>
 
@@ -1126,58 +1679,6 @@ Constant pool:<br/>
 
 <p><a href="https://github.com/CyC2018/Backend-Interview-Guide">https://github.com/CyC2018/Backend-Interview-Guide</a></p>
 
-<ul>
-<li>
-<a href="#toc_0">数据类型</a>
-</li>
-<li>
-<a href="#toc_1">String</a>
-</li>
-<li>
-<a href="#toc_2">运算</a>
-</li>
-<li>
-<a href="#toc_3">继承</a>
-</li>
-<li>
-<a href="#toc_4">Object 通用方法</a>
-</li>
-<li>
-<a href="#toc_5">关键字</a>
-</li>
-<li>
-<a href="#toc_6">反射</a>
-</li>
-<li>
-<a href="#toc_7">异常</a>
-</li>
-<li>
-<a href="#toc_8">泛型</a>
-</li>
-<li>
-<a href="#toc_9">注解</a>
-</li>
-<li>
-<a href="#toc_10">特性</a>
-</li>
-<li>
-<a href="#toc_11">Java 各版本的新特性</a>
-</li>
-<li>
-<a href="#toc_12">Java 与 C++ 的区别</a>
-</li>
-<li>
-<a href="#toc_13">JRE or JDK</a>
-</li>
-<li>
-<a href="#toc_14">参考资料</a>
-</li>
-<li>
-<a href="#toc_15">进阶指南</a>
-</li>
-</ul>
-
-
 ]]></content>
   </entry>
   
@@ -1187,8 +1688,42 @@ Constant pool:<br/>
     <updated>2019-02-25T22:17:38+08:00</updated>
     <id>https://books.sangkf.cn/15511042581022.html</id>
     <content type="html"><![CDATA[
-<p>根据微服务架构的鼻祖Martin Fowler的忠告，微服务架构中应当尽量避免分布式事务。然而，在某些领域，分布式事务如同宿命中的对手无法避免。在工程领域，分布式事务的讨论主要聚焦于强一致性和最终一致性的解决方案。典型方案包括：<br/>
-<span id="more"></span><!-- more --></p>
+<blockquote>
+<p>根据微服务架构的鼻祖Martin Fowler的忠告，微服务架构中应当尽量避免分布式事务。然而，在某些领域，分布式事务如同宿命中的对手无法避免。在工程领域，分布式事务的讨论主要聚焦于强一致性和最终一致性的解决方案。</p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">引述</a>
+</li>
+<li>
+<a href="#toc_1">一致性理论</a>
+</li>
+<li>
+<a href="#toc_2">分布式事务解决方案</a>
+<ul>
+<li>
+<a href="#toc_3">2PC方案——强一致性</a>
+</li>
+<li>
+<a href="#toc_4">eBay 事件队列方案——最终一致性</a>
+</li>
+<li>
+<a href="#toc_5">TCC （Try-Confirm-Cancel）补偿模式——最终一致性</a>
+</li>
+<li>
+<a href="#toc_6">缓存数据最终一致性</a>
+</li>
+</ul>
+</li>
+</ul>
+
+
+<h2 id="toc_0">引述</h2>
+
+<p>根据微服务架构的鼻祖Martin Fowler的忠告，微服务架构中应当尽量避免分布式事务。然而，在某些领域，分布式事务如同宿命中的对手无法避免。在工程领域，分布式事务的讨论主要聚焦于强一致性和最终一致性的解决方案。典型方案包括：</p>
 
 <ul>
 <li>两阶段提交（2PC, Two-phase Commit）方案；</li>
@@ -1197,7 +1732,7 @@ Constant pool:<br/>
 <li>缓存数据最终一致性。</li>
 </ul>
 
-<h2 id="toc_0">一致性理论</h2>
+<h2 id="toc_1">一致性理论</h2>
 
 <p>分布式事务的目的是保障分库数据一致性，而跨库事务会遇到各种不可控制的问题，如个别节点永久性宕机，像单机事务一样的ACID是无法奢望的。另外，业界著名的CAP理论也告诉我们，对分布式系统，需要将数据一致性和系统可用性、分区容忍性放在天平上一起考虑。</p>
 
@@ -1240,9 +1775,9 @@ Constant pool:<br/>
 
 <p>分布式系统数据的强一致性、弱一致性和最终一致性可以通过Quorum NRW算法分析。</p>
 
-<h2 id="toc_1">分布式事务解决方案</h2>
+<h2 id="toc_2">分布式事务解决方案</h2>
 
-<h3 id="toc_2">2PC方案——强一致性</h3>
+<h3 id="toc_3">2PC方案——强一致性</h3>
 
 <p>2PC的核心原理是通过提交分阶段和记日志的方式，记录下事务提交所处的阶段状态，在组件宕机重启后，可通过日志恢复事务提交的阶段状态，并在这个状态节点重试，如Coordinator重启后，通过日志可以确定提交处于Prepare还是PrepareAll状态，若是前者，说明有节点可能没有Prepare成功，或所有节点Prepare成功但还没有下发Commit，状态恢复后给所有节点下发RollBack；若是PrepareAll状态，需要给所有节点下发Commit，数据库节点需要保证Commit幂等。</p>
 
@@ -1262,7 +1797,7 @@ Constant pool:<br/>
 
 <p>但三阶段提交也存在一些缺陷，要彻底从协议层面避免数据不一致，可以采用Paxos或者Raft 算法。</p>
 
-<h3 id="toc_3">eBay 事件队列方案——最终一致性</h3>
+<h3 id="toc_4">eBay 事件队列方案——最终一致性</h3>
 
 <p>eBay 的架构师Dan Pritchett，曾在一篇解释BASE 原理的论文《Base：An Acid Alternative》中提到一个eBay 分布式系统一致性问题的解决方案。它的核心思想是将需要分布式处理的任务通过消息或者日志的方式来异步执行，消息或日志可以存到本地文件、数据库或消息队列，再通过业务规则进行失败重试，它要求各服务的接口是幂等的。</p>
 
@@ -1272,7 +1807,7 @@ Constant pool:<br/>
 
 <p>这个方案的核心在于第二阶段的重试和幂等执行。失败后重试，这是一种补偿机制，它是能保证系统最终一致的关键流程。</p>
 
-<h3 id="toc_4">TCC （Try-Confirm-Cancel）补偿模式——最终一致性</h3>
+<h3 id="toc_5">TCC （Try-Confirm-Cancel）补偿模式——最终一致性</h3>
 
 <p>某业务模型如图，由服务 A、服务B、服务C、服务D 共同组成的一个微服务架构系统。服务A 需要依次调用服务B、服务C 和服务D 共同完成一个操作。当服务A 调用服务D 失败时，若要保证整个系统数据的一致性，就要对服务B 和服务C 的invoke 操作进行回滚，执行反向的revert 操作。回滚成功后，整个微服务系统是数据一致的。</p>
 
@@ -1290,7 +1825,7 @@ Constant pool:<br/>
 
 <p>另外，很多业务特征使得该服务无法提供一个安全的回滚操作。</p>
 
-<h3 id="toc_5">缓存数据最终一致性</h3>
+<h3 id="toc_6">缓存数据最终一致性</h3>
 
 <p>在我们的业务系统中，缓存（Redis 或者Memcached）通常被用在数据库前面，作为数据读取的缓冲，使得I/O 操作不至于直接落在数据库上。以商品详情页为例，假如卖家修改了商品信息，并写回到数据库，但是这时候用户从商品详情页看到的信息还是从缓存中拿到的过时数据，这就出现了缓存系统和数据库系统中的数据不一致的现象。</p>
 
@@ -1312,30 +1847,6 @@ Constant pool:<br/>
 
 <p>对购物转账等电商和金融业务，中间件层的2PC最大问题在于业务不可见，一旦出现不可抗力或意想不到的一致性破坏，如数据节点永久性宕机，业务难以根据2PC的日志进行补偿。金融场景下，数据一致性是命根，业务需要对数据有百分之百的掌控力，建议使用TCC这类分布式事务模型，或基于消息队列的柔性事务框架，这两种方案都在业务层实现，业务开发者具有足够掌控力，可以结合SOA框架来架构，包括Dubbo、Spring Cloud等。</p>
 
-<ul>
-<li>
-<a href="#toc_0">一致性理论</a>
-</li>
-<li>
-<a href="#toc_1">分布式事务解决方案</a>
-<ul>
-<li>
-<a href="#toc_2">2PC方案——强一致性</a>
-</li>
-<li>
-<a href="#toc_3">eBay 事件队列方案——最终一致性</a>
-</li>
-<li>
-<a href="#toc_4">TCC （Try-Confirm-Cancel）补偿模式——最终一致性</a>
-</li>
-<li>
-<a href="#toc_5">缓存数据最终一致性</a>
-</li>
-</ul>
-</li>
-</ul>
-
-
 ]]></content>
   </entry>
   
@@ -1345,11 +1856,82 @@ Constant pool:<br/>
     <updated>2019-02-25T22:16:17+08:00</updated>
     <id>https://books.sangkf.cn/15511041776834.html</id>
     <content type="html"><![CDATA[
+<blockquote>
+<p>为保障系统的可用性、可靠性以及性能，在分布式系统中，往往会设置数据冗余，即对数据进行复制。举例来说，当一个数据库的副本被破环以后，那么系统只需要转换到其他数据副本就能继续运行下去。</p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">引述</a>
+</li>
+<li>
+<a href="#toc_1">CAP 定理</a>
+</li>
+<li>
+<a href="#toc_2">一致性模型</a>
+</li>
+<li>
+<a href="#toc_3">事务的作用</a>
+</li>
+<li>
+<a href="#toc_4">常见的事务处理机制</a>
+<ul>
+<li>
+<a href="#toc_5">Master-Slave 复制</a>
+</li>
+<li>
+<a href="#toc_6">Master-Master 多主复制</a>
+</li>
+<li>
+<a href="#toc_7">两阶段提交</a>
+<ul>
+<li>
+<a href="#toc_8">第一阶段（准备阶段）</a>
+</li>
+<li>
+<a href="#toc_9">第二阶段（提交阶段）</a>
+</li>
+<li>
+<a href="#toc_10">三阶段提交</a>
+</li>
+<li>
+<a href="#toc_11">CanCommit 阶段</a>
+</li>
+<li>
+<a href="#toc_12">PreCommit 阶段</a>
+</li>
+<li>
+<a href="#toc_13">doCommit 阶段</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_14">Paxos 算法</a>
+<ul>
+<li>
+<a href="#toc_15">阶段1</a>
+</li>
+<li>
+<a href="#toc_16">阶段2</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_17">参考文献</a>
+</li>
+</ul>
+
+
+<h2 id="toc_0">引述</h2>
+
 <p>为保障系统的可用性、可靠性以及性能，在分布式系统中，往往会设置数据冗余，即对数据进行复制。举例来说，当一个数据库的副本被破环以后，那么系统只需要转换到其他数据副本就能继续运行下去。<br/>
-<span id="more"></span><!-- more --><br/>
 另外一个例子，当访问单一服务器管理的数据的进程数不断增加时，系统就需要对服务器的数量进行扩充，此时，对服务器进行复制，随后让它们分担工作负荷，就可以提高性能。但同时，如何保障多个数据节点之间数据的一致以及如何处理分布式事务，将成为为一个复杂的话题。本文将介绍常用的事务处理机制。</p>
 
-<h2 id="toc_0">CAP 定理</h2>
+<h2 id="toc_1">CAP 定理</h2>
 
 <p>CAP 定理（也称为 Brewer 定理），是由计算机科学家 Eric Brewer 提出的，即在分布式计算机系统不可能同时提供以下全部三个保证：</p>
 
@@ -1363,7 +1945,7 @@ Constant pool:<br/>
 
 <p>但是，在实际的应用场景中，数据的一致性往往也是需要保证的。那么这是否违背了 CAP 定理呢？</p>
 
-<h2 id="toc_1">一致性模型</h2>
+<h2 id="toc_2">一致性模型</h2>
 
 <p>其实，数据的一致性也分几种情况，大致可以分为：</p>
 
@@ -1375,7 +1957,7 @@ Constant pool:<br/>
 
 <p>也就是说，在设计分布式系统时，我们并不一定要求是强一致性的，根据应用场景可以选择弱一致性或者是最终一致性。</p>
 
-<h2 id="toc_2">事务的作用</h2>
+<h2 id="toc_3">事务的作用</h2>
 
 <p>事务有如下作用：</p>
 
@@ -1385,9 +1967,9 @@ Constant pool:<br/>
 <li><p>ACID</p></li>
 </ul>
 
-<h2 id="toc_3">常见的事务处理机制</h2>
+<h2 id="toc_4">常见的事务处理机制</h2>
 
-<h3 id="toc_4">Master-Slave 复制</h3>
+<h3 id="toc_5">Master-Slave 复制</h3>
 
 <p>Slave 一般是 Master 的备份。在这样的系统中，一般是如下设计的：</p>
 
@@ -1406,7 +1988,7 @@ Constant pool:<br/>
 
 <p>这种机制的缺点是，如果 Master 挂了，Slave 只能提供读服务，而没有写服务。</p>
 
-<h3 id="toc_5">Master-Master 多主复制</h3>
+<h3 id="toc_6">Master-Master 多主复制</h3>
 
 <p>指一个系统存在两个或多个Master，每个Master都提供读写服务。这个机制是Master-Slave的加强版，数据间同步一般是通过Master间的异步完成，所以是最终一致性。 Master-Master的好处是，一台Master挂了，别的Master可以正常做读写服务，他和Master-Slave一样，当数据没有被复制到别的Master上时，数据会丢失。很多数据库都支持Master-Master的Replication的机制。</p>
 
@@ -1418,11 +2000,11 @@ Constant pool:<br/>
 <li><p>多个节点间需要序列化协议</p></li>
 </ul>
 
-<h3 id="toc_6">两阶段提交</h3>
+<h3 id="toc_7">两阶段提交</h3>
 
 <p>两阶段提交协议 （Two-phase commit protocol，2PC）的过程涉及到协调者和参与者。协调者可以看做成事务的发起者，同时也是事务的一个参与者。对于一个分布式事务来说，一个事务是涉及到多个参与者的。具体的两阶段提交的过程如下：</p>
 
-<h4 id="toc_7">第一阶段（准备阶段）</h4>
+<h4 id="toc_8">第一阶段（准备阶段）</h4>
 
 <ul>
 <li><p>协调者节点向所有参与者节点询问是否可以执行提交操作(vote)，并开始等待各参与者节点的响应。</p></li>
@@ -1430,7 +2012,7 @@ Constant pool:<br/>
 <li><p>各参与者节点响应协调者节点发起的询问。如果参与者节点的事务操作实际执行成功，则它返回一个“同意”消息；如果参与者节点的事务操作实际执行失败，则它返回一个“中止”消息。</p></li>
 </ul>
 
-<h4 id="toc_8">第二阶段（提交阶段）</h4>
+<h4 id="toc_9">第二阶段（提交阶段）</h4>
 
 <p>如果协调者收到了参与者的失败消息或者超时，直接给每个参与者发送回滚(Rollback)消息；否则，发送提交(Commit)消息；参与者根据协调者的指令执行提交或者回滚操作，释放所有事务处理过程中使用的锁资源。(注意:必须在最后阶段释放锁资源)</p>
 
@@ -1464,7 +2046,7 @@ Constant pool:<br/>
 
 <p>为了解决两阶段提交协议的种种问题，研究者们在二阶段提交的基础上做了改进，提出了三阶段提交。</p>
 
-<h4 id="toc_9">三阶段提交</h4>
+<h4 id="toc_10">三阶段提交</h4>
 
 <p>三阶段提交协议（Three-phase commit protocol，3PC），是二阶段提交（2PC）的改进版本。与两阶段提交不同的是，三阶段提交有两个改动点：</p>
 
@@ -1475,7 +2057,7 @@ Constant pool:<br/>
 
 <p>即 3PC 把 2PC 的准备阶段再次一分为二，这样三阶段提交就有 CanCommit、PreCommit、DoCommit 三个阶段。</p>
 
-<h4 id="toc_10">CanCommit 阶段</h4>
+<h4 id="toc_11">CanCommit 阶段</h4>
 
 <p>CanCommit 阶段其实和 2PC 的准备阶段很像。协调者向参与者发送 commit 请求，参与者如果可以提交就返回 Yes 响应，否则返回 No 响应。</p>
 
@@ -1484,7 +2066,7 @@ Constant pool:<br/>
 <li><p>响应反馈：参与者接到 CanCommit 请求之后，正常情况下，如果其自身认为可以顺利执行事务，则返回 Yes 响应，并进入预备状态。否则反馈 No</p></li>
 </ul>
 
-<h4 id="toc_11">PreCommit 阶段</h4>
+<h4 id="toc_12">PreCommit 阶段</h4>
 
 <p>协调者根据参与者的反应情况来决定是否可以记性事务的 PreCommit 操作。根据响应情况，有以下两种可能。</p>
 
@@ -1498,7 +2080,7 @@ Constant pool:<br/>
 <li><p>中断事务：参与者收到来自协调者的 abort 请求之后（或超时之后，仍未收到协调者的请求），执行事务的中断。</p></li>
 </ul>
 
-<h4 id="toc_12">doCommit 阶段</h4>
+<h4 id="toc_13">doCommit 阶段</h4>
 
 <p>该阶段进行真正的事务提交，也可以分为以下两种情况。</p>
 
@@ -1519,7 +2101,7 @@ Constant pool:<br/>
 
 <p>三阶段提交不会一直持有事务资源并处于阻塞状态。但是这种机制也会导致数据一致性问题，因为，由于网络原因，协调者发送的 abort 响应没有及时被参与者接收到，那么参与者在等待超时之后执行了 commit 操作，这样就和其他接到 abort 命令并执行回滚的参与者之间存在数据不一致的情况。</p>
 
-<h3 id="toc_13">Paxos 算法</h3>
+<h3 id="toc_14">Paxos 算法</h3>
 
 <p>Paxos 算法是 Leslie Lamport 于1990年提出的一种基于消息传递且具有高度容错特性的一致性算法。Paxos 算法目前在 Google 的 Chubby、MegaStore、Spanner 等系统中得到了应用，Hadoop 中的 ZooKeeper 也使用了 Paxos 算法。</p>
 
@@ -1534,14 +2116,14 @@ Constant pool:<br/>
 
 <p>算法可以分为两个阶段来执行：</p>
 
-<h4 id="toc_14">阶段1</h4>
+<h4 id="toc_15">阶段1</h4>
 
 <ul>
 <li><p>Proposer 选择一个议案编号 n，向 acceptor 的多数派发送编号也为 n 的 prepare 请求。</p></li>
 <li><p>Acceptor：如果接收到的 prepare 请求的编号 n 大于它已经回应的任何prepare 请求，它就回应已经批准的编号最高的议案（如果有的话），并承诺不再回应任何编号小于 n 的议案；</p></li>
 </ul>
 
-<h4 id="toc_15">阶段2</h4>
+<h4 id="toc_16">阶段2</h4>
 
 <ul>
 <li><p>Proposer：如果收到了多数 acceptor 对 prepare 请求（编号为 n）的回应，它就向这些 acceptor 发送议案{n, v}的 accept 请求，其中 v 是所有回应中编号最高的议案的决议，或者是 proposer 选择的值，如果回应说还没有议案。</p></li>
@@ -1549,74 +2131,13 @@ Constant pool:<br/>
 <li><p>Proposer 可以提出多个议案，只要它遵循上面的算法。它可以在任何时刻放弃一个议案。（这不会破坏正确性，即使在议案被放弃后，议案的请求或者回应消息才到达目标）如果其它的 proposer 已经开始提出更高编号的议案，那么最好能放弃当前的议案。因此，如果 acceptor 忽略一个 prepare 或者 accept 请求（因为已经收到了更高编号的 prepare 请求），它应该告知 proposer 放弃议案。这是一个性能优化，而不影响正确性。</p></li>
 </ul>
 
-<h2 id="toc_16">参考文献</h2>
+<h2 id="toc_17">参考文献</h2>
 
 <ul>
 <li><a href="http://research.microsoft.com/en-us/um/people/lamport/pubs/lamport-paxos.pdf">http://research.microsoft.com/en-us/um/people/lamport/pubs/lamport-paxos.pdf</a></li>
 <li><a href="https://www.oschina.net/question/2720166_2235329">https://www.oschina.net/question/2720166_2235329</a></li>
 <li><a href="https://github.com/waylau/distributed-systems-technologies-and-cases-analysis">《分布式系统常用技术及案例分析》</a></li>
 </ul>
-
-<ul>
-<li>
-<a href="#toc_0">CAP 定理</a>
-</li>
-<li>
-<a href="#toc_1">一致性模型</a>
-</li>
-<li>
-<a href="#toc_2">事务的作用</a>
-</li>
-<li>
-<a href="#toc_3">常见的事务处理机制</a>
-<ul>
-<li>
-<a href="#toc_4">Master-Slave 复制</a>
-</li>
-<li>
-<a href="#toc_5">Master-Master 多主复制</a>
-</li>
-<li>
-<a href="#toc_6">两阶段提交</a>
-<ul>
-<li>
-<a href="#toc_7">第一阶段（准备阶段）</a>
-</li>
-<li>
-<a href="#toc_8">第二阶段（提交阶段）</a>
-</li>
-<li>
-<a href="#toc_9">三阶段提交</a>
-</li>
-<li>
-<a href="#toc_10">CanCommit 阶段</a>
-</li>
-<li>
-<a href="#toc_11">PreCommit 阶段</a>
-</li>
-<li>
-<a href="#toc_12">doCommit 阶段</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_13">Paxos 算法</a>
-<ul>
-<li>
-<a href="#toc_14">阶段1</a>
-</li>
-<li>
-<a href="#toc_15">阶段2</a>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_16">参考文献</a>
-</li>
-</ul>
-
 
 ]]></content>
   </entry>
@@ -1627,8 +2148,44 @@ Constant pool:<br/>
     <updated>2019-02-25T22:04:08+08:00</updated>
     <id>https://books.sangkf.cn/15511034481464.html</id>
     <content type="html"><![CDATA[
-<p>本项目包含了技术面试必备的基础知识，浅显易懂，你不需要花很长的时间去阅读和理解成堆的技术书籍就可以快速掌握这些知识，从而节省宝贵的面试复习时间。你也可以阅读 <a href="https://github.com/CyC2018/Backend-Interview-Guide">面试进阶指南</a>，包含了学习指导和面试技巧，让你更轻松拿到满意的 Offer。<br/>
-<span id="more"></span><!-- more --></p>
+<blockquote>
+<p>本项目包含了技术面试必备的基础知识，浅显易懂，你不需要花很长的时间去阅读和理解成堆的技术书籍就可以快速掌握这些知识，从而节省宝贵的面试复习时间。</p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">✏️ 算法</a>
+</li>
+<li>
+<a href="#toc_1">💻 操作系统</a>
+</li>
+<li>
+<a href="#toc_2">☁️ 网络</a>
+</li>
+<li>
+<a href="#toc_3">🎨 面向对象</a>
+</li>
+<li>
+<a href="#toc_4">💾 数据库</a>
+</li>
+<li>
+<a href="#toc_5">☕️ Java</a>
+</li>
+<li>
+<a href="#toc_6">💡 系统设计</a>
+</li>
+<li>
+<a href="#toc_7">🔧 工具</a>
+</li>
+<li>
+<a href="#toc_8">🍉 编码实践</a>
+</li>
+</ul>
+
+
+<p>本项目包含了技术面试必备的基础知识，浅显易懂，你不需要花很长的时间去阅读和理解成堆的技术书籍就可以快速掌握这些知识，从而节省宝贵的面试复习时间。你也可以阅读 <a href="https://github.com/CyC2018/Backend-Interview-Guide">面试进阶指南</a>，包含了学习指导和面试技巧，让你更轻松拿到满意的 Offer。</p>
 
 <h2 id="toc_0">✏️ 算法</h2>
 
@@ -1711,37 +2268,6 @@ Constant pool:<br/>
 <p>原文地址 <a href="https://github.com/CyC2018/CS-Notes">https://github.com/CyC2018/CS-Notes</a></p>
 </blockquote>
 
-<ul>
-<li>
-<a href="#toc_0">✏️ 算法</a>
-</li>
-<li>
-<a href="#toc_1">💻 操作系统</a>
-</li>
-<li>
-<a href="#toc_2">☁️ 网络</a>
-</li>
-<li>
-<a href="#toc_3">🎨 面向对象</a>
-</li>
-<li>
-<a href="#toc_4">💾 数据库</a>
-</li>
-<li>
-<a href="#toc_5">☕️ Java</a>
-</li>
-<li>
-<a href="#toc_6">💡 系统设计</a>
-</li>
-<li>
-<a href="#toc_7">🔧 工具</a>
-</li>
-<li>
-<a href="#toc_8">🍉 编码实践</a>
-</li>
-</ul>
-
-
 ]]></content>
   </entry>
   
@@ -1751,11 +2277,55 @@ Constant pool:<br/>
     <updated>2019-02-25T19:36:31+08:00</updated>
     <id>https://books.sangkf.cn/15510945917129.html</id>
     <content type="html"><![CDATA[
+<blockquote>
+<p>解决分布式事务的最好办法其实就是不考虑分布式事务，将一个大的业务进行拆分，整个大的业务流程，转化成若干个小的业务流程，然后通过设计补偿流程从而考虑最终一致性。</p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">概述</a>
+<ul>
+<li>
+<ul>
+<li>
+<a href="#toc_1">What’s 事务</a>
+</li>
+<li>
+<a href="#toc_2">典型场景：银行转账业务</a>
+</li>
+<li>
+<a href="#toc_3">电商场景：流量充值业务</a>
+</li>
+<li>
+<a href="#toc_4">分布式事务</a>
+</li>
+<li>
+<a href="#toc_5">场景一：</a>
+</li>
+<li>
+<a href="#toc_6">场景二：</a>
+</li>
+<li>
+<a href="#toc_7">场景三：</a>
+</li>
+<li>
+<a href="#toc_8">场景四：</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+<h2 id="toc_0">概述</h2>
+
 <p>分布式事务场景如何设计系统架构及解决数据一致性问题，个人理解最终方案把握以下原则就可以了，那就是：大事务=小事务（原子事务）+异步（消息通知），<br/>
-<span id="more"></span><!-- more --><br/>
 <strong>解决分布式事务的最好办法其实就是不考虑分布式事务，将一个大的业务进行拆分，整个大的业务流程，转化成若干个小的业务流程，然后通过设计补偿流程从而考虑最终一致性。</strong></p>
 
-<h4 id="toc_0">What’s 事务</h4>
+<h4 id="toc_1">What’s 事务</h4>
 
 <p>事务（Transaction）及其ACID属性</p>
 
@@ -1768,11 +2338,11 @@ Constant pool:<br/>
 <li>持久性（Durabe）：事务完成之后，它对于数据的修改是永久性的，即使出现系统故障也能够保持。</li>
 </ul>
 
-<h4 id="toc_1">典型场景：银行转账业务</h4>
+<h4 id="toc_2">典型场景：银行转账业务</h4>
 
 <p>例如：李雷账户中有500块钱，韩梅梅账户有200块钱，李雷要从自己的账户中转100块钱给韩梅梅，转账（事务）成功执行完成后应该是李雷账户减100变为400，韩梅梅账户加100变为300，不能出现其他情况，即在事务开始和结束时数据都必须保持一致状态（一致性），事务结束时所有的数据及结构都必须是正确的。并且同样的转账操作（同一流水，即一次转账操作）无论执行多少次结果都相同（幂等性）。</p>
 
-<h4 id="toc_2">电商场景：流量充值业务</h4>
+<h4 id="toc_3">电商场景：流量充值业务</h4>
 
 <p>再说我们做的一个项目：中国移动-流量充值能力中心，核心业务流程为：</p>
 
@@ -1789,7 +2359,7 @@ Constant pool:<br/>
 
 <p><img src="media/15510945917129/15510949905392.png" alt="" class="mw_img_center" style="width:500px;display: block; clear:both; margin: 0 auto;"/></p>
 
-<h4 id="toc_3">分布式事务</h4>
+<h4 id="toc_4">分布式事务</h4>
 
 <p>上述两个场景的业务需求已经说完了，接着谈谈分布式事务，要说分布式事务那就先聊聊本地事务与分布式事务：</p>
 
@@ -1820,7 +2390,7 @@ Constant pool:<br/>
 <li>等其他服务</li>
 </ol>
 
-<h4 id="toc_4">场景一：</h4>
+<h4 id="toc_5">场景一：</h4>
 
 <p>库存数量与订单数量一致性，采用补偿型+最大努力通知型，采用原因为不涉及跨机房和长事务（正常情况下库存与订单服务处理很快）：</p>
 
@@ -1831,7 +2401,7 @@ Constant pool:<br/>
 <li>2-2. 下单失败，库存回滚，两事务均失败，此处还有一个保障机制（最大努力通知型），就是如果调用库存服务异常，确定库存回滚失败了，则放入消息服务（延时消息队列）分阶段定时重试，努力重试保证库存服务正常后成功回滚。</li>
 </ol>
 
-<h4 id="toc_5">场景二：</h4>
+<h4 id="toc_6">场景二：</h4>
 
 <p>订单信息、支付信息、充值信息三者之间的一致性，采用异步确保型的原因是，整个业务链路太长且跨不同的机房系统，网络延迟较高，业务方面恰好不需要非常高的实时性，所以采用小事务+异步通知，目前正常情况下用户从下单到完成支付到流量到账平均为1-5分钟左右：</p>
 
@@ -1844,11 +2414,11 @@ Constant pool:<br/>
 <li>3-3. 当直充超时时，调用定时任务服务进行超时重试机制（第一次重试在10分钟后执行、第二次在30分钟后、第三次…..），直到最大超时重试次数后还得不到直充结果，订单状态会卡在支付成功状态，依赖T+1对账稽核流程保证最终一致性，订单状态根据对账结果流转为：已完成或待退款–&gt;退款成功。</li>
 </ol>
 
-<h4 id="toc_6">场景三：</h4>
+<h4 id="toc_7">场景三：</h4>
 
 <p>直充到账后的消息通知（APP消息推送或短信通知），采用最大努力通知型，这个业务场景比较简单，在直充成功后，订单状态流转为已完成，此时通过消息服务进行到账通知业务的解耦，调用消息服务失败的情况下，使用定时任务努力通知。</p>
 
-<h4 id="toc_7">场景四：</h4>
+<h4 id="toc_8">场景四：</h4>
 
 <p><strong>对账稽核：</strong></p>
 
@@ -1876,34 +2446,6 @@ Constant pool:<br/>
 
 <p><img src="media/15510945917129/4.png" alt="image" class="mw_img_center" style="width:500px;display: block; clear:both; margin: 0 auto;"/></p>
 
-<ul>
-<li>
-<a href="#toc_0">What’s 事务</a>
-</li>
-<li>
-<a href="#toc_1">典型场景：银行转账业务</a>
-</li>
-<li>
-<a href="#toc_2">电商场景：流量充值业务</a>
-</li>
-<li>
-<a href="#toc_3">分布式事务</a>
-</li>
-<li>
-<a href="#toc_4">场景一：</a>
-</li>
-<li>
-<a href="#toc_5">场景二：</a>
-</li>
-<li>
-<a href="#toc_6">场景三：</a>
-</li>
-<li>
-<a href="#toc_7">场景四：</a>
-</li>
-</ul>
-
-
 ]]></content>
   </entry>
   
@@ -1913,10 +2455,28 @@ Constant pool:<br/>
     <updated>2019-02-25T19:34:43+08:00</updated>
     <id>https://books.sangkf.cn/15510944838066.html</id>
     <content type="html"><![CDATA[
+<blockquote>
+<p>原子性、一致性、隔离性、持久性是事务的四个基本特性。</p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">事务特性</a>
+</li>
+<li>
+<a href="#toc_1">分布式事务</a>
+</li>
+<li>
+<a href="#toc_2">开源框架</a>
+</li>
+</ul>
+
+
 <h2 id="toc_0">事务特性</h2>
 
-<p>原子性、一致性、隔离性、持久性，这四个属性通常称为ACID特性。<br/>
-<span id="more"></span><!-- more --></p>
+<p>原子性、一致性、隔离性、持久性，这四个属性通常称为ACID特性。</p>
 
 <ul>
 <li>原子性（atomicity）。一个事务是一个不可分割的工作单位，事务中包括的诸操作要么都做，要么都不做。</li>
@@ -1949,19 +2509,6 @@ Constant pool:<br/>
 <li>ByteJTA是一个兼容JTA规范的基于XA/2PC的分布式事务管理器</li>
 </ul>
 
-<ul>
-<li>
-<a href="#toc_0">事务特性</a>
-</li>
-<li>
-<a href="#toc_1">分布式事务</a>
-</li>
-<li>
-<a href="#toc_2">开源框架</a>
-</li>
-</ul>
-
-
 ]]></content>
   </entry>
   
@@ -1971,13 +2518,52 @@ Constant pool:<br/>
     <updated>2019-02-25T16:47:12+08:00</updated>
     <id>https://books.sangkf.cn/15510844326202.html</id>
     <content type="html"><![CDATA[
-<h3 id="toc_0">前言</h3>
-
 <blockquote>
-<p>有人认为编程是一门技术活，要有一定的天赋，非天资聪慧者不能及也。其实不然，笔者虽是计算机专业出身，但工作年限并不长，对于技术这碗饭有一些心得体会，大多数人成为某领域顶级专家可能会有些难度，但应对日常工作，成长为资深研发工程师、技术专家、甚至成为小团队的Team Leader，其实并不难。</p>
+<p>多读书、多看报，多研究常用开源框架的源码，比如：github.com，这里汇集了全球工程师的智慧！</p>
 </blockquote>
 
 <span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">前言</a>
+</li>
+<li>
+<a href="#toc_1">基础知识</a>
+</li>
+<li>
+<a href="#toc_2">数据库</a>
+</li>
+<li>
+<a href="#toc_3">web容器/协议/网络</a>
+</li>
+<li>
+<a href="#toc_4">常用三方工具包</a>
+</li>
+<li>
+<a href="#toc_5">中间件</a>
+</li>
+<li>
+<a href="#toc_6">系统架构</a>
+</li>
+<li>
+<a href="#toc_7">项目管理</a>
+</li>
+<li>
+<a href="#toc_8">运维</a>
+</li>
+<li>
+<a href="#toc_9">个人成长</a>
+</li>
+<li>
+<a href="#toc_10">其它</a>
+</li>
+</ul>
+
+
+<h3 id="toc_0">前言</h3>
+
+<p>有人认为编程是一门技术活，要有一定的天赋，非天资聪慧者不能及也。其实不然，笔者虽是计算机专业出身，但工作年限并不长，对于技术这碗饭有一些心得体会，大多数人成为某领域顶级专家可能会有些难度，但应对日常工作，成长为资深研发工程师、技术专家、甚至成为小团队的Team Leader，其实并不难。</p>
 
 <p><strong>多读书、多看报，多研究常用开源框架的源码，比如：github.com，这里汇集了全球工程师的智慧！</strong></p>
 
@@ -2172,46 +2758,7 @@ Constant pool:<br/>
 <li><a href="https://link.juejin.im/?target=http%3A%2F%2Fblog.csdn.net%2Fqq1332479771%2Farticle%2Fdetails%2F56087333">github上fork项目后，如何同步更新后面提交</a></li>
 </ul>
 
-<blockquote>
-<p>原文地址：<a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk">github.com/aalansehaiy…</a></p>
-</blockquote>
-
-<ul>
-<li>
-<a href="#toc_0">前言</a>
-</li>
-<li>
-<a href="#toc_1">基础知识</a>
-</li>
-<li>
-<a href="#toc_2">数据库</a>
-</li>
-<li>
-<a href="#toc_3">web容器/协议/网络</a>
-</li>
-<li>
-<a href="#toc_4">常用三方工具包</a>
-</li>
-<li>
-<a href="#toc_5">中间件</a>
-</li>
-<li>
-<a href="#toc_6">系统架构</a>
-</li>
-<li>
-<a href="#toc_7">项目管理</a>
-</li>
-<li>
-<a href="#toc_8">运维</a>
-</li>
-<li>
-<a href="#toc_9">个人成长</a>
-</li>
-<li>
-<a href="#toc_10">其它</a>
-</li>
-</ul>
-
+<p>[<strong>原文地址</strong>]：<a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk">github.com/aalansehaiy…</a></p>
 
 ]]></content>
   </entry>
@@ -2389,22 +2936,7 @@ Constant pool:<br/>
 
 <p>如果是强劲的服务器或者线程数较少情况下处理速度将会更快</p>
 
-<ul>
-<li>
-<a href="#toc_0">常用技术实现</a>
-</li>
-<li>
-<a href="#toc_1">不用算法的解决方案</a>
-</li>
-<li>
-<a href="#toc_2">核心代码</a>
-</li>
-</ul>
-
-
-<blockquote>
-<p>[转载]<a href="https://www.cnblogs.com/zhanlang/p/10424757.html">https://www.cnblogs.com/zhanlang/p/10424757.html</a></p>
-</blockquote>
+<p>[<strong>转载</strong>]<a href="https://www.cnblogs.com/zhanlang/p/10424757.html">https://www.cnblogs.com/zhanlang/p/10424757.html</a></p>
 
 ]]></content>
   </entry>
@@ -2415,8 +2947,21 @@ Constant pool:<br/>
     <updated>2019-02-25T12:18:15+08:00</updated>
     <id>https://books.sangkf.cn/15510682951931.html</id>
     <content type="html"><![CDATA[
-<p>代理类的目的是为其他对象提供一个代理以控制对某个对象的访问。<br/>
-<span id="more"></span><!-- more --></p>
+<blockquote>
+<p>代理类的目的是为其他对象提供一个代理以控制对某个对象的访问。</p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">代理的含义</a>
+</li>
+<li>
+<a href="#toc_1">动态代理相关类介绍</a>
+</li>
+</ul>
+
 
 <h2 id="toc_0">代理的含义</h2>
 
@@ -2458,19 +3003,7 @@ Constant pool:<br/>
 <p>其实我们所说的DynamicProxy（动态代理类）是这样一种class：它是在运行时生成的class，在生成它时你必须提供一组interface给它，然后该class就宣称它实现了这些 interface。如此一来，我们可以把该class的实例当作这些interface中的任何一个来用（可以强转为相应的接口类型）。当然，这个DynamicProxy其实就是一个Proxy，它不会做实质性的工作，在生成它的实例时你必须提供一个handler，由它接管实际的工作。</p></li>
 </ol>
 
-<blockquote>
-<p>[转载]<a href="https://blog.csdn.net/xiaokang123456kao/article/details/77679848">https://blog.csdn.net/xiaokang123456kao/article/details/77679848</a></p>
-</blockquote>
-
-<ul>
-<li>
-<a href="#toc_0">代理的含义</a>
-</li>
-<li>
-<a href="#toc_1">动态代理相关类介绍</a>
-</li>
-</ul>
-
+<p>[<strong>转载</strong>]<a href="https://blog.csdn.net/xiaokang123456kao/article/details/77679848">https://blog.csdn.net/xiaokang123456kao/article/details/77679848</a></p>
 
 ]]></content>
   </entry>
@@ -2481,20 +3014,61 @@ Constant pool:<br/>
     <updated>2019-02-25T11:16:28+08:00</updated>
     <id>https://books.sangkf.cn/15510645880732.html</id>
     <content type="html"><![CDATA[
-<p><a href="https://yq.aliyun.com/articles/679881?spm=a2c4e.11155472.0.0.ae1e42459WcIqo">原文地址</a><br/>
-<a href="https://yq.aliyun.com/articles/679881?spm=a2c4e.11155472.0.0.ae1e42459WcIqo">https://yq.aliyun.com/articles/679881?spm=a2c4e.11155472.0.0.ae1e42459WcIqo</a></p>
+<blockquote>
+<p>除非单表数据未来会一直不断上涨，否则不要一开始就考虑拆分，拆分会带来逻辑、部署、运维的各种复杂度，一般以整型值为主的表在千万级以下，字符串为主的表在五百万以下是没有太大问题的。</p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">单表优化方案</a>
+</li>
+<li>
+<a href="#toc_1">读写分离</a>
+</li>
+<li>
+<a href="#toc_2">缓存</a>
+</li>
+<li>
+<a href="#toc_3">表分区</a>
+</li>
+<li>
+<a href="#toc_4">垂直拆分</a>
+</li>
+<li>
+<a href="#toc_5">水平拆分</a>
+<ul>
+<li>
+<ul>
+<li>
+<a href="#toc_6">概述</a>
+</li>
+<li>
+<a href="#toc_7">分片原则</a>
+</li>
+<li>
+<a href="#toc_8">解决方案</a>
+</li>
+<li>
+<a href="#toc_9">各方案比较</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_10">兼容MySQL且可水平扩展的数据库</a>
+</li>
+</ul>
+
 
 <h2 id="toc_0">单表优化方案</h2>
 
-<blockquote>
-<p>除非单表数据未来会一直不断上涨，否则不要一开始就考虑拆分，拆分会带来逻辑、部署、运维的各种复杂度，一般以整型值为主的表在千万级以下，字符串为主的表在五百万以下是没有太大问题的。而事实上很多时候MySQL单表的性能依然有不少优化空间，甚至能正常支撑千万级以上的数据量。<br/>
-<span id="more"></span><!-- more --></p>
+<p>除非单表数据未来会一直不断上涨，否则不要一开始就考虑拆分，拆分会带来逻辑、部署、运维的各种复杂度，一般以整型值为主的表在千万级以下，字符串为主的表在五百万以下是没有太大问题的。而事实上很多时候MySQL单表的性能依然有不少优化空间，甚至能正常支撑千万级以上的数据量。</p>
 
 <ol>
-<li><strong>字段优化总结</strong></li>
-</ol>
-</blockquote>
-
+<li><p><strong>字段优化总结</strong></p>
 <ul>
 <li>尽量使用TINYINT、SMALLINT、MEDIUM_INT作为整数类型而非INT，如果非负则加上UNSIGNED</li>
 <li>VARCHAR的长度只分配真正需要的空间</li>
@@ -2502,10 +3076,8 @@ Constant pool:<br/>
 <li>尽量使用TIMESTAMP而非DATETIME</li>
 <li>单表不要有太多字段，建议在20以内</li>
 <li>避免使用NULL字段，很难查询优化且占用额外索引空间</li>
-<li><p>用整型来存IP</p></li>
-</ul>
-
-<ol>
+<li>用整型来存IP</li>
+</ul></li>
 <li><p><strong>索引优化总结</strong></p>
 <ul>
 <li>索引并不是越多越好，要根据查询有针对性的创建，考虑在WHERE和ORDER BY命令上涉及的列建立索引，可根据EXPLAIN来查看是否用了索引还是全表扫描</li>
@@ -2830,48 +3402,8 @@ Constant pool:<br/>
 2）非结构化或弱结构化数据；<br/>
 3）对事务要求不强，且无太多关联操作的数据。</p>
 
-<ul>
-<li>
-<a href="#toc_0">单表优化方案</a>
-</li>
-<li>
-<a href="#toc_1">读写分离</a>
-</li>
-<li>
-<a href="#toc_2">缓存</a>
-</li>
-<li>
-<a href="#toc_3">表分区</a>
-</li>
-<li>
-<a href="#toc_4">垂直拆分</a>
-</li>
-<li>
-<a href="#toc_5">水平拆分</a>
-<ul>
-<li>
-<ul>
-<li>
-<a href="#toc_6">概述</a>
-</li>
-<li>
-<a href="#toc_7">分片原则</a>
-</li>
-<li>
-<a href="#toc_8">解决方案</a>
-</li>
-<li>
-<a href="#toc_9">各方案比较</a>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_10">兼容MySQL且可水平扩展的数据库</a>
-</li>
-</ul>
-
+<p><a href="https://yq.aliyun.com/articles/679881?spm=a2c4e.11155472.0.0.ae1e42459WcIqo">原文地址</a><br/>
+<a href="https://yq.aliyun.com/articles/679881?spm=a2c4e.11155472.0.0.ae1e42459WcIqo">https://yq.aliyun.com/articles/679881?spm=a2c4e.11155472.0.0.ae1e42459WcIqo</a></p>
 
 ]]></content>
   </entry>
@@ -2882,8 +3414,10 @@ Constant pool:<br/>
     <updated>2019-02-25T11:15:39+08:00</updated>
     <id>https://books.sangkf.cn/15510645390936.html</id>
     <content type="html"><![CDATA[
-<p>列举一些Java常用的知识点<br/>
+<blockquote>
+<p>列举一些Java相关的知识点<br/>
 <span id="more"></span><!-- more --></p>
+</blockquote>
 
 <p><strong>基础篇</strong><br/>
 <strong>01面向对象</strong><br/>
@@ -3677,8 +4211,6 @@ TensorFlow、DeepLearning4J</p>
 《从Paxos 到 Zookeeper》 <br/>
 《架构即未来》</p>
 
-
-
 ]]></content>
   </entry>
   
@@ -3688,191 +4220,303 @@ TensorFlow、DeepLearning4J</p>
     <updated>2019-02-25T11:15:09+08:00</updated>
     <id>https://books.sangkf.cn/15510645099182.html</id>
     <content type="html"><![CDATA[
-<p>原文地址 <a href="https://www.cnblogs.com/huyunfan/p/7456535.html">https://www.cnblogs.com/huyunfan/p/7456535.html</a></p>
+<blockquote>
+<p>[<strong>原文地址</strong>] <a href="https://www.cnblogs.com/huyunfan/p/7456535.html">https://www.cnblogs.com/huyunfan/p/7456535.html</a></p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
 
 <ul>
-<li><p><strong>default拓展方法</strong><br/>
-<span id="more"></span><!-- more --><br/>
-default关键字为接口声明添加非抽象方法的实现,也称为拓展方法</p>
-<pre><code class="language-java">public interface Formula {
-  void doSomething();<br/>
-  default void before() {<br/>
-      System.out.println(&quot;我是拓展方法&quot;);<br/>
-  }<br/>
-}<br/>
-public class FormulaService implements Formula {<br/>
-  @Override<br/>
-  public void doSomething() {<br/>
-      before();<br/>
-      System.out.println(&quot;我是override方法&quot;);<br/>
-  }<br/>
-}
-</code></pre></li>
-<li><p><strong>Lambda表达式</strong></p>
-<p>java8引入函数式编程，Lambda则是函数式编程的基础。</p>
-<pre><code class="language-java">List&lt;String&gt; list = Arrays.asList(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;);
-// java8之前<br/>
-Collections.sort(list, new Comparator&lt;String&gt;(){<br/>
-  @Override<br/>
-  public int compare(String o1, String o2) {<br/>
-      return o1.compareTo(o2);<br/>
-  }<br/>
-});<br/>
-// lambda<br/>
-Collections.sort(list, (String o1, String o2) -&gt; {<br/>
-          return o2.compareTo(o1);<br/>
-});<br/>
-// 简洁lambda<br/>
-Collections.sort(list, (String o1, String o2) -&gt;  o2.compareTo(o1));<br/>
-// 更简洁lambda<br/>
-Collections.sort(list, (o1, o2) -&gt;  o2.compareTo(o1));<br/>
-// 也可以这样写<br/>
-Collections.sort(list, Comparator.comparing(String::toString));
-</code></pre></li>
-<li><p><strong>函数式接口</strong></p>
-<p>一个函数式接口有且只能有一个抽象方法申明，其中该注意的是 @FunctionalInterface 注解，此时如果在接口中定义了第二个抽象方法，编译器将会抛出异常。当然如果不加该注解也不是不行，如果接口中有多个抽象方法，而你又使用了lambda表达式，则在调用处会抛出异常。</p>
-<pre><code class="language-java">@FunctionalInterface
-public interface Formula&lt;F,T&gt;{<br/>
-  T convert(F var1);<br/>
-}<br/>
-Formula&lt;String,Integer&gt; function = (var1 -&gt; Integer.valueOf(var1));<br/>
-Integer var2 = function.convert(&quot;1000&quot;); 
-</code></pre></li>
-<li><p><strong>方法和构造函数引用</strong></p>
-<p>方法引用的标准语法是 <code>类名:方法名</code></p>
-<table>
-<thead>
-<tr>
-<th>类型</th>
-<th>示例</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>引用静态方法</td>
-<td>targetClass :: staticMethodName</td>
-</tr>
-<tr>
-<td>引用某个对象的实例方法</td>
-<td>targetClass :: instanceMethodName</td>
-</tr>
-<tr>
-<td>引用某个类型的任意对象的实例方法</td>
-<td>targetType :: methodName</td>
-</tr>
-<tr>
-<td>引用构造方法</td>
-<td>className :: new</td>
-</tr>
-</tbody>
-</table></li>
+<li>
+<a href="#toc_0">default拓展方法</a>
+</li>
+<li>
+<a href="#toc_1">Lambda表达式</a>
+</li>
+<li>
+<a href="#toc_2">函数式接口</a>
+</li>
+<li>
+<a href="#toc_3">方法和构造函数引用</a>
+<ul>
+<li>
+<a href="#toc_4">引用静态方法</a>
+</li>
+<li>
+<a href="#toc_5">引用某个类型的任意对象的实例方法</a>
+</li>
+<li>
+<a href="#toc_6">引用构造方法</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_7">Lambda的范围</a>
+<ul>
+<li>
+<a href="#toc_8">访问成员变量</a>
+</li>
+<li>
+<a href="#toc_9">访问成员变量和静态变量</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_10">内置函数式接口</a>
+<ul>
+<li>
+<a href="#toc_11">Predicates</a>
+</li>
+<li>
+<a href="#toc_12">Functions</a>
+</li>
+<li>
+<a href="#toc_13">Suppliers</a>
+</li>
+<li>
+<a href="#toc_14">Consumers</a>
+</li>
+<li>
+<a href="#toc_15">Comparators</a>
+</li>
+<li>
+<a href="#toc_16">Optionals</a>
+</li>
+</ul>
+</li>
 </ul>
 
-<ol>
-<li><p><strong>引用静态方法</strong></p>
-<pre><code class="language-java">Formula&lt;String,Integer&gt; function = (Integer::valueOf);
-Integer var2 = function.convert(&quot;1000&quot;);
-</code></pre></li>
-<li><p><strong>引用某个类型的任意对象的实例方法</strong></p>
-<pre><code class="language-java">public static void main(String[] args) {
-  String[] array = {&quot;贱明&quot;, &quot;学友&quot;};<br/>
-  Arrays.sort(array, String::compareTo);<br/>
-}
-</code></pre></li>
-<li><p><strong>引用构造方法</strong></p>
-<pre><code class="language-java">// 定义工厂
-interface PersonFactory&lt;P extends Person&gt;{<br/>
-   P create(String name);<br/>
-}<br/>
-// Person类的构造方法<br/>
-public Person(String name) {<br/>
-   this.name = name;<br/>
-}<br/>
-// 创建<br/>
-PersonFactory&lt;Person&gt; factory = Person::new;<br/>
-factory.create(&quot;贱明&quot;);
-</code></pre></li>
-</ol>
 
-<ul>
-<li><p><strong>Lambda的范围</strong></p>
-<p>lambda可以访问局部对应的外部区域的局部final变量，以及成员变量和静态变量。</p>
-<ol>
-<li><p><strong>访问成员变量</strong></p>
-<pre><code class="language-java">public void doSomething(){
- final String p1 = &quot;贱明&quot;;<br/>
- final String p2 = &quot;学友&quot;;<br/>
- Formula function = (person1, person2) -&gt; p1.compareTo(p2);<br/>
-}
+<h2 id="toc_0">default拓展方法</h2>
+
+<p>default关键字为接口声明添加非抽象方法的实现,也称为拓展方法</p>
+
+<pre><code class="language-java">  public interface Formula {
+      void doSomething();
+  
+      default void before() {
+          System.out.println(&quot;我是拓展方法&quot;);
+      }
+  }
+  
+  public class FormulaService implements Formula {
+  
+      @Override
+      public void doSomething() {
+          before();
+          System.out.println(&quot;我是override方法&quot;);
+      }
+  }
 </code></pre>
-<p>与java8以下版本不同的是，p1 p2你可以不修饰成final 也不会报错，但是如果你想修改他们，编译器则会告诉你这是不被允许的。</p></li>
-<li><p><strong>访问成员变量和静态变量</strong></p>
-<pre><code class="language-java">public void doSomething(){;
-Formula function = (person1, person2) -&gt;{<br/>
-    dehua = &quot;贱明&quot;;<br/>
-    xueyou=&quot;学友&quot;;<br/>
-    return dehua.compareTo(xueyou);<br/>
-};<br/>
-}
-</code></pre></li>
-</ol></li>
-<li><p><strong>内置函数式接口</strong></p>
+
+<h2 id="toc_1">Lambda表达式</h2>
+
+<p>java8引入函数式编程，Lambda则是函数式编程的基础。</p>
+
+<pre><code class="language-java">  List&lt;String&gt; list = Arrays.asList(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;);
+  
+  // java8之前
+  Collections.sort(list, new Comparator&lt;String&gt;(){
+      @Override
+      public int compare(String o1, String o2) {
+          return o1.compareTo(o2);
+      }
+  });
+  
+  // lambda
+  Collections.sort(list, (String o1, String o2) -&gt; {
+              return o2.compareTo(o1);
+  });
+  
+  // 简洁lambda
+  Collections.sort(list, (String o1, String o2) -&gt;  o2.compareTo(o1));
+  
+  // 更简洁lambda
+  Collections.sort(list, (o1, o2) -&gt;  o2.compareTo(o1));
+  
+  // 也可以这样写
+  Collections.sort(list, Comparator.comparing(String::toString));
+</code></pre>
+
+<h2 id="toc_2">函数式接口</h2>
+
+<p>一个函数式接口有且只能有一个抽象方法申明，其中该注意的是 @FunctionalInterface 注解，此时如果在接口中定义了第二个抽象方法，编译器将会抛出异常。当然如果不加该注解也不是不行，如果接口中有多个抽象方法，而你又使用了lambda表达式，则在调用处会抛出异常。</p>
+
+<pre><code class="language-java">  @FunctionalInterface
+  public interface Formula&lt;F,T&gt;{
+      T convert(F var1);
+  }
+  
+  Formula&lt;String,Integer&gt; function = (var1 -&gt; Integer.valueOf(var1));
+  Integer var2 = function.convert(&quot;1000&quot;); 
+</code></pre>
+
+<h2 id="toc_3">方法和构造函数引用</h2>
+
+<p>方法引用的标准语法是 <code>类名:方法名</code></p>
+
+<p>| 类型                             | 示例                              |<br/>
+  | -------------------------------- | --------------------------------- |<br/>
+  | 引用静态方法                     | targetClass :: staticMethodName   |<br/>
+  | 引用某个对象的实例方法           | targetClass :: instanceMethodName |<br/>
+  | 引用某个类型的任意对象的实例方法 | targetType :: methodName          |<br/>
+  | 引用构造方法                     | className :: new                  |</p>
+
+<h3 id="toc_4">引用静态方法</h3>
+
+<pre><code class="language-java">   Formula&lt;String,Integer&gt; function = (Integer::valueOf);
+   Integer var2 = function.convert(&quot;1000&quot;);
+</code></pre>
+
+<h3 id="toc_5">引用某个类型的任意对象的实例方法</h3>
+
+<pre><code class="language-java">   public static void main(String[] args) {
+      String[] array = {&quot;贱明&quot;, &quot;学友&quot;};
+      Arrays.sort(array, String::compareTo);
+   }
+</code></pre>
+
+<h3 id="toc_6">引用构造方法</h3>
+
+<pre><code class="language-java">   // 定义工厂
+   interface PersonFactory&lt;P extends Person&gt;{
+       P create(String name);
+   }
+   // Person类的构造方法
+   public Person(String name) {
+       this.name = name;
+   }
+   // 创建
+   PersonFactory&lt;Person&gt; factory = Person::new;
+   factory.create(&quot;贱明&quot;);
+</code></pre>
+
+<h2 id="toc_7">Lambda的范围</h2>
+
+<p>lambda可以访问局部对应的外部区域的局部final变量，以及成员变量和静态变量。</p>
+
+<h3 id="toc_8">访问成员变量</h3>
+
+<pre><code class="language-text"> ```java
+ public void doSomething(){
+     final String p1 = &quot;贱明&quot;;
+     final String p2 = &quot;学友&quot;;
+     Formula function = (person1, person2) -&gt; p1.compareTo(p2);
+ }
+ ```
+
+ 与java8以下版本不同的是，p1 p2你可以不修饰成final 也不会报错，但是如果你想修改他们，编译器则会告诉你这是不被允许的。
+</code></pre>
+
+<h3 id="toc_9">访问成员变量和静态变量</h3>
+
+<pre><code class="language-text"> ```java
+ public void doSomething(){;
+    Formula function = (person1, person2) -&gt;{
+        dehua = &quot;贱明&quot;;
+        xueyou=&quot;学友&quot;;
+        return dehua.compareTo(xueyou);
+    };
+ }
+ ```
+</code></pre>
+
+<h2 id="toc_10">内置函数式接口</h2>
+
 <p>​     java8 api中提供了很多内置函数式接口，而且有些接口其实在Google Guava中已经实现了，很大程  度的降低了程序员的工作负担。</p>
-<ol>
-<li><p><strong>Predicates</strong><br/>
-Predicate是一个布尔类型的函数，该函数只有一个输入参数，他包含了多种默认实现。</p>
-<pre><code class="language-java">public static void main(String[] args) {
-Predicate&lt;String&gt; predicate = (s) -&gt; s.contains(&quot;贱明&quot;);<br/>
-String var1 = &quot;牛贱明&quot;;<br/>
-predicate.test(var1);              // true<br/>
-predicate.negate().test(var1);     // false<br/>
-Predicate&lt;Boolean&gt; nonNull = Objects::nonNull;<br/>
-Predicate&lt;Boolean&gt; isNull = Objects::isNull;<br/>
-Predicate&lt;String&gt; isEmpty = String::isEmpty;<br/>
-Predicate&lt;String&gt; isNotEmpty = isEmpty.negate();<br/>
-isNotEmpty.and(isEmpty).test(var1);<br/>
-}
-</code></pre></li>
-<li><p><strong>Functions</strong></p>
-<p>Function接口接收一个参数，并返回单一的结果。默认方法可以将多个函数串在一起</p>
-<pre><code class="language-java">public static void main(String[] args) {
-Function&lt;String, Integer&gt; toInteger = Integer::valueOf;<br/>
-Function&lt;String, String&gt; backToString = toInteger.andThen(String::valueOf);<br/>
-System.out.println(toInteger.apply(&quot;123&quot;));<br/>
-System.out.println(backToString.apply(&quot;123&quot;));<br/>
-}
-</code></pre></li>
-<li><p><strong>Suppliers</strong></p>
-<p>Supplier接口产生一个给定类型的结果。与Function不同的是，Supplier没有输入参数。</p>
-<pre><code class="language-java">Supplier&lt;Person&gt; personSupplier = Person::new;
-Person p = personSupplier.get();   // new Person
-</code></pre></li>
-<li><p><strong>Consumers</strong></p>
-<p>Consumer代表了在一个输入参数上需要进行的操作。</p>
-<pre><code class="language-java">Consumer&lt;Person&gt; greeter = (p) -&gt; System.out.println(&quot;Hello, &quot; + p.getName());
-greeter.accept(new Person(&quot;贱明&quot;));
-</code></pre></li>
-<li><p><strong>Comparators</strong></p>
-<p>Comparator接口在早期的Java版本中非常著名。Java 8 为这个接口添加了不同的默认方法。</p>
-<pre><code class="language-java">Comparator&lt;Person&gt; comparator = (p1, p2) -&gt; p1.getName().compareTo(p2.getName());
-Person p1 = new Person(&quot;贱明&quot;);<br/>
-Person p2 = new Person(&quot;学友&quot;);<br/>
-System.out.println(comparator.compare(p1, p2));             // &gt; 1105<br/>
-System.out.println(comparator.reversed().compare(p1, p2));  // &lt; -1105
-</code></pre></li>
-<li><p><strong>Optionals</strong></p>
-<p>Optional不是一个函数式接口，而是一个精巧的工具接口，用来防止NullPointerException产生。<br/>
-Optional是一个简单的值容器，这个值可以是null，也可以是non-null。考虑到一个方法可能会返回一个non-null的值，也可能返回一个空值。为了不直接返回null，我们在Java 8中就返回一个Optional。</p>
-<pre><code class="language-java">Optional&lt;String&gt; optional = Optional.of(&quot;贱明&quot;);
-System.out.println(optional.isPresent()); // true      <br/>
-System.out.println(optional.get()); // 贱明   <br/>
-System.out.println(optional.orElse(&quot;学友&quot;)); // 贱明    <br/>
-optional.ifPresent((s) -&gt; System.out.println(s.charAt(0))); 
-</code></pre></li>
-</ol></li>
-</ul>
 
+<h3 id="toc_11">Predicates</h3>
 
+<pre><code class="language-text"> Predicate是一个布尔类型的函数，该函数只有一个输入参数，他包含了多种默认实现。
+
+ ```java
+ public static void main(String[] args) {
+    Predicate&lt;String&gt; predicate = (s) -&gt; s.contains(&quot;贱明&quot;);
+    String var1 = &quot;牛贱明&quot;;
+
+    predicate.test(var1);              // true
+    predicate.negate().test(var1);     // false
+
+    Predicate&lt;Boolean&gt; nonNull = Objects::nonNull;
+    Predicate&lt;Boolean&gt; isNull = Objects::isNull;
+
+    Predicate&lt;String&gt; isEmpty = String::isEmpty;
+    Predicate&lt;String&gt; isNotEmpty = isEmpty.negate();
+
+    isNotEmpty.and(isEmpty).test(var1);
+ }
+ ```
+</code></pre>
+
+<h3 id="toc_12">Functions</h3>
+
+<pre><code class="language-text"> Function接口接收一个参数，并返回单一的结果。默认方法可以将多个函数串在一起
+
+ ```java
+ public static void main(String[] args) {
+    Function&lt;String, Integer&gt; toInteger = Integer::valueOf;
+    Function&lt;String, String&gt; backToString = toInteger.andThen(String::valueOf);
+
+    System.out.println(toInteger.apply(&quot;123&quot;));
+    System.out.println(backToString.apply(&quot;123&quot;));
+ }
+
+ ```
+</code></pre>
+
+<h3 id="toc_13">Suppliers</h3>
+
+<pre><code class="language-text"> Supplier接口产生一个给定类型的结果。与Function不同的是，Supplier没有输入参数。
+
+ ```java
+ Supplier&lt;Person&gt; personSupplier = Person::new;
+ Person p = personSupplier.get();   // new Person
+
+ ```
+</code></pre>
+
+<h3 id="toc_14">Consumers</h3>
+
+<pre><code class="language-text"> Consumer代表了在一个输入参数上需要进行的操作。
+
+ ```java
+ Consumer&lt;Person&gt; greeter = (p) -&gt; System.out.println(&quot;Hello, &quot; + p.getName());
+ greeter.accept(new Person(&quot;贱明&quot;));
+
+ ```
+</code></pre>
+
+<h3 id="toc_15">Comparators</h3>
+
+<pre><code class="language-text"> Comparator接口在早期的Java版本中非常著名。Java 8 为这个接口添加了不同的默认方法。
+
+ ```java
+ Comparator&lt;Person&gt; comparator = (p1, p2) -&gt; p1.getName().compareTo(p2.getName());
+
+ Person p1 = new Person(&quot;贱明&quot;);
+ Person p2 = new Person(&quot;学友&quot;);
+
+ System.out.println(comparator.compare(p1, p2));             // &gt; 1105
+ System.out.println(comparator.reversed().compare(p1, p2));  // &lt; -1105
+
+ ```
+</code></pre>
+
+<h3 id="toc_16">Optionals</h3>
+
+<pre><code class="language-text"> Optional不是一个函数式接口，而是一个精巧的工具接口，用来防止NullPointerException产生。
+ Optional是一个简单的值容器，这个值可以是null，也可以是non-null。考虑到一个方法可能会返回一个non-null的值，也可能返回一个空值。为了不直接返回null，我们在Java 8中就返回一个Optional。
+
+ ```java
+ Optional&lt;String&gt; optional = Optional.of(&quot;贱明&quot;);
+
+ System.out.println(optional.isPresent()); // true      
+ System.out.println(optional.get()); // 贱明   
+ System.out.println(optional.orElse(&quot;学友&quot;)); // 贱明    
+
+ optional.ifPresent((s) -&gt; System.out.println(s.charAt(0)));    
+ ```
+</code></pre>
 
 ]]></content>
   </entry>
@@ -3883,10 +4527,29 @@ optional.ifPresent((s) -&gt; System.out.println(s.charAt(0)));
     <updated>2019-02-25T11:11:10+08:00</updated>
     <id>https://books.sangkf.cn/15510642705827.html</id>
     <content type="html"><![CDATA[
+<blockquote>
+<p>服务治理是微服务架构中最为核心和基础的模块，他主要用来实现各个微服务市里的自动化注册和发现。</p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">服务治理</a>
+</li>
+<li>
+<a href="#toc_1">服务注册</a>
+</li>
+<li>
+<a href="#toc_2">服务发现</a>
+</li>
+</ul>
+
+
 <h2 id="toc_0">服务治理</h2>
 
 <p>服务治理是微服务架构中最为核心和基础的模块，他主要用来实现各个微服务市里的自动化注册和发现。<br/>
-<span id="more"></span><!-- more --></p>
+<!-- more --></p>
 
 <ul>
 <li><p>为什么需要服务治理？微服务没有他会怎样？</p>
@@ -3926,19 +4589,6 @@ optional.ifPresent((s) -&gt; System.out.println(s.charAt(0)));
 
 <p>比如，现有服务C希望调用服务A，服务C就向注册中心发起咨询服务的请求，服务注册中心就会将服务A的位置清单返回给服务C。如按上例服务A的的情况，C便获得了服务A的两个可用位置192.168.0.100:8000和192.168.0.101:8000。当服务C要发起调用的时候，便从该清单中以某种轮询策略取出一个位置来进行服务调用，这就是后续我们将会介绍的客户端负载均衡。</p>
 
-<ul>
-<li>
-<a href="#toc_0">服务治理</a>
-</li>
-<li>
-<a href="#toc_1">服务注册</a>
-</li>
-<li>
-<a href="#toc_2">服务发现</a>
-</li>
-</ul>
-
-
 ]]></content>
   </entry>
   
@@ -3948,9 +4598,30 @@ optional.ifPresent((s) -&gt; System.out.println(s.charAt(0)));
     <updated>2019-02-24T11:47:00+08:00</updated>
     <id>https://books.sangkf.cn/15509800202549.html</id>
     <content type="html"><![CDATA[
+<blockquote>
 <p>利用MarkDown书写一些常用的流程图，Echarts图表，数学公式，点图等</p>
+</blockquote>
 
 <span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">mermaid</a>
+</li>
+<li>
+<a href="#toc_1">dot</a>
+</li>
+<li>
+<a href="#toc_2">echarts</a>
+</li>
+<li>
+<a href="#toc_3">顺序图和流程图</a>
+</li>
+<li>
+<a href="#toc_4">LaTeX （MathJax 渲染）</a>
+</li>
+</ul>
+
 
 <h3 id="toc_0">mermaid</h3>
 
@@ -4055,25 +4726,6 @@ $$  x = \dfrac{-b \pm \sqrt{b^2 - 4ac}}{2a} $$
 
 <p><img src="media/15509800202549/15510634028669.jpg" alt="" style="width:500px;"/></p>
 
-<ul>
-<li>
-<a href="#toc_0">mermaid</a>
-</li>
-<li>
-<a href="#toc_1">dot</a>
-</li>
-<li>
-<a href="#toc_2">echarts</a>
-</li>
-<li>
-<a href="#toc_3">顺序图和流程图</a>
-</li>
-<li>
-<a href="#toc_4">LaTeX （MathJax 渲染）</a>
-</li>
-</ul>
-
-
 ]]></content>
   </entry>
   
@@ -4088,7 +4740,51 @@ $$  x = \dfrac{-b \pm \sqrt{b^2 - 4ac}}{2a} $$
 <span id="more"></span><!-- more --></p>
 </blockquote>
 
-<p><img src="media/15509784083382/15509784261382.jpg" alt="" class="mw_img_center" style="width:500px;display: block; clear:both; margin: 0 auto;"/></p>
+<ul>
+<li>
+<a href="#toc_0">引述</a>
+</li>
+<li>
+<a href="#toc_1">Java 8日期/时间类</a>
+<ul>
+<li>
+<a href="#toc_2">LocalDate和LocalTime</a>
+</li>
+<li>
+<a href="#toc_3">LocalDateTime</a>
+</li>
+<li>
+<a href="#toc_4">Instant</a>
+</li>
+<li>
+<a href="#toc_5">Duration</a>
+</li>
+<li>
+<a href="#toc_6">Period</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_7">日期的操作和格式化</a>
+<ul>
+<li>
+<a href="#toc_8">增加和减少日期</a>
+</li>
+<li>
+<a href="#toc_9">格式化日期</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_10">时区</a>
+</li>
+<li>
+<a href="#toc_11">其他历法</a>
+</li>
+</ul>
+
+
+<h2 id="toc_0">引述</h2>
 
 <p>在介绍本篇文章内容之前，我们先来讨论Java 8为什么要引入新的日期API，与之前的时间和日期处理方式有什么不同？</p>
 
@@ -4102,11 +4798,11 @@ $$  x = \dfrac{-b \pm \sqrt{b^2 - 4ac}}{2a} $$
 
 <p>由于以上这些问题，出现了一些三方的日期处理框架，例如Joda-Time，date4j等开源项目。但是，Java需要一套标准的用于处理时间和日期的框架，于是Java 8中引入了新的日期API。新的日期API是<a href="https://jcp.org/en/jsr/detail?id=310">JSR-310</a>规范的实现，Joda-Time框架的作者正是JSR-310的规范的倡导者，所以能从Java 8的日期API中看到很多Joda-Time的特性。</p>
 
-<h2 id="toc_0">Java 8日期/时间类</h2>
+<h2 id="toc_1">Java 8日期/时间类</h2>
 
 <p>Java 8的日期和时间类包含<code>LocalDate</code>、<code>LocalTime</code>、<code>Instant</code>、<code>Duration</code>以及<code>Period</code>，这些类都包含在<code>java.time</code>包中，下面我们看看这些类的用法。</p>
 
-<h3 id="toc_1">LocalDate和LocalTime</h3>
+<h3 id="toc_2">LocalDate和LocalTime</h3>
 
 <p><code>LocalDate</code>类表示一个具体的日期，但不包含具体时间，也不包含时区信息。可以通过<code>LocalDate</code>的静态方法<code>of()</code>创建一个实例，<code>LocalDate</code>也包含一些方法用来获取年份，月份，天，星期几等：</p>
 
@@ -4131,7 +4827,7 @@ int minute = localTime.getMinute();                 // 分：23
 int second = localTime.getSecond();                 // 秒：52
 </code></pre>
 
-<h3 id="toc_2">LocalDateTime</h3>
+<h3 id="toc_3">LocalDateTime</h3>
 
 <p><code>LocalDateTime</code>类是<code>LocalDate</code>和<code>LocalTime</code>的结合体，可以通过<code>of()</code>方法直接创建，也可以调用<code>LocalDate</code>的<code>atTime()</code>方法或<code>LocalTime</code>的<code>atDate()</code>方法将<code>LocalDate</code>或<code>LocalTime</code>合并成一个<code>LocalDateTime</code>：</p>
 
@@ -4149,7 +4845,7 @@ LocalDateTime ldt2 = localDate.atTime(localTime);
 LocalTime time = ldt1.toLocalTime();
 </code></pre>
 
-<h3 id="toc_3">Instant</h3>
+<h3 id="toc_4">Instant</h3>
 
 <p><code>Instant</code>用于表示一个时间戳，它与我们常使用的<code>System.currentTimeMillis()</code>有些类似，不过<code>Instant</code>可以精确到纳秒（Nano-Second），<code>System.currentTimeMillis()</code>方法只精确到毫秒（Milli-Second）。如果查看<code>Instant</code>源码，发现它的内部使用了两个常量，<code>seconds</code>表示从1970-01-01 00:00:00开始到现在的秒数，<code>nanos</code>表示纳秒部分（<code>nanos</code>的值不会超过<code>999,999,999</code>）。<code>Instant</code>除了使用<code>now()</code>方法创建外，还可以通过<code>ofEpochSecond</code>方法创建：</p>
 
@@ -4161,7 +4857,7 @@ LocalTime time = ldt1.toLocalTime();
 <pre><code class="language-java">1970-01-01T00:02:00.000100Z
 </code></pre>
 
-<h3 id="toc_4">Duration</h3>
+<h3 id="toc_5">Duration</h3>
 
 <p><code>Duration</code>的内部实现与<code>Instant</code>类似，也是包含两部分：<code>seconds</code>表示秒，<code>nanos</code>表示纳秒。两者的区别是<code>Instant</code>用于表示一个时间戳（或者说是一个时间点），而<code>Duration</code>表示一个时间段，所以<code>Duration</code>类中不包含<code>now()</code>静态方法。可以通过<code>Duration.between()</code>方法创建<code>Duration</code>对象：</p>
 
@@ -4184,7 +4880,7 @@ Duration duration2 = Duration.of(1000, ChronoUnit.MILLIS);  // 1000毫秒
 
 </code></pre>
 
-<h3 id="toc_5">Period</h3>
+<h3 id="toc_6">Period</h3>
 
 <p><code>Period</code>在概念上和<code>Duration</code>类似，区别在于<code>Period</code>是以年月日来衡量一个时间段，比如2年3个月6天：</p>
 
@@ -4199,9 +4895,9 @@ Period period = Period.between(
  LocalDate.of(2017, 2, 5));
 </code></pre>
 
-<h2 id="toc_6">日期的操作和格式化</h2>
+<h2 id="toc_7">日期的操作和格式化</h2>
 
-<h3 id="toc_7">增加和减少日期</h3>
+<h3 id="toc_8">增加和减少日期</h3>
 
 <p>Java 8中的日期/时间类都是不可变的，这是为了保证线程安全。当然，新的日期/时间类也提供了方法用于创建对象的可变版本，比如增加一天或者减少一天：</p>
 
@@ -4325,7 +5021,7 @@ date.with(temporal -&gt; {
 });
 </code></pre>
 
-<h3 id="toc_8">格式化日期</h3>
+<h3 id="toc_9">格式化日期</h3>
 
 <p>新的日期API中提供了一个<code>DateTimeFormatter</code>类用于处理日期格式化操作，它被包含在<code>java.time.format</code>包中，Java 8的日期类有一个<code>format()</code>方法用于将日期格式化为字符串，该方法接收一个<code>DateTimeFormatter</code>类型参数：</p>
 
@@ -4346,7 +5042,7 @@ LocalDate date = LocalDate.parse(strDate6, DateTimeFormatter.ofPattern(&quot;yyy
 LocalDateTime dateTime1 = LocalDateTime.parse(strDate7, DateTimeFormatter.ofPattern(&quot;yyyy-MM-dd HH:mm:ss&quot;));
 </code></pre>
 
-<h2 id="toc_9">时区</h2>
+<h2 id="toc_10">时区</h2>
 
 <p>Java 8中的时区操作被很大程度上简化了，新的时区类<code>java.time.ZoneId</code>是原有的<code>java.util.TimeZone</code>类的替代品。<code>ZoneId</code>对象可以通过<code>ZoneId.of()</code>方法创建，也可以通过<code>ZoneId.systemDefault()</code>获取系统默认时区：</p>
 
@@ -4385,7 +5081,7 @@ LocalDateTime localDateTime = LocalDateTime.now();
 OffsetDateTime offsetDateTime = OffsetDateTime.of(localDateTime, zoneOffset);
 </code></pre>
 
-<h2 id="toc_10">其他历法</h2>
+<h2 id="toc_11">其他历法</h2>
 
 <p>Java中使用的历法是ISO 8601日历系统，它是世界民用历法，也就是我们所说的公历。平年有365天，闰年是366天。闰年的定义是：非世纪年，能被4整除；世纪年能被400整除。为了计算的一致性，公元1年的前一年被当做公元0年，以此类推。</p>
 
@@ -4417,48 +5113,7 @@ ChronoLocalDate jpChronoLocalDate = jpChronology.dateNow();
 
 <p>在实际开发过程中建议使用<code>LocalDate</code>，包括存储、操作、业务规则的解读；除非需要将程序的输入或者输出本地化，这时可以使用<code>ChronoLocalDate</code>类。</p>
 
-<p>转载出处：<a href="https://lw900925.github.io/java/java8-newtime-api.html#more">https://lw900925.github.io/java/java8-newtime-api.html#more</a></p>
-
-<ul>
-<li>
-<a href="#toc_0">Java 8日期/时间类</a>
-<ul>
-<li>
-<a href="#toc_1">LocalDate和LocalTime</a>
-</li>
-<li>
-<a href="#toc_2">LocalDateTime</a>
-</li>
-<li>
-<a href="#toc_3">Instant</a>
-</li>
-<li>
-<a href="#toc_4">Duration</a>
-</li>
-<li>
-<a href="#toc_5">Period</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_6">日期的操作和格式化</a>
-<ul>
-<li>
-<a href="#toc_7">增加和减少日期</a>
-</li>
-<li>
-<a href="#toc_8">格式化日期</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_9">时区</a>
-</li>
-<li>
-<a href="#toc_10">其他历法</a>
-</li>
-</ul>
-
+<p>[<strong>转载出处</strong>]：<a href="https://lw900925.github.io/java/java8-newtime-api.html#more">https://lw900925.github.io/java/java8-newtime-api.html#more</a></p>
 
 ]]></content>
   </entry>
@@ -4469,11 +5124,28 @@ ChronoLocalDate jpChronoLocalDate = jpChronology.dateNow();
     <updated>2019-02-23T22:56:52+08:00</updated>
     <id>https://books.sangkf.cn/15509338125902.html</id>
     <content type="html"><![CDATA[
+<blockquote>
+<p>本文主要介绍如何利用jenkins实现自动部署Java项目</p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">背景</a>
+</li>
+<li>
+<a href="#toc_1">具体实现</a>
+</li>
+</ul>
+
+
+<h2 id="toc_0">背景</h2>
+
 <p>自己经常写一些小项目，有时候是自己写，更多时候是帮别人写。 一般都要部署到服务器上，最早使用的方法是本地 mvn clean package 打包好，上传到服务器上运行。有时候发现自己写了个bug，修复了，或者改了点/加了点需求，改完代码，又要重新打包，上传。 反反复复，很麻烦。之前在公司，用的是 jenkins，解决了这个痛点，<br/>
-<span id="more"></span><!-- more --><br/>
 jenkins 搭好了后，只需要在 jenkins 后台点击构建即可。后来，也用了一段时间公司自己开发的一个云产品，类似 EDAS 的一个东西，只需要把代码推到 GitLab上，  构建项目，运行项目全在后台操作，安全可靠。 但是这些东西，都是针对大型项目，项目复杂度高，服务器配置也高。自己一个人开发的小项目，通常都是单模块项目，客户的服务器配置可能也不高，2G内存，1G内存都有可能。 于是，直接用 shell 脚本启动项目不失为一种好方法。  </p>
 
-<h2 id="toc_0">具体实现</h2>
+<h2 id="toc_1">具体实现</h2>
 
 <p>代码结构如下<br/>
  <img src="media/15509338125902/QQ20190117-222349@2x.png" alt=""/>   <br/>
@@ -4600,8 +5272,20 @@ echo &quot;SENS部署完毕，Enjoy！&quot;
     <updated>2019-02-23T22:53:50+08:00</updated>
     <id>https://books.sangkf.cn/15509336304684.html</id>
     <content type="html"><![CDATA[
+<blockquote>
 <p>收藏一些发现的比较好的博客<br/>
 <span id="more"></span><!-- more --></p>
+</blockquote>
+
+<ul>
+<li>
+<a href="#toc_0">精品博客收藏</a>
+</li>
+<li>
+<a href="#toc_1">我的常用地址</a>
+</li>
+</ul>
+
 
 <h3 id="toc_0">精品博客收藏</h3>
 
@@ -4618,129 +5302,6 @@ echo &quot;SENS部署完毕，Enjoy！&quot;
 <li><a href="http://blog.sangkf.cn">个人博客</a></li>
 <li><a href="http://pma.sangkf.cn">PhpMyAdmin</a></li>
 </ul>
-
-<ul>
-<li>
-<a href="#toc_0">精品博客收藏</a>
-</li>
-<li>
-<a href="#toc_1">我的常用地址</a>
-</li>
-</ul>
-
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Gitment：使用 GitHub Issues 搭建评论系统]]></title>
-    <link href="https://books.sangkf.cn/15509294487927.html"/>
-    <updated>2019-02-23T21:44:08+08:00</updated>
-    <id>https://books.sangkf.cn/15509294487927.html</id>
-    <content type="html"><![CDATA[
-<blockquote>
-<p>[转载]<a href="https://imsun.net/posts/gitment-introduction/">https://imsun.net/posts/gitment-introduction/</a></p>
-</blockquote>
-
-<p><a href="https://github.com/imsun/gitment">Gitment</a> 是作者实现的一款基于 GitHub Issues 的评论系统。支持在前端直接引入，不需要任何后端代码。可以在页面进行登录、查看、评论、点赞等操作，同时有完整的 Markdown / GFM 和代码高亮支持。尤为适合各种基于 GitHub Pages 的静态博客或项目页面。<br/>
-<span id="more"></span><!-- more --><br/>
-本博客评论系统已迁移至 Gitment。虽然 Gitment 只能使用 GitHub 账号进行评论，但考虑到博客受众，这是可以接受的。</p>
-
-<ul>
-<li><a href="https://github.com/imsun/gitment">项目地址</a></li>
-<li><a href="https://imsun.github.io/gitment/">示例页面</a></li>
-</ul>
-
-<h2 id="toc_0"><a href="https://imsun.net/posts/gitment-introduction/#%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8" title="基础使用"></a>基础使用</h2>
-
-<h3 id="toc_1"><a href="https://imsun.net/posts/gitment-introduction/#1-%E6%B3%A8%E5%86%8C-OAuth-Application" title="1\. 注册 OAuth Application"></a>1. 注册 OAuth Application</h3>
-
-<p><a href="https://github.com/settings/applications/new">点击此处</a> 来注册一个新的 OAuth Application。其他内容可以随意填写，但要确保填入正确的 callback URL（一般是评论页面对应的域名，如 <code>https://imsun.net</code>）。</p>
-
-<p>你会得到一个 client ID 和一个 client secret，这个将被用于之后的用户登录。</p>
-
-<h3 id="toc_2"><a href="https://imsun.net/posts/gitment-introduction/#2-%E5%BC%95%E5%85%A5-Gitment" title="2\. 引入 Gitment"></a>2. 引入 Gitment</h3>
-
-<p>将下面的代码添加到你的页面：</p>
-
-<pre><code class="language-javascript">&lt;div id=&quot;container&quot;&gt;&lt;/div&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;https://imsun.github.io/gitment/style/default.css&quot;&gt;
-&lt;script src=&quot;https://imsun.github.io/gitment/dist/gitment.browser.js&quot;&gt;&lt;/script&gt;
-&lt;script&gt;
-var gitment = new Gitment({
-  id: &#39;页面 ID&#39;, // 可选。默认为 location.href
-  owner: &#39;你的 GitHub ID&#39;,
-  repo: &#39;存储评论的 repo&#39;,
-  oauth: {
-    client_id: &#39;你的 client ID&#39;,
-    client_secret: &#39;你的 client secret&#39;,
-  },
-})
-gitment.render(&#39;container&#39;)
-&lt;/script&gt;
-</code></pre>
-
-<p>注意，上述代码引用的 Gitment 将会随着开发变动。如果你希望始终使用最新的界面与特性即可引入上述代码。</p>
-
-<p>如果你希望引用确定版本的 Gitment，则应该使用 npm 进行安装。</p>
-
-<pre><code class="language-javascript">$ npm install --save gitment
-</code></pre>
-
-<p>关于构造函数中的更多可用参数请查看 <a href="https://github.com/imsun/gitment#options">Gitment Options</a></p>
-
-<h3 id="toc_3"><a href="https://imsun.net/posts/gitment-introduction/#3-%E5%88%9D%E5%A7%8B%E5%8C%96%E8%AF%84%E8%AE%BA" title="3\. 初始化评论"></a>3. 初始化评论</h3>
-
-<p>页面发布后，你需要访问页面并使用你的 GitHub 账号登录（请确保你的账号是第二步所填 repo 的 owner），点击初始化按钮。</p>
-
-<p>之后其他用户即可在该页面发表评论。</p>
-
-<h2 id="toc_4"><a href="https://imsun.net/posts/gitment-introduction/#%E8%87%AA%E5%AE%9A%E4%B9%89" title="自定义"></a>自定义</h2>
-
-<p>Gitment 很容易进行自定义，你可以写一份自定义的 CSS 或者使用一个新的主题。（主题可以改变 DOM 结构而自定义 CSS 不能）</p>
-
-<p>比如你可以通过自定义主题将评论框放在评论列表前面：</p>
-
-<pre><code class="language-javascript">const myTheme = {
-  render(state, instance) {
-    const container = document.createElement(&#39;div&#39;)
-    container.lang = &quot;en-US&quot;
-    container.className = &#39;gitment-container gitment-root-container&#39;
-    container.appendChild(instance.renderHeader(state, instance))
-    container.appendChild(instance.renderEditor(state, instance))
-    container.appendChild(instance.renderComments(state, instance))
-    container.appendChild(instance.renderFooter(state, instance))
-    return container
-  },
-}
-const gitment = new Gitment({
-  // ...
-  theme: myTheme,
-})
-gitment.render(&#39;container&#39;)
-</code></pre>
-
-<p>更多自定义内容请查看<a href="https://github.com/imsun/gitment#customize">文档</a>。</p>
-
-<h2 id="toc_5"><a href="https://imsun.net/posts/gitment-introduction/#%E5%85%B6%E4%BB%96%E9%97%AE%E9%A2%98" title="其他问题"></a>其他问题</h2>
-
-<h3 id="toc_6"><a href="https://imsun.net/posts/gitment-introduction/#%E8%AF%AD%E8%A8%80%E9%97%AE%E9%A2%98" title="语言问题"></a>语言问题</h3>
-
-<p>考虑到 GitHub 本身使用英文，而本项目面向用户均为 GitHub 用户，所以作者没有提供中文支持的打算。实在有需求的可以通过自定义主题支持中文。</p>
-
-<h3 id="toc_7"><a href="https://imsun.net/posts/gitment-introduction/#%E8%AF%B7%E5%8B%BF%E6%BB%A5%E7%94%A8" title="请勿滥用"></a>请勿滥用</h3>
-
-<p>在开发这个项目时我就一直有一个疑虑：我这样做有没有滥用 GitHub？为此我仔细读了 <a href="https://help.github.com/articles/github-terms-of-service/#g-api-terms">GitHub Terms of Service</a> 中 API Terms 的部分，认为自己并没有违反协议。之后我向 GitHub 发邮件询问了这一问题。GitHub 给出的回复是：</p>
-
-<blockquote>
-<p>We’re pleased to see you making use of the tools and resources available on GitHub.</p>
-</blockquote>
-
-<p>因此本项目的确没有违反 GitHub 使用协议。但我还是想提醒使用本项目的用户，请保持克制，切勿滥用。</p>
-
-<h3 id="toc_8"><a href="https://imsun.net/posts/gitment-introduction/#%E6%A0%B7%E5%BC%8F%E7%89%88%E6%9D%83" title="样式版权"></a>样式版权</h3>
-
-<p>在项目开源前作者曾实现了一个像素级抄袭 GitHub Issues 样式的界面，但在阅读 ToS 时发现违反了 <a href="https://help.github.com/articles/github-terms-of-service/#f-intellectual-property-notice">Section F</a>，并在和 GitHub 邮件沟通的过程中确认了这一行为是侵权的。因此便改成了现在的样式。请其他想要自定义样式的用户也留意版权问题。</p>
 
 ]]></content>
   </entry>

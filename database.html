@@ -140,7 +140,10 @@
                       
                       <div class="a-content-text">
                         
-                        	<p>分布式事务场景如何设计系统架构及解决数据一致性问题，个人理解最终方案把握以下原则就可以了，那就是：大事务=小事务（原子事务）+异步（消息通知），<br/>
+                        	<blockquote>
+<p>解决分布式事务的最好办法其实就是不考虑分布式事务，将一个大的业务进行拆分，整个大的业务流程，转化成若干个小的业务流程，然后通过设计补偿流程从而考虑最终一致性。</p>
+</blockquote>
+
 
                         
                       </div>
@@ -173,9 +176,10 @@
                       
                       <div class="a-content-text">
                         
-                        	<h2 id="toc_0">事务特性</h2>
+                        	<blockquote>
+<p>原子性、一致性、隔离性、持久性是事务的四个基本特性。</p>
+</blockquote>
 
-<p>原子性、一致性、隔离性、持久性，这四个属性通常称为ACID特性。<br/>
 
                         
                       </div>
@@ -208,13 +212,10 @@
                       
                       <div class="a-content-text">
                         
-                        	<p><a href="https://yq.aliyun.com/articles/679881?spm=a2c4e.11155472.0.0.ae1e42459WcIqo">原文地址</a><br/>
-<a href="https://yq.aliyun.com/articles/679881?spm=a2c4e.11155472.0.0.ae1e42459WcIqo">https://yq.aliyun.com/articles/679881?spm=a2c4e.11155472.0.0.ae1e42459WcIqo</a></p>
+                        	<blockquote>
+<p>除非单表数据未来会一直不断上涨，否则不要一开始就考虑拆分，拆分会带来逻辑、部署、运维的各种复杂度，一般以整型值为主的表在千万级以下，字符串为主的表在五百万以下是没有太大问题的。</p>
+</blockquote>
 
-<h2 id="toc_0">单表优化方案</h2>
-
-<blockquote>
-<p>除非单表数据未来会一直不断上涨，否则不要一开始就考虑拆分，拆分会带来逻辑、部署、运维的各种复杂度，一般以整型值为主的表在千万级以下，字符串为主的表在五百万以下是没有太大问题的。而事实上很多时候MySQL单表的性能依然有不少优化空间，甚至能正常支撑千万级以上的数据量。<br/>
 
                         
                       </div>
@@ -247,17 +248,10 @@
                       
                       <div class="a-content-text">
                         
-                        	<p>一、MySQL概述</p>
+                        	<blockquote>
+<p>详细介绍了Mysql的安装以及一些基本操作</p>
+</blockquote>
 
-<p>1、什么是数据库 ？<br/>
-　答：数据的仓库，如：在ATM的示例中我们创建了一个 db 目录，称其为数据库</p>
-
-<p>2、什么是 MySQL、Oracle、SQLite、Access、MS SQL Server等 ？<br/>
-　答：他们均是一个软件，都有两个主要的功能：</p>
-
-<ul>
-<li>a. 将数据保存到文件或内存</li>
-<li>b. 接收特定的命令，然后对文件进行相应的操作
 
                         
                       </div>
@@ -361,6 +355,12 @@
 	      
 		      
 			      <li class="post">
+			        <a href="15513224851488.html">Java中的volatile关键字解析</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
 			        <a href="15512563500691.html">HashMap源码解读(JDK1.7)</a>
 			      </li>
 		     
@@ -380,12 +380,6 @@
 		      
 			      <li class="post">
 			        <a href="15511042581022.html">微服务架构下处理分布式事务的典型方案</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="15511041776834.html">分布式系统常见的事务处理机制</a>
 			      </li>
 		     
 		  
@@ -510,7 +504,7 @@ Powered by <a target="_blank" href="http://books.sangkf.cn">见课就上的小�
 
 	$(document).ready(function(){
 		if(!browserRedirect()){
-		$(".article-content>ul:last").wrap("<div id='custom_menu'></div>");
+		$(".article-content>ul:first").wrap("<div id='custom_menu'></div>");
 	    	var $custom_menu = $("#custom_menu");
 	    	$("#custom_menu").remove();
 	    	$custom_menu.insertBefore($(".inner-wrap"));

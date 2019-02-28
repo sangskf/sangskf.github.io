@@ -154,12 +154,49 @@
 
       <div class="article-content">
       <blockquote>
-<p>[转载]<a href="https://imsun.net/posts/gitment-introduction/">https://imsun.net/posts/gitment-introduction/</a></p>
+<p>[<strong>转载</strong>]<a href="https://imsun.net/posts/gitment-introduction/">https://imsun.net/posts/gitment-introduction/</a></p>
 </blockquote>
 
-<p><a href="https://github.com/imsun/gitment">Gitment</a> 是作者实现的一款基于 GitHub Issues 的评论系统。支持在前端直接引入，不需要任何后端代码。可以在页面进行登录、查看、评论、点赞等操作，同时有完整的 Markdown / GFM 和代码高亮支持。尤为适合各种基于 GitHub Pages 的静态博客或项目页面。<br/>
-<span id="more"></span><!-- more --><br/>
-本博客评论系统已迁移至 Gitment。虽然 Gitment 只能使用 GitHub 账号进行评论，但考虑到博客受众，这是可以接受的。</p>
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">基础使用</a>
+<ul>
+<li>
+<a href="#toc_1">1. 注册 OAuth Application</a>
+</li>
+<li>
+<a href="#toc_2">2. 引入 Gitment</a>
+</li>
+<li>
+<a href="#toc_3">3. 初始化评论</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_4">自定义</a>
+</li>
+<li>
+<a href="#toc_5">其他问题</a>
+<ul>
+<li>
+<a href="#toc_6">语言问题</a>
+</li>
+<li>
+<a href="#toc_7">请勿滥用</a>
+</li>
+<li>
+<a href="#toc_8">样式版权</a>
+</li>
+</ul>
+</li>
+</ul>
+
+
+<p><a href="https://github.com/imsun/gitment">Gitment</a> 是作者实现的一款基于 GitHub Issues 的评论系统。支持在前端直接引入，不需要任何后端代码。可以在页面进行登录、查看、评论、点赞等操作，同时有完整的 Markdown / GFM 和代码高亮支持。尤为适合各种基于 GitHub Pages 的静态博客或项目页面。</p>
+
+<p>本博客评论系统已迁移至 Gitment。虽然 Gitment 只能使用 GitHub 账号进行评论，但考虑到博客受众，这是可以接受的。</p>
 
 <ul>
 <li><a href="https://github.com/imsun/gitment">项目地址</a></li>
@@ -368,6 +405,12 @@ gitment.render(&#39;container&#39;)
 	      
 		      
 			      <li class="post">
+			        <a href="15513224851488.html">Java中的volatile关键字解析</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
 			        <a href="15512563500691.html">HashMap源码解读(JDK1.7)</a>
 			      </li>
 		     
@@ -387,12 +430,6 @@ gitment.render(&#39;container&#39;)
 		      
 			      <li class="post">
 			        <a href="15511042581022.html">微服务架构下处理分布式事务的典型方案</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="15511041776834.html">分布式系统常见的事务处理机制</a>
 			      </li>
 		     
 		  
@@ -517,7 +554,7 @@ Powered by <a target="_blank" href="http://books.sangkf.cn">见课就上的小�
 
 	$(document).ready(function(){
 		if(!browserRedirect()){
-		$(".article-content>ul:last").wrap("<div id='custom_menu'></div>");
+		$(".article-content>ul:first").wrap("<div id='custom_menu'></div>");
 	    	var $custom_menu = $("#custom_menu");
 	    	$("#custom_menu").remove();
 	    	$custom_menu.insertBefore($(".inner-wrap"));

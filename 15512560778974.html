@@ -153,11 +153,79 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <h2 id="toc_0">概述</h2>
+      <blockquote>
+<p>在JDK1.8之前，HashMap采用<code>数组+链表</code>实现，即使用链表处理冲突，同一hash值的节点都存储在一个链表里。但是当位于一个桶中的元素较多，即hash值相等的元素较多时，通过key值依次查找的效率较低。</p>
+</blockquote>
 
-<p>在JDK1.8之前，HashMap采用<code>数组+链表</code>实现，即使用链表处理冲突，同一hash值的节点都存储在一个链表里。但是当位于一个桶中的元素较多，即hash值相等的元素较多时，通过key值依次查找的效率较低。<br/>
-<span id="more"></span><!-- more --><br/>
-而JDK1.8中，HashMap采用<code>数组+链表+红黑树</code>实现，当链表长度超过阈值（8）时，将链表转换为红黑树，这样大大减少了查找时间。</p>
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">概述</a>
+</li>
+<li>
+<a href="#toc_1">涉及到的数据结构：处理hash冲突的链表和红黑树以及位桶</a>
+<ul>
+<li>
+<a href="#toc_2">链表的实现</a>
+</li>
+<li>
+<a href="#toc_3">红黑树</a>
+</li>
+<li>
+<a href="#toc_4">位桶</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_5">HashMap源码分析</a>
+<ul>
+<li>
+<a href="#toc_6">类的继承关系</a>
+</li>
+<li>
+<a href="#toc_7">类的属性</a>
+</li>
+<li>
+<a href="#toc_8">类的构造函数</a>
+<ul>
+<li>
+<a href="#toc_9">HashMap(int, float)型构造函数</a>
+</li>
+<li>
+<a href="#toc_10">HashMap(int)型构造函数</a>
+</li>
+<li>
+<a href="#toc_11">HashMap()型构造函数</a>
+</li>
+<li>
+<a href="#toc_12">HashMap(Map)型构造函数</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_13">hash算法</a>
+</li>
+<li>
+<a href="#toc_14">重要方法分析</a>
+<ul>
+<li>
+<ul>
+<li>
+<a href="#toc_15">HashMap的数据存储实现原理</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+<h2 id="toc_0">概述</h2>
+
+<p>在JDK1.8之前，HashMap采用<code>数组+链表</code>实现，即使用链表处理冲突，同一hash值的节点都存储在一个链表里。但是当位于一个桶中的元素较多，即hash值相等的元素较多时，通过key值依次查找的效率较低。而JDK1.8中，HashMap采用<code>数组+链表+红黑树</code>实现，当链表长度超过阈值（8）时，将链表转换为红黑树，这样大大减少了查找时间。</p>
 
 <p>下图中代表jdk1.8之前的hashmap结构，左边部分即代表哈希表，也称为哈希数组，数组的每个元素都是一个单链表的头节点，链表是用来解决冲突的，如果不同的key映射到了数组的同一位置处，就将其放入单链表中。</p>
 
@@ -538,70 +606,6 @@ System.out.println(map.put(&quot;a&quot;, &quot;AB&quot;)); // 打印AA
 }
 </code></pre>
 
-<ul>
-<li>
-<a href="#toc_0">概述</a>
-</li>
-<li>
-<a href="#toc_1">涉及到的数据结构：处理hash冲突的链表和红黑树以及位桶</a>
-<ul>
-<li>
-<a href="#toc_2">链表的实现</a>
-</li>
-<li>
-<a href="#toc_3">红黑树</a>
-</li>
-<li>
-<a href="#toc_4">位桶</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_5">HashMap源码分析</a>
-<ul>
-<li>
-<a href="#toc_6">类的继承关系</a>
-</li>
-<li>
-<a href="#toc_7">类的属性</a>
-</li>
-<li>
-<a href="#toc_8">类的构造函数</a>
-<ul>
-<li>
-<a href="#toc_9">HashMap(int, float)型构造函数</a>
-</li>
-<li>
-<a href="#toc_10">HashMap(int)型构造函数</a>
-</li>
-<li>
-<a href="#toc_11">HashMap()型构造函数</a>
-</li>
-<li>
-<a href="#toc_12">HashMap(Map)型构造函数</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_13">hash算法</a>
-</li>
-<li>
-<a href="#toc_14">重要方法分析</a>
-<ul>
-<li>
-<ul>
-<li>
-<a href="#toc_15">HashMap的数据存储实现原理</a>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-
 
     
 
@@ -713,6 +717,12 @@ System.out.println(map.put(&quot;a&quot;, &quot;AB&quot;)); // 打印AA
 	      
 		      
 			      <li class="post">
+			        <a href="15513224851488.html">Java中的volatile关键字解析</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
 			        <a href="15512563500691.html">HashMap源码解读(JDK1.7)</a>
 			      </li>
 		     
@@ -732,12 +742,6 @@ System.out.println(map.put(&quot;a&quot;, &quot;AB&quot;)); // 打印AA
 		      
 			      <li class="post">
 			        <a href="15511042581022.html">微服务架构下处理分布式事务的典型方案</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="15511041776834.html">分布式系统常见的事务处理机制</a>
 			      </li>
 		     
 		  
@@ -862,7 +866,7 @@ Powered by <a target="_blank" href="http://books.sangkf.cn">见课就上的小�
 
 	$(document).ready(function(){
 		if(!browserRedirect()){
-		$(".article-content>ul:last").wrap("<div id='custom_menu'></div>");
+		$(".article-content>ul:first").wrap("<div id='custom_menu'></div>");
 	    	var $custom_menu = $("#custom_menu");
 	    	$("#custom_menu").remove();
 	    	$custom_menu.insertBefore($(".inner-wrap"));

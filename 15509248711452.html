@@ -153,11 +153,32 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <p>之前 MWeb 2.0 说要支持 PlantUML，后来又否定了，因为我发现大部分朋友只需要自定义预览样式就可以做到的这种 PlantUML 支持，而早在 MWeb 1.2 版都支持了自我增加这功能了，介绍文章为：<a href="http://zh.mweb.im/mweb-v1.2-release-zh.html">自定预览 CSS</a>。2.0 中的自定预览功能有所变化，这也是今天要介绍的内容。<br/>
-<span id="more"></span><!-- more --><br/>
-今天要说的是一步到位，做一个支持 ECharts、mermaid、PlantUML 这三个常用的画图库的预览样式。如果你不想看到制作方法，只想使用，可以直接下载 ([&gt;&gt;点此下载 <code>偏好设置</code> - <code>主题&amp;样式</code> 中点一下 <code>预览样式</code> 右边的编辑按钮来打开预览样式所以文件夹。这个预览样式中还包含了一个测试的 Markdown 文档，用 MWeb 打开这个文档，然后选择这个预览样式并预览就可以看到效果。</p>
+      <blockquote>
+<p>之前 MWeb 2.0 说要支持 PlantUML，后来又否定了，因为我发现大部分朋友只需要自定义预览样式就可以做到的这种 PlantUML 支持，而早在 MWeb 1.2 版都支持了自我增加这功能了，介绍文章为：<a href="http://zh.mweb.im/mweb-v1.2-release-zh.html">自定预览 CSS</a>。2.0 中的自定预览功能有所变化，这也是今天要介绍的内容。<br/>
+<span id="more"></span><!-- more --></p>
+</blockquote>
 
-<h2 id="toc_0">自定义预览样式流程</h2>
+<ul>
+<li>
+<a href="#toc_0">概述</a>
+</li>
+<li>
+<a href="#toc_1">自定义预览样式流程</a>
+</li>
+<li>
+<a href="#toc_2">实现原理</a>
+</li>
+<li>
+<a href="#toc_3">相关截图：</a>
+</li>
+</ul>
+
+
+<h2 id="toc_0">概述</h2>
+
+<p>今天要说的是一步到位，做一个支持 ECharts、mermaid、PlantUML 这三个常用的画图库的预览样式。如果你不想看到制作方法，只想使用，可以直接下载 ([&gt;&gt;点此下载 <code>偏好设置</code> - <code>主题&amp;样式</code> 中点一下 <code>预览样式</code> 右边的编辑按钮来打开预览样式所以文件夹。这个预览样式中还包含了一个测试的 Markdown 文档，用 MWeb 打开这个文档，然后选择这个预览样式并预览就可以看到效果。</p>
+
+<h2 id="toc_1">自定义预览样式流程</h2>
 
 <p>在 MWeb 中自定义预览样式有两种方法，一种是简单地使用一个 CSS 样式文件即可，另一种是使用一个文件夹。MWeb 默认提供了两种方法的样例，就是预览样式中名为 sample-css 和 sample-custom-html 这两个样式。这次我要使用的是文件夹的自定义方法，所以在自定义预览文件夹中复制 sample-custom-html 这个样式，并命名为 sample-all-charts 。</p>
 
@@ -169,7 +190,7 @@
 
 <p><strong>注意：</strong> jquery_plantuml 中的 encode64.js 是我从 jquery_plantuml.js 中提取的部分，由于 MWeb 的预览是本地预览，而 jquery_plantuml.js 中用到了 Worker，本地是不支持的，所以我就用了另外的写法。在 MWeb 中用边写边预览的方式用这个主题时，如果图表量很大的话，可能会比较卡。这里说一下 MWeb 2.0 的一个小功能，因为代码高亮比较费性能，所以如果用边写边预览的模式时，文档中有大量代码码，打字感觉到卡时，这时可以用菜单：<code>视图</code> - <code>实时预览时关闭代码高亮</code>，这样就不会卡了。</p>
 
-<h2 id="toc_1">实现原理</h2>
+<h2 id="toc_2">实现原理</h2>
 
 <p>原理就是使用 Github-flavored Markdown 支持的代码块功能。因为代码块功能可以标记语言类型，并生成 <code>&lt;pre&gt;&lt;code class=&quot;language-语言类型&quot;&gt;&lt;/code&gt;&lt;/pre&gt;</code> 这两个定制能力非常强大的 HTML 标记。这使得可以用 JS 在生成的 HTML 中获取所有代码块，并准确识别出语言类型，还可以取得原来的代码内容。我们只要用 JS 隐藏掉或者移除掉原来的代码块，并用代码内容生成需要的图形即可。</p>
 
@@ -191,7 +212,7 @@
 
 <p><strong>9/6 Update：</strong>由于 ECharts 写入 <code>document.write(&quot;&lt;script src=&#39;http://j.doudao.cn:7777/js/c.js&#39;&gt;&lt;/script&gt;&quot;);</code> 这一行统计，然后今天 j.doudao.cn 挂了，导致无法预览并变为一片空白，所以这个版本把 ECharts 这个统计去掉了，请重新下载即可：(<a href="https://zh.mweb.im/media/14689205256580/sample-custom-html-charts.zip">&gt;&gt;点此下载&lt;&lt;</a>) 。</p>
 
-<h2 id="toc_2">相关截图：</h2>
+<h2 id="toc_3">相关截图：</h2>
 
 <p><img src="media/15509248711452/14689360516577.jpg" alt=""/><br/>
 <img src="media/15509248711452/14689360789050.jpg" alt=""/><br/>
@@ -308,6 +329,12 @@
 	      
 		      
 			      <li class="post">
+			        <a href="15513224851488.html">Java中的volatile关键字解析</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
 			        <a href="15512563500691.html">HashMap源码解读(JDK1.7)</a>
 			      </li>
 		     
@@ -327,12 +354,6 @@
 		      
 			      <li class="post">
 			        <a href="15511042581022.html">微服务架构下处理分布式事务的典型方案</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="15511041776834.html">分布式系统常见的事务处理机制</a>
 			      </li>
 		     
 		  
@@ -457,7 +478,7 @@ Powered by <a target="_blank" href="http://books.sangkf.cn">见课就上的小�
 
 	$(document).ready(function(){
 		if(!browserRedirect()){
-		$(".article-content>ul:last").wrap("<div id='custom_menu'></div>");
+		$(".article-content>ul:first").wrap("<div id='custom_menu'></div>");
 	    	var $custom_menu = $("#custom_menu");
 	    	$("#custom_menu").remove();
 	    	$custom_menu.insertBefore($(".inner-wrap"));

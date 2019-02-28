@@ -153,11 +153,28 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <p>自己经常写一些小项目，有时候是自己写，更多时候是帮别人写。 一般都要部署到服务器上，最早使用的方法是本地 mvn clean package 打包好，上传到服务器上运行。有时候发现自己写了个bug，修复了，或者改了点/加了点需求，改完代码，又要重新打包，上传。 反反复复，很麻烦。之前在公司，用的是 jenkins，解决了这个痛点，<br/>
-<span id="more"></span><!-- more --><br/>
+      <blockquote>
+<p>本文主要介绍如何利用jenkins实现自动部署Java项目</p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">背景</a>
+</li>
+<li>
+<a href="#toc_1">具体实现</a>
+</li>
+</ul>
+
+
+<h2 id="toc_0">背景</h2>
+
+<p>自己经常写一些小项目，有时候是自己写，更多时候是帮别人写。 一般都要部署到服务器上，最早使用的方法是本地 mvn clean package 打包好，上传到服务器上运行。有时候发现自己写了个bug，修复了，或者改了点/加了点需求，改完代码，又要重新打包，上传。 反反复复，很麻烦。之前在公司，用的是 jenkins，解决了这个痛点，<br/>
 jenkins 搭好了后，只需要在 jenkins 后台点击构建即可。后来，也用了一段时间公司自己开发的一个云产品，类似 EDAS 的一个东西，只需要把代码推到 GitLab上，  构建项目，运行项目全在后台操作，安全可靠。 但是这些东西，都是针对大型项目，项目复杂度高，服务器配置也高。自己一个人开发的小项目，通常都是单模块项目，客户的服务器配置可能也不高，2G内存，1G内存都有可能。 于是，直接用 shell 脚本启动项目不失为一种好方法。  </p>
 
-<h2 id="toc_0">具体实现</h2>
+<h2 id="toc_1">具体实现</h2>
 
 <p>代码结构如下<br/>
  <img src="media/15509338125902/QQ20190117-222349@2x.png" alt=""/>   <br/>
@@ -386,6 +403,12 @@ echo &quot;SENS部署完毕，Enjoy！&quot;
 	      
 		      
 			      <li class="post">
+			        <a href="15513224851488.html">Java中的volatile关键字解析</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
 			        <a href="15512563500691.html">HashMap源码解读(JDK1.7)</a>
 			      </li>
 		     
@@ -405,12 +428,6 @@ echo &quot;SENS部署完毕，Enjoy！&quot;
 		      
 			      <li class="post">
 			        <a href="15511042581022.html">微服务架构下处理分布式事务的典型方案</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="15511041776834.html">分布式系统常见的事务处理机制</a>
 			      </li>
 		     
 		  
@@ -535,7 +552,7 @@ Powered by <a target="_blank" href="http://books.sangkf.cn">见课就上的小�
 
 	$(document).ready(function(){
 		if(!browserRedirect()){
-		$(".article-content>ul:last").wrap("<div id='custom_menu'></div>");
+		$(".article-content>ul:first").wrap("<div id='custom_menu'></div>");
 	    	var $custom_menu = $("#custom_menu");
 	    	$("#custom_menu").remove();
 	    	$custom_menu.insertBefore($(".inner-wrap"));

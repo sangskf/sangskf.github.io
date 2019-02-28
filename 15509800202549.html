@@ -153,9 +153,30 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <p>利用MarkDown书写一些常用的流程图，Echarts图表，数学公式，点图等</p>
+      <blockquote>
+<p>利用MarkDown书写一些常用的流程图，Echarts图表，数学公式，点图等</p>
+</blockquote>
 
 <span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">mermaid</a>
+</li>
+<li>
+<a href="#toc_1">dot</a>
+</li>
+<li>
+<a href="#toc_2">echarts</a>
+</li>
+<li>
+<a href="#toc_3">顺序图和流程图</a>
+</li>
+<li>
+<a href="#toc_4">LaTeX （MathJax 渲染）</a>
+</li>
+</ul>
+
 
 <h3 id="toc_0">mermaid</h3>
 
@@ -259,25 +280,6 @@ $$  x = \dfrac{-b \pm \sqrt{b^2 - 4ac}}{2a} $$
 </code></pre>
 
 <p><img src="media/15509800202549/15510634028669.jpg" alt="" style="width:500px;"/></p>
-
-<ul>
-<li>
-<a href="#toc_0">mermaid</a>
-</li>
-<li>
-<a href="#toc_1">dot</a>
-</li>
-<li>
-<a href="#toc_2">echarts</a>
-</li>
-<li>
-<a href="#toc_3">顺序图和流程图</a>
-</li>
-<li>
-<a href="#toc_4">LaTeX （MathJax 渲染）</a>
-</li>
-</ul>
-
 
 
     
@@ -390,6 +392,12 @@ $$  x = \dfrac{-b \pm \sqrt{b^2 - 4ac}}{2a} $$
 	      
 		      
 			      <li class="post">
+			        <a href="15513224851488.html">Java中的volatile关键字解析</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
 			        <a href="15512563500691.html">HashMap源码解读(JDK1.7)</a>
 			      </li>
 		     
@@ -409,12 +417,6 @@ $$  x = \dfrac{-b \pm \sqrt{b^2 - 4ac}}{2a} $$
 		      
 			      <li class="post">
 			        <a href="15511042581022.html">微服务架构下处理分布式事务的典型方案</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="15511041776834.html">分布式系统常见的事务处理机制</a>
 			      </li>
 		     
 		  
@@ -539,7 +541,7 @@ Powered by <a target="_blank" href="http://books.sangkf.cn">见课就上的小�
 
 	$(document).ready(function(){
 		if(!browserRedirect()){
-		$(".article-content>ul:last").wrap("<div id='custom_menu'></div>");
+		$(".article-content>ul:first").wrap("<div id='custom_menu'></div>");
 	    	var $custom_menu = $("#custom_menu");
 	    	$("#custom_menu").remove();
 	    	$custom_menu.insertBefore($(".inner-wrap"));

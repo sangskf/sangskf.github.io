@@ -153,13 +153,52 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <h3 id="toc_0">前言</h3>
-
-<blockquote>
-<p>有人认为编程是一门技术活，要有一定的天赋，非天资聪慧者不能及也。其实不然，笔者虽是计算机专业出身，但工作年限并不长，对于技术这碗饭有一些心得体会，大多数人成为某领域顶级专家可能会有些难度，但应对日常工作，成长为资深研发工程师、技术专家、甚至成为小团队的Team Leader，其实并不难。</p>
+      <blockquote>
+<p>多读书、多看报，多研究常用开源框架的源码，比如：github.com，这里汇集了全球工程师的智慧！</p>
 </blockquote>
 
 <span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">前言</a>
+</li>
+<li>
+<a href="#toc_1">基础知识</a>
+</li>
+<li>
+<a href="#toc_2">数据库</a>
+</li>
+<li>
+<a href="#toc_3">web容器/协议/网络</a>
+</li>
+<li>
+<a href="#toc_4">常用三方工具包</a>
+</li>
+<li>
+<a href="#toc_5">中间件</a>
+</li>
+<li>
+<a href="#toc_6">系统架构</a>
+</li>
+<li>
+<a href="#toc_7">项目管理</a>
+</li>
+<li>
+<a href="#toc_8">运维</a>
+</li>
+<li>
+<a href="#toc_9">个人成长</a>
+</li>
+<li>
+<a href="#toc_10">其它</a>
+</li>
+</ul>
+
+
+<h3 id="toc_0">前言</h3>
+
+<p>有人认为编程是一门技术活，要有一定的天赋，非天资聪慧者不能及也。其实不然，笔者虽是计算机专业出身，但工作年限并不长，对于技术这碗饭有一些心得体会，大多数人成为某领域顶级专家可能会有些难度，但应对日常工作，成长为资深研发工程师、技术专家、甚至成为小团队的Team Leader，其实并不难。</p>
 
 <p><strong>多读书、多看报，多研究常用开源框架的源码，比如：github.com，这里汇集了全球工程师的智慧！</strong></p>
 
@@ -354,46 +393,7 @@
 <li><a href="https://link.juejin.im/?target=http%3A%2F%2Fblog.csdn.net%2Fqq1332479771%2Farticle%2Fdetails%2F56087333">github上fork项目后，如何同步更新后面提交</a></li>
 </ul>
 
-<blockquote>
-<p>原文地址：<a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk">github.com/aalansehaiy…</a></p>
-</blockquote>
-
-<ul>
-<li>
-<a href="#toc_0">前言</a>
-</li>
-<li>
-<a href="#toc_1">基础知识</a>
-</li>
-<li>
-<a href="#toc_2">数据库</a>
-</li>
-<li>
-<a href="#toc_3">web容器/协议/网络</a>
-</li>
-<li>
-<a href="#toc_4">常用三方工具包</a>
-</li>
-<li>
-<a href="#toc_5">中间件</a>
-</li>
-<li>
-<a href="#toc_6">系统架构</a>
-</li>
-<li>
-<a href="#toc_7">项目管理</a>
-</li>
-<li>
-<a href="#toc_8">运维</a>
-</li>
-<li>
-<a href="#toc_9">个人成长</a>
-</li>
-<li>
-<a href="#toc_10">其它</a>
-</li>
-</ul>
-
+<p>[<strong>原文地址</strong>]：<a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Faalansehaiyang%2Ftechnology-talk">github.com/aalansehaiy…</a></p>
 
 
     
@@ -506,6 +506,12 @@
 	      
 		      
 			      <li class="post">
+			        <a href="15513224851488.html">Java中的volatile关键字解析</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
 			        <a href="15512563500691.html">HashMap源码解读(JDK1.7)</a>
 			      </li>
 		     
@@ -525,12 +531,6 @@
 		      
 			      <li class="post">
 			        <a href="15511042581022.html">微服务架构下处理分布式事务的典型方案</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="15511041776834.html">分布式系统常见的事务处理机制</a>
 			      </li>
 		     
 		  
@@ -655,7 +655,7 @@ Powered by <a target="_blank" href="http://books.sangkf.cn">见课就上的小�
 
 	$(document).ready(function(){
 		if(!browserRedirect()){
-		$(".article-content>ul:last").wrap("<div id='custom_menu'></div>");
+		$(".article-content>ul:first").wrap("<div id='custom_menu'></div>");
 	    	var $custom_menu = $("#custom_menu");
 	    	$("#custom_menu").remove();
 	    	$custom_menu.insertBefore($(".inner-wrap"));

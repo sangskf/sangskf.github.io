@@ -140,7 +140,10 @@
                       
                       <div class="a-content-text">
                         
-                        	<p>根据微服务架构的鼻祖Martin Fowler的忠告，微服务架构中应当尽量避免分布式事务。然而，在某些领域，分布式事务如同宿命中的对手无法避免。在工程领域，分布式事务的讨论主要聚焦于强一致性和最终一致性的解决方案。典型方案包括：<br/>
+                        	<blockquote>
+<p>根据微服务架构的鼻祖Martin Fowler的忠告，微服务架构中应当尽量避免分布式事务。然而，在某些领域，分布式事务如同宿命中的对手无法避免。在工程领域，分布式事务的讨论主要聚焦于强一致性和最终一致性的解决方案。</p>
+</blockquote>
+
 
                         
                       </div>
@@ -173,7 +176,10 @@
                       
                       <div class="a-content-text">
                         
-                        	<p>为保障系统的可用性、可靠性以及性能，在分布式系统中，往往会设置数据冗余，即对数据进行复制。举例来说，当一个数据库的副本被破环以后，那么系统只需要转换到其他数据副本就能继续运行下去。<br/>
+                        	<blockquote>
+<p>为保障系统的可用性、可靠性以及性能，在分布式系统中，往往会设置数据冗余，即对数据进行复制。举例来说，当一个数据库的副本被破环以后，那么系统只需要转换到其他数据副本就能继续运行下去。</p>
+</blockquote>
+
 
                         
                       </div>
@@ -242,9 +248,10 @@
                       
                       <div class="a-content-text">
                         
-                        	<h2 id="toc_0">服务治理</h2>
+                        	<blockquote>
+<p>服务治理是微服务架构中最为核心和基础的模块，他主要用来实现各个微服务市里的自动化注册和发现。</p>
+</blockquote>
 
-<p>服务治理是微服务架构中最为核心和基础的模块，他主要用来实现各个微服务市里的自动化注册和发现。<br/>
 
                         
                       </div>
@@ -277,13 +284,10 @@
                       
                       <div class="a-content-text">
                         
-                        	<h3 id="toc_0">声明Bean的注解:</h3>
+                        	<blockquote>
+<p>简单介绍一下Spring常用的注解，及其作用和使用场景</p>
+</blockquote>
 
-<ul>
-<li>@Component : 组件,没有明确的角色</li>
-<li><a href="https://my.oschina.net/service">@Service</a> : 在业务逻辑层(service层)使用</li>
-<li>@Repository : 在数据访问层(dao层)使用.</li>
-<li><a href="https://my.oschina.net/u/1774615">@Controller</a> : 在展现层(MVC--SpringMVC)使用
 
                         
                       </div>
@@ -387,6 +391,12 @@
 	      
 		      
 			      <li class="post">
+			        <a href="15513224851488.html">Java中的volatile关键字解析</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
 			        <a href="15512563500691.html">HashMap源码解读(JDK1.7)</a>
 			      </li>
 		     
@@ -406,12 +416,6 @@
 		      
 			      <li class="post">
 			        <a href="15511042581022.html">微服务架构下处理分布式事务的典型方案</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="15511041776834.html">分布式系统常见的事务处理机制</a>
 			      </li>
 		     
 		  
@@ -536,7 +540,7 @@ Powered by <a target="_blank" href="http://books.sangkf.cn">见课就上的小�
 
 	$(document).ready(function(){
 		if(!browserRedirect()){
-		$(".article-content>ul:last").wrap("<div id='custom_menu'></div>");
+		$(".article-content>ul:first").wrap("<div id='custom_menu'></div>");
 	    	var $custom_menu = $("#custom_menu");
 	    	$("#custom_menu").remove();
 	    	$custom_menu.insertBefore($(".inner-wrap"));

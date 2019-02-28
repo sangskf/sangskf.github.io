@@ -153,12 +153,64 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <ul>
-<li>不积跬步无以至千里，不积小流无以成江海</li>
-<li>千里之行，始于足下</li>
-</ul>
+      <blockquote>
+<p>不积跬步无以至千里，不积小流无以成江海<br/>
+千里之行，始于足下</p>
+</blockquote>
 
 <span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">数据类型</a>
+</li>
+<li>
+<a href="#toc_1">String</a>
+</li>
+<li>
+<a href="#toc_2">运算</a>
+</li>
+<li>
+<a href="#toc_3">继承</a>
+</li>
+<li>
+<a href="#toc_4">Object 通用方法</a>
+</li>
+<li>
+<a href="#toc_5">关键字</a>
+</li>
+<li>
+<a href="#toc_6">反射</a>
+</li>
+<li>
+<a href="#toc_7">异常</a>
+</li>
+<li>
+<a href="#toc_8">泛型</a>
+</li>
+<li>
+<a href="#toc_9">注解</a>
+</li>
+<li>
+<a href="#toc_10">特性</a>
+</li>
+<li>
+<a href="#toc_11">Java 各版本的新特性</a>
+</li>
+<li>
+<a href="#toc_12">Java 与 C++ 的区别</a>
+</li>
+<li>
+<a href="#toc_13">JRE or JDK</a>
+</li>
+<li>
+<a href="#toc_14">参考资料</a>
+</li>
+<li>
+<a href="#toc_15">进阶指南</a>
+</li>
+</ul>
+
 
 <h2 id="toc_0">数据类型</h2>
 
@@ -410,58 +462,6 @@ Constant pool:<br/>
 
 <p><a href="https://github.com/CyC2018/Backend-Interview-Guide">https://github.com/CyC2018/Backend-Interview-Guide</a></p>
 
-<ul>
-<li>
-<a href="#toc_0">数据类型</a>
-</li>
-<li>
-<a href="#toc_1">String</a>
-</li>
-<li>
-<a href="#toc_2">运算</a>
-</li>
-<li>
-<a href="#toc_3">继承</a>
-</li>
-<li>
-<a href="#toc_4">Object 通用方法</a>
-</li>
-<li>
-<a href="#toc_5">关键字</a>
-</li>
-<li>
-<a href="#toc_6">反射</a>
-</li>
-<li>
-<a href="#toc_7">异常</a>
-</li>
-<li>
-<a href="#toc_8">泛型</a>
-</li>
-<li>
-<a href="#toc_9">注解</a>
-</li>
-<li>
-<a href="#toc_10">特性</a>
-</li>
-<li>
-<a href="#toc_11">Java 各版本的新特性</a>
-</li>
-<li>
-<a href="#toc_12">Java 与 C++ 的区别</a>
-</li>
-<li>
-<a href="#toc_13">JRE or JDK</a>
-</li>
-<li>
-<a href="#toc_14">参考资料</a>
-</li>
-<li>
-<a href="#toc_15">进阶指南</a>
-</li>
-</ul>
-
-
 
     
 
@@ -573,6 +573,12 @@ Constant pool:<br/>
 	      
 		      
 			      <li class="post">
+			        <a href="15513224851488.html">Java中的volatile关键字解析</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
 			        <a href="15512563500691.html">HashMap源码解读(JDK1.7)</a>
 			      </li>
 		     
@@ -592,12 +598,6 @@ Constant pool:<br/>
 		      
 			      <li class="post">
 			        <a href="15511042581022.html">微服务架构下处理分布式事务的典型方案</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="15511041776834.html">分布式系统常见的事务处理机制</a>
 			      </li>
 		     
 		  
@@ -722,7 +722,7 @@ Powered by <a target="_blank" href="http://books.sangkf.cn">见课就上的小�
 
 	$(document).ready(function(){
 		if(!browserRedirect()){
-		$(".article-content>ul:last").wrap("<div id='custom_menu'></div>");
+		$(".article-content>ul:first").wrap("<div id='custom_menu'></div>");
 	    	var $custom_menu = $("#custom_menu");
 	    	$("#custom_menu").remove();
 	    	$custom_menu.insertBefore($(".inner-wrap"));

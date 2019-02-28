@@ -153,10 +153,28 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <h2 id="toc_0">事务特性</h2>
+      <blockquote>
+<p>原子性、一致性、隔离性、持久性是事务的四个基本特性。</p>
+</blockquote>
 
-<p>原子性、一致性、隔离性、持久性，这四个属性通常称为ACID特性。<br/>
-<span id="more"></span><!-- more --></p>
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">事务特性</a>
+</li>
+<li>
+<a href="#toc_1">分布式事务</a>
+</li>
+<li>
+<a href="#toc_2">开源框架</a>
+</li>
+</ul>
+
+
+<h2 id="toc_0">事务特性</h2>
+
+<p>原子性、一致性、隔离性、持久性，这四个属性通常称为ACID特性。</p>
 
 <ul>
 <li>原子性（atomicity）。一个事务是一个不可分割的工作单位，事务中包括的诸操作要么都做，要么都不做。</li>
@@ -188,19 +206,6 @@
 <li>微服务架构下分布式事务解决方案 —— 阿里GTS</li>
 <li>ByteJTA是一个兼容JTA规范的基于XA/2PC的分布式事务管理器</li>
 </ul>
-
-<ul>
-<li>
-<a href="#toc_0">事务特性</a>
-</li>
-<li>
-<a href="#toc_1">分布式事务</a>
-</li>
-<li>
-<a href="#toc_2">开源框架</a>
-</li>
-</ul>
-
 
 
     
@@ -313,6 +318,12 @@
 	      
 		      
 			      <li class="post">
+			        <a href="15513224851488.html">Java中的volatile关键字解析</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
 			        <a href="15512563500691.html">HashMap源码解读(JDK1.7)</a>
 			      </li>
 		     
@@ -332,12 +343,6 @@
 		      
 			      <li class="post">
 			        <a href="15511042581022.html">微服务架构下处理分布式事务的典型方案</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="15511041776834.html">分布式系统常见的事务处理机制</a>
 			      </li>
 		     
 		  
@@ -462,7 +467,7 @@ Powered by <a target="_blank" href="http://books.sangkf.cn">见课就上的小�
 
 	$(document).ready(function(){
 		if(!browserRedirect()){
-		$(".article-content>ul:last").wrap("<div id='custom_menu'></div>");
+		$(".article-content>ul:first").wrap("<div id='custom_menu'></div>");
 	    	var $custom_menu = $("#custom_menu");
 	    	$("#custom_menu").remove();
 	    	$custom_menu.insertBefore($(".inner-wrap"));

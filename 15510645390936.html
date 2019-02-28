@@ -153,8 +153,10 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <p>列举一些Java常用的知识点<br/>
+      <blockquote>
+<p>列举一些Java相关的知识点<br/>
 <span id="more"></span><!-- more --></p>
+</blockquote>
 
 <p><strong>基础篇</strong><br/>
 <strong>01面向对象</strong><br/>
@@ -949,8 +951,6 @@ TensorFlow、DeepLearning4J</p>
 《架构即未来》</p>
 
 
-
-
     
 
       </div>
@@ -1061,6 +1061,12 @@ TensorFlow、DeepLearning4J</p>
 	      
 		      
 			      <li class="post">
+			        <a href="15513224851488.html">Java中的volatile关键字解析</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
 			        <a href="15512563500691.html">HashMap源码解读(JDK1.7)</a>
 			      </li>
 		     
@@ -1080,12 +1086,6 @@ TensorFlow、DeepLearning4J</p>
 		      
 			      <li class="post">
 			        <a href="15511042581022.html">微服务架构下处理分布式事务的典型方案</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="15511041776834.html">分布式系统常见的事务处理机制</a>
 			      </li>
 		     
 		  
@@ -1210,7 +1210,7 @@ Powered by <a target="_blank" href="http://books.sangkf.cn">见课就上的小�
 
 	$(document).ready(function(){
 		if(!browserRedirect()){
-		$(".article-content>ul:last").wrap("<div id='custom_menu'></div>");
+		$(".article-content>ul:first").wrap("<div id='custom_menu'></div>");
 	    	var $custom_menu = $("#custom_menu");
 	    	$("#custom_menu").remove();
 	    	$custom_menu.insertBefore($(".inner-wrap"));

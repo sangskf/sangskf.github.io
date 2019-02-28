@@ -151,8 +151,44 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <p>本项目包含了技术面试必备的基础知识，浅显易懂，你不需要花很长的时间去阅读和理解成堆的技术书籍就可以快速掌握这些知识，从而节省宝贵的面试复习时间。你也可以阅读 <a href="https://github.com/CyC2018/Backend-Interview-Guide">面试进阶指南</a>，包含了学习指导和面试技巧，让你更轻松拿到满意的 Offer。<br/>
-<span id="more"></span><!-- more --></p>
+      <blockquote>
+<p>本项目包含了技术面试必备的基础知识，浅显易懂，你不需要花很长的时间去阅读和理解成堆的技术书籍就可以快速掌握这些知识，从而节省宝贵的面试复习时间。</p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">✏️ 算法</a>
+</li>
+<li>
+<a href="#toc_1">💻 操作系统</a>
+</li>
+<li>
+<a href="#toc_2">☁️ 网络</a>
+</li>
+<li>
+<a href="#toc_3">🎨 面向对象</a>
+</li>
+<li>
+<a href="#toc_4">💾 数据库</a>
+</li>
+<li>
+<a href="#toc_5">☕️ Java</a>
+</li>
+<li>
+<a href="#toc_6">💡 系统设计</a>
+</li>
+<li>
+<a href="#toc_7">🔧 工具</a>
+</li>
+<li>
+<a href="#toc_8">🍉 编码实践</a>
+</li>
+</ul>
+
+
+<p>本项目包含了技术面试必备的基础知识，浅显易懂，你不需要花很长的时间去阅读和理解成堆的技术书籍就可以快速掌握这些知识，从而节省宝贵的面试复习时间。你也可以阅读 <a href="https://github.com/CyC2018/Backend-Interview-Guide">面试进阶指南</a>，包含了学习指导和面试技巧，让你更轻松拿到满意的 Offer。</p>
 
 <h2 id="toc_0">✏️ 算法</h2>
 
@@ -234,37 +270,6 @@
 <blockquote>
 <p>原文地址 <a href="https://github.com/CyC2018/CS-Notes">https://github.com/CyC2018/CS-Notes</a></p>
 </blockquote>
-
-<ul>
-<li>
-<a href="#toc_0">✏️ 算法</a>
-</li>
-<li>
-<a href="#toc_1">💻 操作系统</a>
-</li>
-<li>
-<a href="#toc_2">☁️ 网络</a>
-</li>
-<li>
-<a href="#toc_3">🎨 面向对象</a>
-</li>
-<li>
-<a href="#toc_4">💾 数据库</a>
-</li>
-<li>
-<a href="#toc_5">☕️ Java</a>
-</li>
-<li>
-<a href="#toc_6">💡 系统设计</a>
-</li>
-<li>
-<a href="#toc_7">🔧 工具</a>
-</li>
-<li>
-<a href="#toc_8">🍉 编码实践</a>
-</li>
-</ul>
-
 
 
     
@@ -377,6 +382,12 @@
 	      
 		      
 			      <li class="post">
+			        <a href="15513224851488.html">Java中的volatile关键字解析</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
 			        <a href="15512563500691.html">HashMap源码解读(JDK1.7)</a>
 			      </li>
 		     
@@ -396,12 +407,6 @@
 		      
 			      <li class="post">
 			        <a href="15511042581022.html">微服务架构下处理分布式事务的典型方案</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="15511041776834.html">分布式系统常见的事务处理机制</a>
 			      </li>
 		     
 		  
@@ -526,7 +531,7 @@ Powered by <a target="_blank" href="http://books.sangkf.cn">见课就上的小�
 
 	$(document).ready(function(){
 		if(!browserRedirect()){
-		$(".article-content>ul:last").wrap("<div id='custom_menu'></div>");
+		$(".article-content>ul:first").wrap("<div id='custom_menu'></div>");
 	    	var $custom_menu = $("#custom_menu");
 	    	$("#custom_menu").remove();
 	    	$custom_menu.insertBefore($(".inner-wrap"));

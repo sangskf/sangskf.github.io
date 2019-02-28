@@ -153,8 +153,21 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <p>代理类的目的是为其他对象提供一个代理以控制对某个对象的访问。<br/>
-<span id="more"></span><!-- more --></p>
+      <blockquote>
+<p>代理类的目的是为其他对象提供一个代理以控制对某个对象的访问。</p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">代理的含义</a>
+</li>
+<li>
+<a href="#toc_1">动态代理相关类介绍</a>
+</li>
+</ul>
+
 
 <h2 id="toc_0">代理的含义</h2>
 
@@ -196,19 +209,7 @@
 <p>其实我们所说的DynamicProxy（动态代理类）是这样一种class：它是在运行时生成的class，在生成它时你必须提供一组interface给它，然后该class就宣称它实现了这些 interface。如此一来，我们可以把该class的实例当作这些interface中的任何一个来用（可以强转为相应的接口类型）。当然，这个DynamicProxy其实就是一个Proxy，它不会做实质性的工作，在生成它的实例时你必须提供一个handler，由它接管实际的工作。</p></li>
 </ol>
 
-<blockquote>
-<p>[转载]<a href="https://blog.csdn.net/xiaokang123456kao/article/details/77679848">https://blog.csdn.net/xiaokang123456kao/article/details/77679848</a></p>
-</blockquote>
-
-<ul>
-<li>
-<a href="#toc_0">代理的含义</a>
-</li>
-<li>
-<a href="#toc_1">动态代理相关类介绍</a>
-</li>
-</ul>
-
+<p>[<strong>转载</strong>]<a href="https://blog.csdn.net/xiaokang123456kao/article/details/77679848">https://blog.csdn.net/xiaokang123456kao/article/details/77679848</a></p>
 
 
     
@@ -321,6 +322,12 @@
 	      
 		      
 			      <li class="post">
+			        <a href="15513224851488.html">Java中的volatile关键字解析</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
 			        <a href="15512563500691.html">HashMap源码解读(JDK1.7)</a>
 			      </li>
 		     
@@ -340,12 +347,6 @@
 		      
 			      <li class="post">
 			        <a href="15511042581022.html">微服务架构下处理分布式事务的典型方案</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="15511041776834.html">分布式系统常见的事务处理机制</a>
 			      </li>
 		     
 		  
@@ -470,7 +471,7 @@ Powered by <a target="_blank" href="http://books.sangkf.cn">见课就上的小�
 
 	$(document).ready(function(){
 		if(!browserRedirect()){
-		$(".article-content>ul:last").wrap("<div id='custom_menu'></div>");
+		$(".article-content>ul:first").wrap("<div id='custom_menu'></div>");
 	    	var $custom_menu = $("#custom_menu");
 	    	$("#custom_menu").remove();
 	    	$custom_menu.insertBefore($(".inner-wrap"));

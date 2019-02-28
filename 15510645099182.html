@@ -153,191 +153,303 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <p>原文地址 <a href="https://www.cnblogs.com/huyunfan/p/7456535.html">https://www.cnblogs.com/huyunfan/p/7456535.html</a></p>
+      <blockquote>
+<p>[<strong>原文地址</strong>] <a href="https://www.cnblogs.com/huyunfan/p/7456535.html">https://www.cnblogs.com/huyunfan/p/7456535.html</a></p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
 
 <ul>
-<li><p><strong>default拓展方法</strong><br/>
-<span id="more"></span><!-- more --><br/>
-default关键字为接口声明添加非抽象方法的实现,也称为拓展方法</p>
-<pre><code class="language-java">public interface Formula {
-  void doSomething();<br/>
-  default void before() {<br/>
-      System.out.println(&quot;我是拓展方法&quot;);<br/>
-  }<br/>
-}<br/>
-public class FormulaService implements Formula {<br/>
-  @Override<br/>
-  public void doSomething() {<br/>
-      before();<br/>
-      System.out.println(&quot;我是override方法&quot;);<br/>
-  }<br/>
-}
-</code></pre></li>
-<li><p><strong>Lambda表达式</strong></p>
-<p>java8引入函数式编程，Lambda则是函数式编程的基础。</p>
-<pre><code class="language-java">List&lt;String&gt; list = Arrays.asList(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;);
-// java8之前<br/>
-Collections.sort(list, new Comparator&lt;String&gt;(){<br/>
-  @Override<br/>
-  public int compare(String o1, String o2) {<br/>
-      return o1.compareTo(o2);<br/>
-  }<br/>
-});<br/>
-// lambda<br/>
-Collections.sort(list, (String o1, String o2) -&gt; {<br/>
-          return o2.compareTo(o1);<br/>
-});<br/>
-// 简洁lambda<br/>
-Collections.sort(list, (String o1, String o2) -&gt;  o2.compareTo(o1));<br/>
-// 更简洁lambda<br/>
-Collections.sort(list, (o1, o2) -&gt;  o2.compareTo(o1));<br/>
-// 也可以这样写<br/>
-Collections.sort(list, Comparator.comparing(String::toString));
-</code></pre></li>
-<li><p><strong>函数式接口</strong></p>
-<p>一个函数式接口有且只能有一个抽象方法申明，其中该注意的是 @FunctionalInterface 注解，此时如果在接口中定义了第二个抽象方法，编译器将会抛出异常。当然如果不加该注解也不是不行，如果接口中有多个抽象方法，而你又使用了lambda表达式，则在调用处会抛出异常。</p>
-<pre><code class="language-java">@FunctionalInterface
-public interface Formula&lt;F,T&gt;{<br/>
-  T convert(F var1);<br/>
-}<br/>
-Formula&lt;String,Integer&gt; function = (var1 -&gt; Integer.valueOf(var1));<br/>
-Integer var2 = function.convert(&quot;1000&quot;); 
-</code></pre></li>
-<li><p><strong>方法和构造函数引用</strong></p>
-<p>方法引用的标准语法是 <code>类名:方法名</code></p>
-<table>
-<thead>
-<tr>
-<th>类型</th>
-<th>示例</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>引用静态方法</td>
-<td>targetClass :: staticMethodName</td>
-</tr>
-<tr>
-<td>引用某个对象的实例方法</td>
-<td>targetClass :: instanceMethodName</td>
-</tr>
-<tr>
-<td>引用某个类型的任意对象的实例方法</td>
-<td>targetType :: methodName</td>
-</tr>
-<tr>
-<td>引用构造方法</td>
-<td>className :: new</td>
-</tr>
-</tbody>
-</table></li>
+<li>
+<a href="#toc_0">default拓展方法</a>
+</li>
+<li>
+<a href="#toc_1">Lambda表达式</a>
+</li>
+<li>
+<a href="#toc_2">函数式接口</a>
+</li>
+<li>
+<a href="#toc_3">方法和构造函数引用</a>
+<ul>
+<li>
+<a href="#toc_4">引用静态方法</a>
+</li>
+<li>
+<a href="#toc_5">引用某个类型的任意对象的实例方法</a>
+</li>
+<li>
+<a href="#toc_6">引用构造方法</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_7">Lambda的范围</a>
+<ul>
+<li>
+<a href="#toc_8">访问成员变量</a>
+</li>
+<li>
+<a href="#toc_9">访问成员变量和静态变量</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_10">内置函数式接口</a>
+<ul>
+<li>
+<a href="#toc_11">Predicates</a>
+</li>
+<li>
+<a href="#toc_12">Functions</a>
+</li>
+<li>
+<a href="#toc_13">Suppliers</a>
+</li>
+<li>
+<a href="#toc_14">Consumers</a>
+</li>
+<li>
+<a href="#toc_15">Comparators</a>
+</li>
+<li>
+<a href="#toc_16">Optionals</a>
+</li>
+</ul>
+</li>
 </ul>
 
-<ol>
-<li><p><strong>引用静态方法</strong></p>
-<pre><code class="language-java">Formula&lt;String,Integer&gt; function = (Integer::valueOf);
-Integer var2 = function.convert(&quot;1000&quot;);
-</code></pre></li>
-<li><p><strong>引用某个类型的任意对象的实例方法</strong></p>
-<pre><code class="language-java">public static void main(String[] args) {
-  String[] array = {&quot;贱明&quot;, &quot;学友&quot;};<br/>
-  Arrays.sort(array, String::compareTo);<br/>
-}
-</code></pre></li>
-<li><p><strong>引用构造方法</strong></p>
-<pre><code class="language-java">// 定义工厂
-interface PersonFactory&lt;P extends Person&gt;{<br/>
-   P create(String name);<br/>
-}<br/>
-// Person类的构造方法<br/>
-public Person(String name) {<br/>
-   this.name = name;<br/>
-}<br/>
-// 创建<br/>
-PersonFactory&lt;Person&gt; factory = Person::new;<br/>
-factory.create(&quot;贱明&quot;);
-</code></pre></li>
-</ol>
 
-<ul>
-<li><p><strong>Lambda的范围</strong></p>
-<p>lambda可以访问局部对应的外部区域的局部final变量，以及成员变量和静态变量。</p>
-<ol>
-<li><p><strong>访问成员变量</strong></p>
-<pre><code class="language-java">public void doSomething(){
- final String p1 = &quot;贱明&quot;;<br/>
- final String p2 = &quot;学友&quot;;<br/>
- Formula function = (person1, person2) -&gt; p1.compareTo(p2);<br/>
-}
+<h2 id="toc_0">default拓展方法</h2>
+
+<p>default关键字为接口声明添加非抽象方法的实现,也称为拓展方法</p>
+
+<pre><code class="language-java">  public interface Formula {
+      void doSomething();
+  
+      default void before() {
+          System.out.println(&quot;我是拓展方法&quot;);
+      }
+  }
+  
+  public class FormulaService implements Formula {
+  
+      @Override
+      public void doSomething() {
+          before();
+          System.out.println(&quot;我是override方法&quot;);
+      }
+  }
 </code></pre>
-<p>与java8以下版本不同的是，p1 p2你可以不修饰成final 也不会报错，但是如果你想修改他们，编译器则会告诉你这是不被允许的。</p></li>
-<li><p><strong>访问成员变量和静态变量</strong></p>
-<pre><code class="language-java">public void doSomething(){;
-Formula function = (person1, person2) -&gt;{<br/>
-    dehua = &quot;贱明&quot;;<br/>
-    xueyou=&quot;学友&quot;;<br/>
-    return dehua.compareTo(xueyou);<br/>
-};<br/>
-}
-</code></pre></li>
-</ol></li>
-<li><p><strong>内置函数式接口</strong></p>
+
+<h2 id="toc_1">Lambda表达式</h2>
+
+<p>java8引入函数式编程，Lambda则是函数式编程的基础。</p>
+
+<pre><code class="language-java">  List&lt;String&gt; list = Arrays.asList(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;);
+  
+  // java8之前
+  Collections.sort(list, new Comparator&lt;String&gt;(){
+      @Override
+      public int compare(String o1, String o2) {
+          return o1.compareTo(o2);
+      }
+  });
+  
+  // lambda
+  Collections.sort(list, (String o1, String o2) -&gt; {
+              return o2.compareTo(o1);
+  });
+  
+  // 简洁lambda
+  Collections.sort(list, (String o1, String o2) -&gt;  o2.compareTo(o1));
+  
+  // 更简洁lambda
+  Collections.sort(list, (o1, o2) -&gt;  o2.compareTo(o1));
+  
+  // 也可以这样写
+  Collections.sort(list, Comparator.comparing(String::toString));
+</code></pre>
+
+<h2 id="toc_2">函数式接口</h2>
+
+<p>一个函数式接口有且只能有一个抽象方法申明，其中该注意的是 @FunctionalInterface 注解，此时如果在接口中定义了第二个抽象方法，编译器将会抛出异常。当然如果不加该注解也不是不行，如果接口中有多个抽象方法，而你又使用了lambda表达式，则在调用处会抛出异常。</p>
+
+<pre><code class="language-java">  @FunctionalInterface
+  public interface Formula&lt;F,T&gt;{
+      T convert(F var1);
+  }
+  
+  Formula&lt;String,Integer&gt; function = (var1 -&gt; Integer.valueOf(var1));
+  Integer var2 = function.convert(&quot;1000&quot;); 
+</code></pre>
+
+<h2 id="toc_3">方法和构造函数引用</h2>
+
+<p>方法引用的标准语法是 <code>类名:方法名</code></p>
+
+<p>| 类型                             | 示例                              |<br/>
+  | -------------------------------- | --------------------------------- |<br/>
+  | 引用静态方法                     | targetClass :: staticMethodName   |<br/>
+  | 引用某个对象的实例方法           | targetClass :: instanceMethodName |<br/>
+  | 引用某个类型的任意对象的实例方法 | targetType :: methodName          |<br/>
+  | 引用构造方法                     | className :: new                  |</p>
+
+<h3 id="toc_4">引用静态方法</h3>
+
+<pre><code class="language-java">   Formula&lt;String,Integer&gt; function = (Integer::valueOf);
+   Integer var2 = function.convert(&quot;1000&quot;);
+</code></pre>
+
+<h3 id="toc_5">引用某个类型的任意对象的实例方法</h3>
+
+<pre><code class="language-java">   public static void main(String[] args) {
+      String[] array = {&quot;贱明&quot;, &quot;学友&quot;};
+      Arrays.sort(array, String::compareTo);
+   }
+</code></pre>
+
+<h3 id="toc_6">引用构造方法</h3>
+
+<pre><code class="language-java">   // 定义工厂
+   interface PersonFactory&lt;P extends Person&gt;{
+       P create(String name);
+   }
+   // Person类的构造方法
+   public Person(String name) {
+       this.name = name;
+   }
+   // 创建
+   PersonFactory&lt;Person&gt; factory = Person::new;
+   factory.create(&quot;贱明&quot;);
+</code></pre>
+
+<h2 id="toc_7">Lambda的范围</h2>
+
+<p>lambda可以访问局部对应的外部区域的局部final变量，以及成员变量和静态变量。</p>
+
+<h3 id="toc_8">访问成员变量</h3>
+
+<pre><code class="language-text"> ```java
+ public void doSomething(){
+     final String p1 = &quot;贱明&quot;;
+     final String p2 = &quot;学友&quot;;
+     Formula function = (person1, person2) -&gt; p1.compareTo(p2);
+ }
+ ```
+
+ 与java8以下版本不同的是，p1 p2你可以不修饰成final 也不会报错，但是如果你想修改他们，编译器则会告诉你这是不被允许的。
+</code></pre>
+
+<h3 id="toc_9">访问成员变量和静态变量</h3>
+
+<pre><code class="language-text"> ```java
+ public void doSomething(){;
+    Formula function = (person1, person2) -&gt;{
+        dehua = &quot;贱明&quot;;
+        xueyou=&quot;学友&quot;;
+        return dehua.compareTo(xueyou);
+    };
+ }
+ ```
+</code></pre>
+
+<h2 id="toc_10">内置函数式接口</h2>
+
 <p>​     java8 api中提供了很多内置函数式接口，而且有些接口其实在Google Guava中已经实现了，很大程  度的降低了程序员的工作负担。</p>
-<ol>
-<li><p><strong>Predicates</strong><br/>
-Predicate是一个布尔类型的函数，该函数只有一个输入参数，他包含了多种默认实现。</p>
-<pre><code class="language-java">public static void main(String[] args) {
-Predicate&lt;String&gt; predicate = (s) -&gt; s.contains(&quot;贱明&quot;);<br/>
-String var1 = &quot;牛贱明&quot;;<br/>
-predicate.test(var1);              // true<br/>
-predicate.negate().test(var1);     // false<br/>
-Predicate&lt;Boolean&gt; nonNull = Objects::nonNull;<br/>
-Predicate&lt;Boolean&gt; isNull = Objects::isNull;<br/>
-Predicate&lt;String&gt; isEmpty = String::isEmpty;<br/>
-Predicate&lt;String&gt; isNotEmpty = isEmpty.negate();<br/>
-isNotEmpty.and(isEmpty).test(var1);<br/>
-}
-</code></pre></li>
-<li><p><strong>Functions</strong></p>
-<p>Function接口接收一个参数，并返回单一的结果。默认方法可以将多个函数串在一起</p>
-<pre><code class="language-java">public static void main(String[] args) {
-Function&lt;String, Integer&gt; toInteger = Integer::valueOf;<br/>
-Function&lt;String, String&gt; backToString = toInteger.andThen(String::valueOf);<br/>
-System.out.println(toInteger.apply(&quot;123&quot;));<br/>
-System.out.println(backToString.apply(&quot;123&quot;));<br/>
-}
-</code></pre></li>
-<li><p><strong>Suppliers</strong></p>
-<p>Supplier接口产生一个给定类型的结果。与Function不同的是，Supplier没有输入参数。</p>
-<pre><code class="language-java">Supplier&lt;Person&gt; personSupplier = Person::new;
-Person p = personSupplier.get();   // new Person
-</code></pre></li>
-<li><p><strong>Consumers</strong></p>
-<p>Consumer代表了在一个输入参数上需要进行的操作。</p>
-<pre><code class="language-java">Consumer&lt;Person&gt; greeter = (p) -&gt; System.out.println(&quot;Hello, &quot; + p.getName());
-greeter.accept(new Person(&quot;贱明&quot;));
-</code></pre></li>
-<li><p><strong>Comparators</strong></p>
-<p>Comparator接口在早期的Java版本中非常著名。Java 8 为这个接口添加了不同的默认方法。</p>
-<pre><code class="language-java">Comparator&lt;Person&gt; comparator = (p1, p2) -&gt; p1.getName().compareTo(p2.getName());
-Person p1 = new Person(&quot;贱明&quot;);<br/>
-Person p2 = new Person(&quot;学友&quot;);<br/>
-System.out.println(comparator.compare(p1, p2));             // &gt; 1105<br/>
-System.out.println(comparator.reversed().compare(p1, p2));  // &lt; -1105
-</code></pre></li>
-<li><p><strong>Optionals</strong></p>
-<p>Optional不是一个函数式接口，而是一个精巧的工具接口，用来防止NullPointerException产生。<br/>
-Optional是一个简单的值容器，这个值可以是null，也可以是non-null。考虑到一个方法可能会返回一个non-null的值，也可能返回一个空值。为了不直接返回null，我们在Java 8中就返回一个Optional。</p>
-<pre><code class="language-java">Optional&lt;String&gt; optional = Optional.of(&quot;贱明&quot;);
-System.out.println(optional.isPresent()); // true      <br/>
-System.out.println(optional.get()); // 贱明   <br/>
-System.out.println(optional.orElse(&quot;学友&quot;)); // 贱明    <br/>
-optional.ifPresent((s) -&gt; System.out.println(s.charAt(0))); 
-</code></pre></li>
-</ol></li>
-</ul>
 
+<h3 id="toc_11">Predicates</h3>
 
+<pre><code class="language-text"> Predicate是一个布尔类型的函数，该函数只有一个输入参数，他包含了多种默认实现。
+
+ ```java
+ public static void main(String[] args) {
+    Predicate&lt;String&gt; predicate = (s) -&gt; s.contains(&quot;贱明&quot;);
+    String var1 = &quot;牛贱明&quot;;
+
+    predicate.test(var1);              // true
+    predicate.negate().test(var1);     // false
+
+    Predicate&lt;Boolean&gt; nonNull = Objects::nonNull;
+    Predicate&lt;Boolean&gt; isNull = Objects::isNull;
+
+    Predicate&lt;String&gt; isEmpty = String::isEmpty;
+    Predicate&lt;String&gt; isNotEmpty = isEmpty.negate();
+
+    isNotEmpty.and(isEmpty).test(var1);
+ }
+ ```
+</code></pre>
+
+<h3 id="toc_12">Functions</h3>
+
+<pre><code class="language-text"> Function接口接收一个参数，并返回单一的结果。默认方法可以将多个函数串在一起
+
+ ```java
+ public static void main(String[] args) {
+    Function&lt;String, Integer&gt; toInteger = Integer::valueOf;
+    Function&lt;String, String&gt; backToString = toInteger.andThen(String::valueOf);
+
+    System.out.println(toInteger.apply(&quot;123&quot;));
+    System.out.println(backToString.apply(&quot;123&quot;));
+ }
+
+ ```
+</code></pre>
+
+<h3 id="toc_13">Suppliers</h3>
+
+<pre><code class="language-text"> Supplier接口产生一个给定类型的结果。与Function不同的是，Supplier没有输入参数。
+
+ ```java
+ Supplier&lt;Person&gt; personSupplier = Person::new;
+ Person p = personSupplier.get();   // new Person
+
+ ```
+</code></pre>
+
+<h3 id="toc_14">Consumers</h3>
+
+<pre><code class="language-text"> Consumer代表了在一个输入参数上需要进行的操作。
+
+ ```java
+ Consumer&lt;Person&gt; greeter = (p) -&gt; System.out.println(&quot;Hello, &quot; + p.getName());
+ greeter.accept(new Person(&quot;贱明&quot;));
+
+ ```
+</code></pre>
+
+<h3 id="toc_15">Comparators</h3>
+
+<pre><code class="language-text"> Comparator接口在早期的Java版本中非常著名。Java 8 为这个接口添加了不同的默认方法。
+
+ ```java
+ Comparator&lt;Person&gt; comparator = (p1, p2) -&gt; p1.getName().compareTo(p2.getName());
+
+ Person p1 = new Person(&quot;贱明&quot;);
+ Person p2 = new Person(&quot;学友&quot;);
+
+ System.out.println(comparator.compare(p1, p2));             // &gt; 1105
+ System.out.println(comparator.reversed().compare(p1, p2));  // &lt; -1105
+
+ ```
+</code></pre>
+
+<h3 id="toc_16">Optionals</h3>
+
+<pre><code class="language-text"> Optional不是一个函数式接口，而是一个精巧的工具接口，用来防止NullPointerException产生。
+ Optional是一个简单的值容器，这个值可以是null，也可以是non-null。考虑到一个方法可能会返回一个non-null的值，也可能返回一个空值。为了不直接返回null，我们在Java 8中就返回一个Optional。
+
+ ```java
+ Optional&lt;String&gt; optional = Optional.of(&quot;贱明&quot;);
+
+ System.out.println(optional.isPresent()); // true      
+ System.out.println(optional.get()); // 贱明   
+ System.out.println(optional.orElse(&quot;学友&quot;)); // 贱明    
+
+ optional.ifPresent((s) -&gt; System.out.println(s.charAt(0)));    
+ ```
+</code></pre>
 
 
     
@@ -450,6 +562,12 @@ optional.ifPresent((s) -&gt; System.out.println(s.charAt(0)));
 	      
 		      
 			      <li class="post">
+			        <a href="15513224851488.html">Java中的volatile关键字解析</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
 			        <a href="15512563500691.html">HashMap源码解读(JDK1.7)</a>
 			      </li>
 		     
@@ -469,12 +587,6 @@ optional.ifPresent((s) -&gt; System.out.println(s.charAt(0)));
 		      
 			      <li class="post">
 			        <a href="15511042581022.html">微服务架构下处理分布式事务的典型方案</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="15511041776834.html">分布式系统常见的事务处理机制</a>
 			      </li>
 		     
 		  
@@ -599,7 +711,7 @@ Powered by <a target="_blank" href="http://books.sangkf.cn">见课就上的小�
 
 	$(document).ready(function(){
 		if(!browserRedirect()){
-		$(".article-content>ul:last").wrap("<div id='custom_menu'></div>");
+		$(".article-content>ul:first").wrap("<div id='custom_menu'></div>");
 	    	var $custom_menu = $("#custom_menu");
 	    	$("#custom_menu").remove();
 	    	$custom_menu.insertBefore($(".inner-wrap"));
