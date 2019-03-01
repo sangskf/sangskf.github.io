@@ -190,130 +190,133 @@
 <a href="#toc_8">重写</a>
 </li>
 <li>
-<a href="#toc_9">实例</a>
+<a href="#toc_9">重载</a>
+</li>
+<li>
+<a href="#toc_10">实例</a>
 </li>
 </ul>
 </li>
 </ul>
 </li>
 <li>
-<a href="#toc_10">Object 通用方法</a>
+<a href="#toc_11">Object 通用方法</a>
 <ul>
 <li>
-<a href="#toc_11">概览</a>
+<a href="#toc_12">概览</a>
 </li>
 <li>
-<a href="#toc_12">equals()</a>
+<a href="#toc_13">equals()</a>
 <ul>
 <li>
-<a href="#toc_13">等价关系</a>
+<a href="#toc_14">等价关系</a>
 </li>
 <li>
-<a href="#toc_14">等价与相等</a>
+<a href="#toc_15">等价与相等</a>
 </li>
 <li>
-<a href="#toc_15">实现</a>
+<a href="#toc_16">实现</a>
 </li>
 </ul>
 </li>
 <li>
-<a href="#toc_16">hashCode()</a>
+<a href="#toc_17">hashCode()</a>
 </li>
 <li>
-<a href="#toc_17">toString()</a>
+<a href="#toc_18">toString()</a>
 </li>
 <li>
-<a href="#toc_18">clone()</a>
+<a href="#toc_19">clone()</a>
 <ul>
 <li>
-<a href="#toc_19">cloneable</a>
+<a href="#toc_20">cloneable</a>
 </li>
 <li>
-<a href="#toc_20">浅拷贝</a>
+<a href="#toc_21">浅拷贝</a>
 </li>
 <li>
-<a href="#toc_21">深拷贝</a>
+<a href="#toc_22">深拷贝</a>
 </li>
 <li>
-<a href="#toc_22">clone的替代方案</a>
+<a href="#toc_23">clone的替代方案</a>
 </li>
 </ul>
 </li>
 </ul>
 </li>
 <li>
-<a href="#toc_23">关键字</a>
+<a href="#toc_24">关键字</a>
 <ul>
 <li>
-<a href="#toc_24">final</a>
+<a href="#toc_25">final</a>
 <ul>
 <li>
-<a href="#toc_25">数据</a>
+<a href="#toc_26">数据</a>
 </li>
 <li>
-<a href="#toc_26">方法</a>
+<a href="#toc_27">方法</a>
 </li>
 <li>
-<a href="#toc_27">类</a>
+<a href="#toc_28">类</a>
 </li>
 </ul>
 </li>
 <li>
-<a href="#toc_28">static</a>
+<a href="#toc_29">static</a>
 <ul>
 <li>
-<a href="#toc_29">静态变量</a>
+<a href="#toc_30">静态变量</a>
 </li>
 <li>
-<a href="#toc_30">静态方法</a>
+<a href="#toc_31">静态方法</a>
 </li>
 <li>
-<a href="#toc_31">静态语句块</a>
+<a href="#toc_32">静态语句块</a>
 </li>
 <li>
-<a href="#toc_32">静态内部类</a>
+<a href="#toc_33">静态内部类</a>
 </li>
 <li>
-<a href="#toc_33">静态导包</a>
+<a href="#toc_34">静态导包</a>
 </li>
 <li>
-<a href="#toc_34">初始化顺序</a>
+<a href="#toc_35">初始化顺序</a>
 </li>
 </ul>
 </li>
 </ul>
 </li>
 <li>
-<a href="#toc_35">反射</a>
+<a href="#toc_36">反射</a>
 </li>
 <li>
-<a href="#toc_36">异常</a>
+<a href="#toc_37">异常</a>
 </li>
 <li>
-<a href="#toc_37">泛型</a>
+<a href="#toc_38">泛型</a>
 </li>
 <li>
-<a href="#toc_38">注解</a>
+<a href="#toc_39">注解</a>
 </li>
 <li>
-<a href="#toc_39">特性</a>
+<a href="#toc_40">特性</a>
 <ul>
 <li>
-<a href="#toc_40">Java 各版本的新特性</a>
+<a href="#toc_41">Java 各版本的新特性</a>
 </li>
 </ul>
 </li>
 <li>
-<a href="#toc_41">Java 与 C++ 的区别</a>
+<a href="#toc_42">Java 与 C++ 的区别</a>
 </li>
 <li>
-<a href="#toc_42">JRE or JDK</a>
+<a href="#toc_43">JRE or JDK</a>
 </li>
 <li>
-<a href="#toc_43">参考资料</a>
+<a href="#toc_44">参考资料</a>
 </li>
 <li>
-<a href="#toc_44">进阶指南</a>
+<a href="#toc_45">进阶指南</a>
 </li>
 </ul>
 
@@ -862,14 +865,16 @@ SuperExtendExample.func()
 <ul>
 <li>子类方法的访问权限必须大于等于父类方法；</li>
 <li>子类方法的返回类型必须是父类方法返回类型或为其子类型。<br/>
-使用 @Override 注解，可以让编译器帮忙检查是否满足上面的两个限制条件。<br/>
-#### 重载<br/>
-存在于同一个类中，指一个方法与已经存在的方法名称上相同，但是参数类型、个数、顺序至少有一个不同。</li>
+使用 @Override 注解，可以让编译器帮忙检查是否满足上面的两个限制条件。</li>
 </ul>
+
+<h4 id="toc_9">重载</h4>
+
+<p>存在于同一个类中，指一个方法与已经存在的方法名称上相同，但是参数类型、个数、顺序至少有一个不同。</p>
 
 <p>应该注意的是，返回值不同，其它都相同不算是重载。</p>
 
-<h4 id="toc_9">实例</h4>
+<h4 id="toc_10">实例</h4>
 
 <pre><code class="language-java">class A {
     public String show(D obj) {
@@ -949,9 +954,9 @@ class D extends B {
 <li>super.show((super)O)</li>
 </ul>
 
-<h2 id="toc_10">Object 通用方法</h2>
+<h2 id="toc_11">Object 通用方法</h2>
 
-<h3 id="toc_11">概览</h3>
+<h3 id="toc_12">概览</h3>
 
 <pre><code class="language-java">public native int hashCode()
 
@@ -976,9 +981,9 @@ public final void wait(long timeout, int nanos) throws InterruptedException
 public final void wait() throws InterruptedException
 </code></pre>
 
-<h3 id="toc_12">equals()</h3>
+<h3 id="toc_13">equals()</h3>
 
-<h4 id="toc_13">等价关系</h4>
+<h4 id="toc_14">等价关系</h4>
 
 <ul>
 <li><strong>自反性</strong></li>
@@ -1020,7 +1025,7 @@ public final void wait() throws InterruptedException
 <pre><code class="language-java">x.equals(null); // false;
 </code></pre>
 
-<h4 id="toc_14">等价与相等</h4>
+<h4 id="toc_15">等价与相等</h4>
 
 <ul>
 <li>对于基本类型，==判断两个值是否相等，基本类型没有equals()方法</li>
@@ -1033,7 +1038,7 @@ System.out.println(x.equals(y)); // true
 System.out.println(x == y);      // false
 </code></pre>
 
-<h4 id="toc_15">实现</h4>
+<h4 id="toc_16">实现</h4>
 
 <ul>
 <li>检查是否为同一个对象的引用，如果是直接返回true</li>
@@ -1068,7 +1073,7 @@ System.out.println(x == y);      // false
 }
 </code></pre>
 
-<h3 id="toc_16">hashCode()</h3>
+<h3 id="toc_17">hashCode()</h3>
 
 <p>hashCode() 返回散列值，而 equals() 是用来判断两个对象是否等价。等价的两个对象散列值一定相同，但是散列值相同的两个对象不一定等价。</p>
 
@@ -1099,7 +1104,7 @@ public int hashCode() {
 }
 </code></pre>
 
-<h3 id="toc_17">toString()</h3>
+<h3 id="toc_18">toString()</h3>
 
 <p>默认返回 ToStringExample@4554617c 这种形式，其中 @ 后面的数值为散列码的无符号十六进制表示。</p>
 
@@ -1120,9 +1125,9 @@ System.out.println(example.toString());
 <pre><code class="language-java">ToStringExample@4554617c
 </code></pre>
 
-<h3 id="toc_18">clone()</h3>
+<h3 id="toc_19">clone()</h3>
 
-<h4 id="toc_19">cloneable</h4>
+<h4 id="toc_20">cloneable</h4>
 
 <p>clone() 是 Object 的 protected 方法，它不是 public，一个类不显式去重写 clone()，其它类就不能直接去调用该类实例的 clone() 方法。</p>
 
@@ -1175,7 +1180,7 @@ try {
 }
 </code></pre>
 
-<h4 id="toc_20">浅拷贝</h4>
+<h4 id="toc_21">浅拷贝</h4>
 
 <p>拷贝对象和原始对象的引用类型引用同一个对象。</p>
 
@@ -1216,7 +1221,7 @@ e1.set(2, 222);
 System.out.println(e2.get(2)); // 222
 </code></pre>
 
-<h4 id="toc_21">深拷贝</h4>
+<h4 id="toc_22">深拷贝</h4>
 
 <p>拷贝对象和原始对象的引用类型引用不同对象。</p>
 
@@ -1262,7 +1267,7 @@ e1.set(2, 222);
 System.out.println(e2.get(2)); // 2
 </code></pre>
 
-<h4 id="toc_22">clone的替代方案</h4>
+<h4 id="toc_23">clone的替代方案</h4>
 
 <p>使用 clone() 方法来拷贝一个对象即复杂又有风险，它会抛出异常，并且还需要类型转换。Effective Java 书上讲到，最好不要去使用 clone()，可以使用拷贝构造函数或者拷贝工厂来拷贝一个对象。</p>
 
@@ -1300,11 +1305,11 @@ e1.set(2, 222);
 System.out.println(e2.get(2)); // 2
 </code></pre>
 
-<h2 id="toc_23">关键字</h2>
+<h2 id="toc_24">关键字</h2>
 
-<h3 id="toc_24">final</h3>
+<h3 id="toc_25">final</h3>
 
-<h4 id="toc_25">数据</h4>
+<h4 id="toc_26">数据</h4>
 
 <p>声明数据为常量，可以是编译时常量，也可以是在运行时被初始化后不能被改变的常量。</p>
 
@@ -1319,19 +1324,19 @@ final A y = new A();
 y.a = 1;
 </code></pre>
 
-<h4 id="toc_26">方法</h4>
+<h4 id="toc_27">方法</h4>
 
 <p>声明方法不能被子类重写。</p>
 
 <p>private 方法隐式地被指定为 final，如果在子类中定义的方法和基类中的一个 private 方法签名相同，此时子类的方法不是重写基类方法，而是在子类中定义了一个新的方法。</p>
 
-<h4 id="toc_27">类</h4>
+<h4 id="toc_28">类</h4>
 
 <p>声明类不允许被继承。</p>
 
-<h3 id="toc_28">static</h3>
+<h3 id="toc_29">static</h3>
 
-<h4 id="toc_29">静态变量</h4>
+<h4 id="toc_30">静态变量</h4>
 
 <ul>
 <li>静态变量：又称为类变量，也就是说这个变量属于类的，类所有的实例都共享静态变量，可以直接通过类名来访问它。静态变量在内存中只存在一份。</li>
@@ -1352,7 +1357,7 @@ y.a = 1;
 }
 </code></pre>
 
-<h4 id="toc_30">静态方法</h4>
+<h4 id="toc_31">静态方法</h4>
 
 <p>静态方法在类加载的时候就存在了，它不依赖于任何实例。所以静态方法必须有实现，也就是说它不能是抽象方法。</p>
 
@@ -1378,7 +1383,7 @@ y.a = 1;
 }
 </code></pre>
 
-<h4 id="toc_31">静态语句块</h4>
+<h4 id="toc_32">静态语句块</h4>
 
 <p>静态语句块在类初始化时运行一次。</p>
 
@@ -1397,7 +1402,7 @@ y.a = 1;
 <pre><code class="language-java">123
 </code></pre>
 
-<h4 id="toc_32">静态内部类</h4>
+<h4 id="toc_33">静态内部类</h4>
 
 <p>非静态内部类依赖于外部类的实例，而静态内部类不需要。</p>
 
@@ -1420,14 +1425,14 @@ y.a = 1;
 
 <p>静态内部类不能访问外部类的非静态的变量和方法。</p>
 
-<h4 id="toc_33">静态导包</h4>
+<h4 id="toc_34">静态导包</h4>
 
 <p>在使用静态变量和方法时不用再指明 ClassName，从而简化代码，但可读性大大降低。</p>
 
 <pre><code class="language-java">import static com.xxx.ClassName.*
 </code></pre>
 
-<h4 id="toc_34">初始化顺序</h4>
+<h4 id="toc_35">初始化顺序</h4>
 
 <p>静态变量和静态语句块优先于实例变量和普通语句块，静态变量和静态语句块的初始化顺序取决于它们在代码中的顺序。</p>
 
@@ -1465,7 +1470,7 @@ y.a = 1;
 <li>子类（构造函数）</li>
 </ul>
 
-<h2 id="toc_35">反射</h2>
+<h2 id="toc_36">反射</h2>
 
 <p>每个类都有一个 <strong>Class</strong> 对象，包含了与类有关的信息。当编译一个新类时，会产生一个同名的 .class 文件，该文件内容保存着 Class 对象。</p>
 
@@ -1501,7 +1506,7 @@ y.a = 1;
 <li><p><a href="http://www.sczyh30.com/posts/Java/java-reflection-1/">深入解析 Java 反射（1）- 基础</a></p></li>
 </ul>
 
-<h2 id="toc_36">异常</h2>
+<h2 id="toc_37">异常</h2>
 
 <p>Throwable 可以用来表示任何可以作为异常抛出的类，分为两种： <strong>Error</strong> 和 <strong>Exception</strong>。其中 Error 用来表示 JVM 无法处理的错误，Exception 分为两种：</p>
 
@@ -1517,7 +1522,7 @@ y.a = 1;
 <li><a href="http://www.importnew.com/7383.html">Java 异常的面试问题及答案 -Part 1</a></li>
 </ul>
 
-<h2 id="toc_37">泛型</h2>
+<h2 id="toc_38">泛型</h2>
 
 <pre><code class="language-java">public class Box&lt;T&gt; {
     // T stands for &quot;Type&quot;
@@ -1532,15 +1537,15 @@ y.a = 1;
 <li><a href="https://cloud.tencent.com/developer/article/1033693">10 道 Java 泛型面试题</a></li>
 </ul>
 
-<h2 id="toc_38">注解</h2>
+<h2 id="toc_39">注解</h2>
 
 <p>Java 注解是附加在代码中的一些元信息，用于一些工具在编译、运行时进行解析和使用，起到说明、配置的功能。注解不会也不能影响代码的实际逻辑，仅仅起到辅助性的作用。</p>
 
 <p><a href="https://www.cnblogs.com/acm-bingzi/p/javaAnnotation.html">注解 Annotation 实现原理与自定义注解例子</a></p>
 
-<h2 id="toc_39">特性</h2>
+<h2 id="toc_40">特性</h2>
 
-<h3 id="toc_40">Java 各版本的新特性</h3>
+<h3 id="toc_41">Java 各版本的新特性</h3>
 
 <p><strong>New highlights in Java SE 8</strong></p>
 
@@ -1574,7 +1579,7 @@ y.a = 1;
 <li><a href="http://www.importnew.com/19345.html">Java 8 特性</a></li>
 </ul>
 
-<h2 id="toc_41">Java 与 C++ 的区别</h2>
+<h2 id="toc_42">Java 与 C++ 的区别</h2>
 
 <ul>
 <li>Java 是纯粹的面向对象语言，所有的对象都继承自 java.lang.Object，C++ 为了兼容 C 即支持面向对象也支持面向过程。</li>
@@ -1587,21 +1592,21 @@ y.a = 1;
 <li>Java 不支持条件编译，C++ 通过 #ifdef #ifndef 等预处理命令从而实现条件编译。</li>
 </ul>
 
-<h2 id="toc_42">JRE or JDK</h2>
+<h2 id="toc_43">JRE or JDK</h2>
 
 <ul>
 <li>JRE is the JVM program, Java application need to run on JRE.</li>
 <li>JDK is a superset of JRE, JRE + tools for developing java programs. e.g, it provides the compiler &quot;javac&quot;</li>
 </ul>
 
-<h2 id="toc_43">参考资料</h2>
+<h2 id="toc_44">参考资料</h2>
 
 <ul>
 <li>Eckel B. Java 编程思想[M]. 机械工业出版社, 2002.</li>
 <li>Bloch J. Effective java[M]. Addison-Wesley Professional, 2017.</li>
 </ul>
 
-<h2 id="toc_44">进阶指南</h2>
+<h2 id="toc_45">进阶指南</h2>
 
 <p><a href="https://github.com/CyC2018/Backend-Interview-Guide">https://github.com/CyC2018/Backend-Interview-Guide</a></p>
 
