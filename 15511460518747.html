@@ -26,9 +26,10 @@
     return true;
   }
 </script>
+<!-- <script src="asset/js/spider/spider.js"></script> -->
   </head>
   <body class="antialiased hide-extras">
-    
+
     <div class="marketing off-canvas-wrap" data-offcanvas>
       <div class="inner-wrap">
 
@@ -172,42 +173,105 @@
 </li>
 <li>
 <a href="#toc_3">继承</a>
+<ul>
+<li>
+<a href="#toc_4">访问权限</a>
 </li>
 <li>
-<a href="#toc_4">Object 通用方法</a>
+<a href="#toc_5">抽象类与接口</a>
 </li>
 <li>
-<a href="#toc_5">关键字</a>
+<a href="#toc_6">super</a>
 </li>
 <li>
-<a href="#toc_6">反射</a>
+<a href="#toc_7">重写与重载</a>
+<ul>
+<li>
+<a href="#toc_8">重写</a>
 </li>
 <li>
-<a href="#toc_7">异常</a>
+<a href="#toc_9">实例</a>
+</li>
+</ul>
+</li>
+</ul>
 </li>
 <li>
-<a href="#toc_8">泛型</a>
+<a href="#toc_10">Object 通用方法</a>
+<ul>
+<li>
+<a href="#toc_11">概览</a>
 </li>
 <li>
-<a href="#toc_9">注解</a>
+<a href="#toc_12">equals()</a>
+<ul>
+<li>
+<a href="#toc_13">等价关系</a>
 </li>
 <li>
-<a href="#toc_10">特性</a>
+<a href="#toc_14">等价与相等</a>
 </li>
 <li>
-<a href="#toc_11">Java 各版本的新特性</a>
+<a href="#toc_15">实现</a>
+</li>
+</ul>
 </li>
 <li>
-<a href="#toc_12">Java 与 C++ 的区别</a>
+<a href="#toc_16">hashCode()</a>
 </li>
 <li>
-<a href="#toc_13">JRE or JDK</a>
+<a href="#toc_17">toString()</a>
 </li>
 <li>
-<a href="#toc_14">参考资料</a>
+<a href="#toc_18">clone()</a>
+<ul>
+<li>
+<a href="#toc_19">cloneable</a>
 </li>
 <li>
-<a href="#toc_15">进阶指南</a>
+<a href="#toc_20">浅拷贝</a>
+</li>
+<li>
+<a href="#toc_21">深拷贝</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_22">关键字</a>
+</li>
+<li>
+<a href="#toc_23">反射</a>
+</li>
+<li>
+<a href="#toc_24">异常</a>
+</li>
+<li>
+<a href="#toc_25">泛型</a>
+</li>
+<li>
+<a href="#toc_26">注解</a>
+</li>
+<li>
+<a href="#toc_27">特性</a>
+<ul>
+<li>
+<a href="#toc_28">Java 各版本的新特性</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_29">Java 与 C++ 的区别</a>
+</li>
+<li>
+<a href="#toc_30">JRE or JDK</a>
+</li>
+<li>
+<a href="#toc_31">参考资料</a>
+</li>
+<li>
+<a href="#toc_32">进阶指南</a>
 </li>
 </ul>
 
@@ -408,57 +472,738 @@ Constant pool:<br/>
 <h2 id="toc_2">运算</h2>
 
 <ul>
-<li><strong>参数传递</strong></li>
-<li><strong>float 与 double</strong></li>
-<li><strong>隐式类型转换</strong></li>
-<li><strong>switch</strong></li>
+<li><strong>参数传递</strong>
+Java 的参数是以值传递的形式传入方法中，而不是引用传递。</li>
 </ul>
+
+<p>以下代码中 Dog dog 的 dog 是一个指针，存储的是对象的地址。在将一个参数传入一个方法时，本质上是将对象的地址以值的方式传递到形参中。因此在方法中使指针引用其它对象，那么这两个指针此时指向的是完全不同的对象，在一方改变其所指向对象的内容时对另一方没有影响。</p>
+
+<pre><code class="language-java">public class Dog {
+
+    String name;
+
+    Dog(String name) {
+        this.name = name;
+    }
+
+    String getName() {
+        return this.name;
+    }
+
+    void setName(String name) {
+        this.name = name;
+    }
+
+    String getObjectAddress() {
+        return super.toString();
+    }
+}
+</code></pre>
+
+<pre><code class="language-java">public class PassByValueExample {
+    public static void main(String[] args) {
+        Dog dog = new Dog(&quot;A&quot;);
+        System.out.println(dog.getObjectAddress()); // Dog@4554617c
+        func(dog);
+        System.out.println(dog.getObjectAddress()); // Dog@4554617c
+        System.out.println(dog.getName());          // A
+    }
+
+    private static void func(Dog dog) {
+        System.out.println(dog.getObjectAddress()); // Dog@4554617c
+        dog = new Dog(&quot;B&quot;);
+        System.out.println(dog.getObjectAddress()); // Dog@74a14482
+        System.out.println(dog.getName());          // B
+    }
+}
+</code></pre>
+
+<p>如果在方法中改变对象的字段值会改变原对象该字段值，因为改变的是同一个地址指向的内容。</p>
+
+<pre><code class="language-java">class PassByValueExample {
+    public static void main(String[] args) {
+        Dog dog = new Dog(&quot;A&quot;);
+        func(dog);
+        System.out.println(dog.getName());          // B
+    }
+
+    private static void func(Dog dog) {
+        dog.setName(&quot;B&quot;);
+    }
+}
+</code></pre>
+
+<ul>
+<li><strong>float 与 double</strong>
+Java 不能隐式执行向下转型，因为这会使得精度降低。<br/>
+1.1 字面量属于 double 类型，不能直接将 1.1 直接赋值给 float 变量，因为这是向下转型。</li>
+</ul>
+
+<pre><code class="language-java">// float f = 1.1;
+</code></pre>
+
+<p>1.1f 字面量才是 float 类型。</p>
+
+<pre><code class="language-java">float f = 1.1f;
+</code></pre>
+
+<ul>
+<li><strong>隐式类型转换</strong>
+因为字面量 1 是 int 类型，它比 short 类型精度要高，因此不能隐式地将 int 类型下转型为 short 类型。</li>
+</ul>
+
+<pre><code class="language-java">short s1 = 1;
+// s1 = s1 + 1;
+</code></pre>
+
+<p>但是使用 += 或者 ++ 运算符可以执行隐式类型转换。</p>
+
+<pre><code class="language-java">s1 += 1;
+// s1++;
+</code></pre>
+
+<p>上面的语句相当于将 s1 + 1 的计算结果进行了向下转型：</p>
+
+<pre><code class="language-java">s1 = (short) (s1 + 1);
+</code></pre>
+
+<ul>
+<li><strong>switch</strong>
+从 Java 7 开始，可以在 switch 条件判断语句中使用 String 对象。</li>
+</ul>
+
+<pre><code class="language-java">String s = &quot;a&quot;;
+switch (s) {
+    case &quot;a&quot;:
+        System.out.println(&quot;aaa&quot;);
+        break;
+    case &quot;b&quot;:
+        System.out.println(&quot;bbb&quot;);
+        break;
+}
+</code></pre>
+
+<p>switch 不支持 long，是因为 switch 的设计初衷是对那些只有少数的几个值进行等值判断，如果值过于复杂，那么还是用 if 比较合适。</p>
+
+<pre><code class="language-java">// long x = 111;
+// switch (x) { // Incompatible types. Found: &#39;long&#39;, required: &#39;char, byte, short, int, Character, Byte, Short, Integer, String, or an enum&#39;
+//     case 111:
+//         System.out.println(111);
+//         break;
+//     case 222:
+//         System.out.println(222);
+//         break;
+// }
+</code></pre>
 
 <h2 id="toc_3">继承</h2>
 
+<h3 id="toc_4">访问权限</h3>
+
+<p>Java 中有三个访问权限修饰符：private、protected 以及 public，如果不加访问修饰符，表示包级可见。</p>
+
+<p>可以对类或类中的成员（字段以及方法）加上访问修饰符。<br/>
+    <strong>类可见表示其它类可以用这个类创建实例对象。<br/>
+    成员可见表示其它类可以用这个类的实例对象访问到该成员；</strong></p>
+
+<p>protected 用于修饰成员，表示在继承体系中成员对于子类可见，但是这个访问修饰符对于类没有意义。</p>
+
+<p>设计良好的模块会隐藏所有的实现细节，把它的 API 与它的实现清晰地隔离开来。模块之间只通过它们的 API 进行通信，一个模块不需要知道其他模块的内部工作情况，这个概念被称为信息隐藏或封装。因此访问权限应当尽可能地使每个类或者成员不被外界访问。</p>
+
+<p>如果子类的方法重写了父类的方法，那么子类中该方法的访问级别不允许低于父类的访问级别。这是为了确保可以使用父类实例的地方都可以使用子类实例，也就是确保满足里氏替换原则。</p>
+
+<p>字段决不能是公有的，因为这么做的话就失去了对这个字段修改行为的控制，客户端可以对其随意修改。例如下面的例子中，AccessExample 拥有 id 公有字段，如果在某个时刻，我们想要使用 int 存储 id 字段，那么就需要修改所有的客户端代码。</p>
+
+<pre><code class="language-java">public class AccessExample {
+    public String id;
+}
+</code></pre>
+
+<p>可以使用公有的 getter 和 setter 方法来替换公有字段，这样的话就可以控制对字段的修改行为。</p>
+
+<pre><code class="language-java">public class AccessExample {
+
+    private int id;
+
+    public String getId() {
+        return id + &quot;&quot;;
+    }
+
+    public void setId(String id) {
+        this.id = Integer.valueOf(id);
+    }
+}
+</code></pre>
+
+<p>但是也有例外，如果是包级私有的类或者私有的嵌套类，那么直接暴露成员不会有特别大的影响。</p>
+
+<pre><code class="language-java">public class AccessWithInnerClassExample {
+
+    private class InnerClass {
+        int x;
+    }
+
+    private InnerClass innerClass;
+
+    public AccessWithInnerClassExample() {
+        innerClass = new InnerClass();
+    }
+
+    public int getValue() {
+        return innerClass.x;  // 直接访问
+    }
+}
+</code></pre>
+
+<h3 id="toc_5">抽象类与接口</h3>
+
 <ul>
-<li><strong>访问权限</strong></li>
-<li><strong>抽象类与接口</strong></li>
-<li><strong>super</strong></li>
-<li><strong>重写与重载</strong></li>
+<li><strong>抽象类</strong></li>
 </ul>
 
-<h2 id="toc_4">Object 通用方法</h2>
+<p>抽象类和抽象方法都使用 abstract 关键字进行声明。抽象类一般会包含抽象方法，抽象方法一定位于抽象类中。</p>
+
+<p>抽象类和普通类最大的区别是，抽象类不能被实例化，需要继承抽象类才能实例化其子类。</p>
+
+<pre><code class="language-java">public abstract class AbstractClassExample {
+    
+    protected int x;
+    private int y;
+    
+    public abstract void func1();
+    
+    public void func2() {
+        System.out.println(&quot;func2&quot;);
+    }
+}
+</code></pre>
+
+<pre><code class="language-java">public class AbstractExtendClassExample extends AbstractClassExample {
+    @Override
+    public void func1() {
+        System.out.println(&quot;func1&quot;);
+    }
+}
+</code></pre>
+
+<pre><code class="language-java">// AbstractClassExample ac1 = new AbstractClassExample(); 
+// &#39;AbstractClassExample&#39; is abstract; cannot be instantiated
+AbstractClassExample ac2 = new AbstractExtendClassExample();
+ac2.func1();
+</code></pre>
 
 <ul>
-<li><strong>概览</strong></li>
-<li><strong>equals()</strong></li>
-<li><strong>hashCode()</strong></li>
-<li><strong>toString()</strong></li>
-<li><strong>clone()</strong></li>
+<li><strong>接口</strong></li>
 </ul>
 
-<h2 id="toc_5">关键字</h2>
+<p>接口是抽象类的延伸，在 Java 8 之前，它可以看成是一个完全抽象的类，也就是说它不能有任何的方法实现。</p>
+
+<p>从 Java 8 开始，接口也可以拥有默认的方法实现，这是因为不支持默认方法的接口的维护成本太高了。在 Java 8 之前，如果一个接口想要添加新的方法，那么要修改所有实现了该接口的类。</p>
+
+<p>接口的成员（字段 + 方法）默认都是 public 的，并且不允许定义为 private 或者 protected。</p>
+
+<p>接口的字段默认都是 static 和 final 的。</p>
+
+<pre><code class="language-java">    public interface InterfaceExample {
+    
+    void func1();
+    
+    default void func2(){
+        System.out.println(&quot;func2&quot;);
+    }
+    
+    int x = 123;
+    // int y;               // Variable &#39;y&#39; might not have been initialized
+    public int z = 0;       // Modifier &#39;public&#39; is redundant for interface fields
+    // private int k = 0;   // Modifier &#39;private&#39; not allowed here
+    // protected int l = 0; // Modifier &#39;protected&#39; not allowed here
+    // private void fun3(); // Modifier &#39;private&#39; not allowed here
+} 
+</code></pre>
+
+<pre><code class="language-java">public class InterfaceImplementExample implements InterfaceExample {
+    @Override
+    public void func1() {
+        System.out.println(&quot;func1&quot;);
+    }
+}
+</code></pre>
+
+<pre><code class="language-java"> // InterfaceExample ie1 = new InterfaceExample(); // &#39;InterfaceExample&#39; is abstract; cannot be instantiated
+InterfaceExample ie2 = new InterfaceImplementExample();
+ie2.func1();
+System.out.println(InterfaceExample.x);
+</code></pre>
 
 <ul>
-<li><strong>final</strong></li>
-<li><strong>static</strong></li>
+<li><p><strong>比较</strong>   </p>
+<ul>
+<li>从设计层面来看，抽象类提供了一种IS-A关系，那么就必须满足里式替换原则，即子类对象必须能够替换掉所有父类对象。而接口更像是一种LIKE-A关系，他只是提供一个方法实现契约，并不要求接口和实现的类具有IS—A关系。</li>
+<li>从使用上来看，一个类可以实现多个接口，但不能继承多个抽象类。</li>
+<li>接口的字段只能是static和final类型的，而抽象类的字段没有这种限制。</li>
+<li>接口的成员只能是public的，而抽象类的成员可以有多重访问权限。</li>
+</ul></li>
+<li><p><strong>使用选择</strong></p>
+<p>使用接口：</p>
+<ul>
+<li>需要让不相关的类都实现一个方法，例如不相关的类都可以实现 Compareable 接口中的 compareTo() 方法；</li>
+<li>需要使用多重继承。</li>
+</ul>
+<p>使用抽象类：</p>
+<ul>
+<li>需要在几个相关的类中共享代码。</li>
+<li>需要能控制继承来的成员的访问权限，而不是都为 public。</li>
+<li>需要继承非静态和非常量字段。</li>
+</ul>
+<p>在很多情况下，接口优先于抽象类。因为接口没有抽象类严格的类层次结构要求，可以灵活地为一个类添加行为。并且从 Java 8 开始，接口也可以有默认的方法实现，使得修改接口的成本也变的很低。</p>
+<ul>
+<li><a href="https://www.ibm.com/developerworks/cn/java/l-javainterface-abstract/">深入理解 abstract class 和 interface</a></li>
+<li><a href="https://dzone.com/articles/when-to-use-abstract-class-and-intreface">When to Use Abstract Class and Interface</a></li>
+</ul></li>
 </ul>
 
-<h2 id="toc_6">反射</h2>
+<h3 id="toc_6">super</h3>
 
-<h2 id="toc_7">异常</h2>
+<ul>
+<li>访问父类的构造函数：可以使用 super() 函数访问父类的构造函数，从而委托父类完成一些初始化的工作。</li>
+<li>访问父类的成员：如果子类重写了父类的某个方法，可以通过使用 super 关键字来引用父类的方法实现。</li>
+</ul>
 
-<h2 id="toc_8">泛型</h2>
+<pre><code class="language-java">public class SuperExample {
 
-<h2 id="toc_9">注解</h2>
+    protected int x;
+    protected int y;
 
-<h2 id="toc_10">特性</h2>
+    public SuperExample(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
 
-<h2 id="toc_11">Java 各版本的新特性</h2>
+    public void func() {
+        System.out.println(&quot;SuperExample.func()&quot;);
+    }
+}
+</code></pre>
 
-<h2 id="toc_12">Java 与 C++ 的区别</h2>
+<pre><code class="language-java">public class SuperExtendExample extends SuperExample {
 
-<h2 id="toc_13">JRE or JDK</h2>
+    private int z;
 
-<h2 id="toc_14">参考资料</h2>
+    public SuperExtendExample(int x, int y, int z) {
+        super(x, y);
+        this.z = z;
+    }
 
-<h2 id="toc_15">进阶指南</h2>
+    @Override
+    public void func() {
+        super.func();
+        System.out.println(&quot;SuperExtendExample.func()&quot;);
+    }
+}
+</code></pre>
+
+<pre><code class="language-java">SuperExample e = new SuperExtendExample(1, 2, 3);
+e.func();
+</code></pre>
+
+<pre><code class="language-java">SuperExample.func()
+SuperExtendExample.func()
+</code></pre>
+
+<h3 id="toc_7">重写与重载</h3>
+
+<h4 id="toc_8">重写</h4>
+
+<p>存在于继承体系中，指子类实现了一个与父类在方法声明上完全相同的一个方法。<br/>
+为了满足里式替换原则，重写有有以下两个限制：</p>
+
+<ul>
+<li>子类方法的访问权限必须大于等于父类方法；</li>
+<li>子类方法的返回类型必须是父类方法返回类型或为其子类型。<br/>
+使用 @Override 注解，可以让编译器帮忙检查是否满足上面的两个限制条件。<br/>
+#### 重载<br/>
+存在于同一个类中，指一个方法与已经存在的方法名称上相同，但是参数类型、个数、顺序至少有一个不同。</li>
+</ul>
+
+<p>应该注意的是，返回值不同，其它都相同不算是重载。</p>
+
+<h4 id="toc_9">实例</h4>
+
+<pre><code class="language-java">class A {
+    public String show(D obj) {
+        return (&quot;A and D&quot;);
+    }
+
+    public String show(A obj) {
+        return (&quot;A and A&quot;);
+    }
+}
+
+class B extends A {
+    public String show(B obj) {
+        return (&quot;B and B&quot;);
+    }
+
+    public String show(A obj) {
+        return (&quot;B and A&quot;);
+    }
+}
+
+class C extends B {
+}
+
+class D extends B {
+}
+</code></pre>
+
+<pre><code class="language-java">public class Test {
+
+    public static void main(String[] args) {
+        A a1 = new A();
+        A a2 = new B();
+        B b = new B();
+        C c = new C();
+        D d = new D();
+        System.out.println(a1.show(b)); // A and A
+        System.out.println(a1.show(c)); // A and A
+        System.out.println(a1.show(d)); // A and D
+        System.out.println(a2.show(b)); // B and A
+        System.out.println(a2.show(c)); // B and A
+        System.out.println(a2.show(d)); // A and D
+        System.out.println(b.show(b));  // B and B
+        System.out.println(b.show(c));  // B and B
+        System.out.println(b.show(d));  // A and D
+    }
+}
+</code></pre>
+
+<pre><code class="language-java">public class Test {
+
+    public static void main(String[] args) {
+        A a1 = new A();
+        A a2 = new B();
+        B b = new B();
+        C c = new C();
+        D d = new D();
+        System.out.println(a1.show(b)); // A and A
+        System.out.println(a1.show(c)); // A and A
+        System.out.println(a1.show(d)); // A and D
+        System.out.println(a2.show(b)); // B and A
+        System.out.println(a2.show(c)); // B and A
+        System.out.println(a2.show(d)); // A and D
+        System.out.println(b.show(b));  // B and B
+        System.out.println(b.show(c));  // B and B
+        System.out.println(b.show(d));  // A and D
+    }
+}
+</code></pre>
+
+<p>涉及到重写时，方法调用的优先级为：</p>
+
+<ul>
+<li>this.show(O)</li>
+<li>super.show(O)</li>
+<li>this.show((super)O)</li>
+<li>super.show((super)O)</li>
+</ul>
+
+<h2 id="toc_10">Object 通用方法</h2>
+
+<h3 id="toc_11">概览</h3>
+
+<pre><code class="language-java">public native int hashCode()
+
+public boolean equals(Object obj)
+
+protected native Object clone() throws CloneNotSupportedException
+
+public String toString()
+
+public final native Class&lt;?&gt; getClass()
+
+protected void finalize() throws Throwable {}
+
+public final native void notify()
+
+public final native void notifyAll()
+
+public final native void wait(long timeout) throws InterruptedException
+
+public final void wait(long timeout, int nanos) throws InterruptedException
+
+public final void wait() throws InterruptedException
+</code></pre>
+
+<h3 id="toc_12">equals()</h3>
+
+<h4 id="toc_13">等价关系</h4>
+
+<ul>
+<li><strong>自反性</strong></li>
+</ul>
+
+<pre><code class="language-java">x.equals(x); // true
+</code></pre>
+
+<ul>
+<li><strong>对称性</strong></li>
+</ul>
+
+<pre><code class="language-java">x.equals(y) == y.equals(x); // true
+</code></pre>
+
+<ul>
+<li><strong>传递性</strong></li>
+</ul>
+
+<pre><code class="language-java">if (x.equals(y) &amp;&amp; y.equals(z))
+    x.equals(z); // true;
+</code></pre>
+
+<ul>
+<li><strong>一致性</strong></li>
+</ul>
+
+<p>多次调用 equals() 方法结果不变</p>
+
+<pre><code class="language-java">x.equals(y) == x.equals(y); // true
+</code></pre>
+
+<ul>
+<li><strong>与NULL的比较</strong></li>
+</ul>
+
+<p>对任何不是 null 的对象 x 调用 x.equals(null) 结果都为 false</p>
+
+<pre><code class="language-java">x.equals(null); // false;
+</code></pre>
+
+<h4 id="toc_14">等价与相等</h4>
+
+<ul>
+<li>对于基本类型，==判断两个值是否相等，基本类型没有equals()方法</li>
+<li>对于引用类型，==判断两个变量是否引用同一个对象，而equals()判断引用的对象是否等价</li>
+</ul>
+
+<pre><code class="language-java">Integer x = new Integer(1);
+Integer y = new Integer(1);
+System.out.println(x.equals(y)); // true
+System.out.println(x == y);      // false
+</code></pre>
+
+<h4 id="toc_15">实现</h4>
+
+<ul>
+<li>检查是否为同一个对象的引用，如果是直接返回true</li>
+<li>检查是否为同一类型，如果不是，直接返回false</li>
+<li>将Object对象进行转型</li>
+<li>判断每个关键域是否相等</li>
+</ul>
+
+<pre><code class="language-java">public class EqualExample {
+
+    private int x;
+    private int y;
+    private int z;
+
+    public EqualExample(int x, int y, int z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        EqualExample that = (EqualExample) o;
+
+        if (x != that.x) return false;
+        if (y != that.y) return false;
+        return z == that.z;
+    }
+}
+</code></pre>
+
+<h3 id="toc_16">hashCode()</h3>
+
+<h3 id="toc_17">toString()</h3>
+
+<h3 id="toc_18">clone()</h3>
+
+<h4 id="toc_19">cloneable</h4>
+
+<h4 id="toc_20">浅拷贝</h4>
+
+<h4 id="toc_21">深拷贝</h4>
+
+<h2 id="toc_22">关键字</h2>
+
+<ul>
+<li><p><strong>final</strong></p>
+<ul>
+<li><strong>数据</strong></li>
+</ul>
+<p>声明数据为常量，可以是编译时常量，也可以是在运行时被初始化后不能被改变的常量。</p>
+<ul>
+<li>对于基本类型，final 使数值不变；</li>
+<li>对于引用类型，final 使引用不变，也就不能引用其它对象，但是被引用的对象本身是可以修改的。</li>
+</ul>
+<pre><code class="language-java">final int x = 1;
+// x = 2;  // cannot assign value to final variable &#39;x&#39;<br/>
+final A y = new A();<br/>
+y.a = 1;
+</code></pre>
+<ul>
+<li><strong>方法</strong></li>
+</ul>
+<p>声明方法不能被子类重写。</p>
+<p>private 方法隐式地被指定为 final，如果在子类中定义的方法和基类中的一个 private 方法签名相同，此时子类的方法不是重写基类方法，而是在子类中定义了一个新的方法。</p>
+<ul>
+<li><strong>类</strong></li>
+</ul>
+<p>声明类不允许被继承。</p></li>
+<li><p><strong>static</strong></p></li>
+</ul>
+
+<h2 id="toc_23">反射</h2>
+
+<p>每个类都有一个 <strong>Class</strong> 对象，包含了与类有关的信息。当编译一个新类时，会产生一个同名的 .class 文件，该文件内容保存着 Class 对象。</p>
+
+<p>类加载相当于 Class 对象的加载，类在第一次使用时才动态加载到 JVM 中。也可以使用 <code>Class.forName(&quot;com.mysql.jdbc.Driver&quot;)</code> 这种方式来控制类的加载，该方法会返回一个 Class 对象。</p>
+
+<p>反射可以提供运行时的类信息，并且这个类可以在运行时才加载进来，甚至在编译时期该类的 .class 不存在也可以加载进来。</p>
+
+<p>Class 和 java.lang.reflect 一起对反射提供了支持，java.lang.reflect 类库主要包含了以下三个类：</p>
+
+<ul>
+<li><strong>Field</strong> ：可以使用 get() 和 set() 方法读取和修改 Field 对象关联的字段；</li>
+<li><strong>Method</strong> ：可以使用 invoke() 方法调用与 Method 对象关联的方法；</li>
+<li><strong>Constructor</strong> ：可以用 Constructor 创建新的对象。</li>
+</ul>
+
+<p><strong>反射的优点：</strong></p>
+
+<ul>
+<li><strong>可扩展性</strong> ：应用程序可以利用全限定名创建可扩展对象的实例，来使用来自外部的用户自定义类。</li>
+<li><strong>类浏览器和可视化开发环境</strong> ：一个类浏览器需要可以枚举类的成员。可视化开发环境（如 IDE）可以从利用反射中可用的类型信息中受益，以帮助程序员编写正确的代码。</li>
+<li><strong>调试器和测试工具</strong> ： 调试器需要能够检查一个类里的私有成员。测试工具可以利用反射来自动地调用类里定义的可被发现的 API 定义，以确保一组测试中有较高的代码覆盖率。</li>
+</ul>
+
+<p><strong>反射的缺点：</strong></p>
+
+<p>尽管反射非常强大，但也不能滥用。如果一个功能可以不用反射完成，那么最好就不用。在我们使用反射技术时，下面几条内容应该牢记于心。</p>
+
+<ul>
+<li><p><strong>性能开销</strong> ：反射涉及了动态类型的解析，所以 JVM 无法对这些代码进行优化。因此，反射操作的效率要比那些非反射操作低得多。我们应该避免在经常被执行的代码或对性能要求很高的程序中使用反射。</p></li>
+<li><p><strong>安全限制</strong> ：使用反射技术要求程序必须在一个没有安全限制的环境中运行。如果一个程序必须在有安全限制的环境中运行，如 Applet，那么这就是个问题了。</p></li>
+<li><p><strong>内部暴露</strong> ：由于反射允许代码执行一些在正常情况下不被允许的操作（比如访问私有的属性和方法），所以使用反射可能会导致意料之外的副作用，这可能导致代码功能失调并破坏可移植性。反射代码破坏了抽象性，因此当平台发生改变的时候，代码的行为就有可能也随着变化。</p></li>
+<li><p><a href="https://docs.oracle.com/javase/tutorial/reflect/index.html">Trail: The Reflection API</a></p></li>
+<li><p><a href="http://www.sczyh30.com/posts/Java/java-reflection-1/">深入解析 Java 反射（1）- 基础</a></p></li>
+</ul>
+
+<h2 id="toc_24">异常</h2>
+
+<p>Throwable 可以用来表示任何可以作为异常抛出的类，分为两种： <strong>Error</strong> 和 <strong>Exception</strong>。其中 Error 用来表示 JVM 无法处理的错误，Exception 分为两种：</p>
+
+<ul>
+<li><strong>受检异常</strong> ：需要用 try...catch... 语句捕获并进行处理，并且可以从异常中恢复；</li>
+<li><strong>非受检异常</strong> ：是程序运行时错误，例如除 0 会引发 Arithmetic Exception，此时程序崩溃并且无法恢复。</li>
+</ul>
+
+<p><img src="media/15511460518747/PPjwP.png" alt="" style="width:600px;"/></p>
+
+<ul>
+<li><a href="https://www.tianmaying.com/tutorial/Java-Exception">Java 入门之异常处理</a></li>
+<li><a href="http://www.importnew.com/7383.html">Java 异常的面试问题及答案 -Part 1</a></li>
+</ul>
+
+<h2 id="toc_25">泛型</h2>
+
+<pre><code class="language-java">public class Box&lt;T&gt; {
+    // T stands for &quot;Type&quot;
+    private T t;
+    public void set(T t) { this.t = t; }
+    public T get() { return t; }
+}
+</code></pre>
+
+<ul>
+<li><a href="http://www.importnew.com/24029.html">Java 泛型详解</a></li>
+<li><a href="https://cloud.tencent.com/developer/article/1033693">10 道 Java 泛型面试题</a></li>
+</ul>
+
+<h2 id="toc_26">注解</h2>
+
+<p>Java 注解是附加在代码中的一些元信息，用于一些工具在编译、运行时进行解析和使用，起到说明、配置的功能。注解不会也不能影响代码的实际逻辑，仅仅起到辅助性的作用。</p>
+
+<p><a href="https://www.cnblogs.com/acm-bingzi/p/javaAnnotation.html">注解 Annotation 实现原理与自定义注解例子</a></p>
+
+<h2 id="toc_27">特性</h2>
+
+<h3 id="toc_28">Java 各版本的新特性</h3>
+
+<p><strong>New highlights in Java SE 8</strong></p>
+
+<ol>
+<li>Lambda Expressions</li>
+<li>Pipelines and Streams</li>
+<li>Date and Time API</li>
+<li>Default Methods</li>
+<li>Type Annotations</li>
+<li>Nashhorn JavaScript Engine</li>
+<li>Concurrent Accumulators</li>
+<li>Parallel operations</li>
+<li>PermGen Error Removed</li>
+</ol>
+
+<p><strong>New highlights in Java SE 7</strong></p>
+
+<ol>
+<li>Strings in Switch Statement</li>
+<li>Type Inference for Generic Instance Creation</li>
+<li>Multiple Exception Handling</li>
+<li>Support for Dynamic Languages</li>
+<li>Try with Resources</li>
+<li>Java nio Package</li>
+<li>Binary Literals, Underscore in literals</li>
+<li><p>Diamond Syntax</p></li>
+</ol>
+
+<ul>
+<li><a href="http://www.selfgrowth.com/articles/difference-between-java-18-and-java-17">Difference between Java 1.8 and Java 1.7?</a></li>
+<li><a href="http://www.importnew.com/19345.html">Java 8 特性</a></li>
+</ul>
+
+<h2 id="toc_29">Java 与 C++ 的区别</h2>
+
+<ul>
+<li>Java 是纯粹的面向对象语言，所有的对象都继承自 java.lang.Object，C++ 为了兼容 C 即支持面向对象也支持面向过程。</li>
+<li>Java 通过虚拟机从而实现跨平台特性，但是 C++ 依赖于特定的平台。</li>
+<li>Java 没有指针，它的引用可以理解为安全指针，而 C++ 具有和 C 一样的指针。</li>
+<li>Java 支持自动垃圾回收，而 C++ 需要手动回收。</li>
+<li>Java 不支持多重继承，只能通过实现多个接口来达到相同目的，而 C++ 支持多重继承。</li>
+<li>Java 不支持操作符重载，虽然可以对两个 String 对象执行加法运算，但是这是语言内置支持的操作，不属于操作符重载，而 C++ 可以。</li>
+<li>Java 的 goto 是保留字，但是不可用，C++ 可以使用 goto。</li>
+<li>Java 不支持条件编译，C++ 通过 #ifdef #ifndef 等预处理命令从而实现条件编译。</li>
+</ul>
+
+<h2 id="toc_30">JRE or JDK</h2>
+
+<ul>
+<li>JRE is the JVM program, Java application need to run on JRE.</li>
+<li>JDK is a superset of JRE, JRE + tools for developing java programs. e.g, it provides the compiler &quot;javac&quot;</li>
+</ul>
+
+<h2 id="toc_31">参考资料</h2>
+
+<ul>
+<li>Eckel B. Java 编程思想[M]. 机械工业出版社, 2002.</li>
+<li>Bloch J. Effective java[M]. Addison-Wesley Professional, 2017.</li>
+</ul>
+
+<h2 id="toc_32">进阶指南</h2>
 
 <p><a href="https://github.com/CyC2018/Backend-Interview-Guide">https://github.com/CyC2018/Backend-Interview-Guide</a></p>
 
