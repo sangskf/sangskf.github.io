@@ -234,44 +234,86 @@
 <li>
 <a href="#toc_21">深拷贝</a>
 </li>
+<li>
+<a href="#toc_22">clone的替代方案</a>
+</li>
 </ul>
 </li>
 </ul>
 </li>
 <li>
-<a href="#toc_22">关键字</a>
-</li>
-<li>
-<a href="#toc_23">反射</a>
-</li>
-<li>
-<a href="#toc_24">异常</a>
-</li>
-<li>
-<a href="#toc_25">泛型</a>
-</li>
-<li>
-<a href="#toc_26">注解</a>
-</li>
-<li>
-<a href="#toc_27">特性</a>
+<a href="#toc_23">关键字</a>
 <ul>
 <li>
-<a href="#toc_28">Java 各版本的新特性</a>
+<a href="#toc_24">final</a>
+<ul>
+<li>
+<a href="#toc_25">数据</a>
+</li>
+<li>
+<a href="#toc_26">方法</a>
+</li>
+<li>
+<a href="#toc_27">类</a>
 </li>
 </ul>
 </li>
 <li>
-<a href="#toc_29">Java 与 C++ 的区别</a>
+<a href="#toc_28">static</a>
+<ul>
+<li>
+<a href="#toc_29">静态变量</a>
 </li>
 <li>
-<a href="#toc_30">JRE or JDK</a>
+<a href="#toc_30">静态方法</a>
 </li>
 <li>
-<a href="#toc_31">参考资料</a>
+<a href="#toc_31">静态语句块</a>
 </li>
 <li>
-<a href="#toc_32">进阶指南</a>
+<a href="#toc_32">静态内部类</a>
+</li>
+<li>
+<a href="#toc_33">静态导包</a>
+</li>
+<li>
+<a href="#toc_34">初始化顺序</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_35">反射</a>
+</li>
+<li>
+<a href="#toc_36">异常</a>
+</li>
+<li>
+<a href="#toc_37">泛型</a>
+</li>
+<li>
+<a href="#toc_38">注解</a>
+</li>
+<li>
+<a href="#toc_39">特性</a>
+<ul>
+<li>
+<a href="#toc_40">Java 各版本的新特性</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_41">Java 与 C++ 的区别</a>
+</li>
+<li>
+<a href="#toc_42">JRE or JDK</a>
+</li>
+<li>
+<a href="#toc_43">参考资料</a>
+</li>
+<li>
+<a href="#toc_44">进阶指南</a>
 </li>
 </ul>
 
@@ -1028,46 +1070,402 @@ System.out.println(x == y);      // false
 
 <h3 id="toc_16">hashCode()</h3>
 
+<p>hashCode() 返回散列值，而 equals() 是用来判断两个对象是否等价。等价的两个对象散列值一定相同，但是散列值相同的两个对象不一定等价。</p>
+
+<p>在覆盖 equals() 方法时应当总是覆盖 hashCode() 方法，保证等价的两个对象散列值也相等。</p>
+
+<p>下面的代码中，新建了两个等价的对象，并将它们添加到 HashSet 中。我们希望将这两个对象当成一样的，只在集合中添加一个对象，但是因为 EqualExample 没有实现 hasCode() 方法，因此这两个对象的散列值是不同的，最终导致集合添加了两个等价的对象。</p>
+
+<pre><code class="language-java">EqualExample e1 = new EqualExample(1, 1, 1);
+EqualExample e2 = new EqualExample(1, 1, 1);
+System.out.println(e1.equals(e2)); // true
+HashSet&lt;EqualExample&gt; set = new HashSet&lt;&gt;();
+set.add(e1);
+set.add(e2);
+System.out.println(set.size());   // 2
+</code></pre>
+
+<p>理想的散列函数应当具有均匀性，即不相等的对象应当均匀分布到所有可能的散列值上。这就要求了散列函数要把所有域的值都考虑进来。可以将每个域都当成 R 进制的某一位，然后组成一个 R 进制的整数。R 一般取 31，因为它是一个奇素数，如果是偶数的话，当出现乘法溢出，信息就会丢失，因为与 2 相乘相当于向左移一位。</p>
+
+<p>一个数与 31 相乘可以转换成移位和减法：<code>31*x == (x&lt;&lt;5)-x</code>，编译器会自动进行这个优化。</p>
+
+<pre><code class="language-java">@Override
+public int hashCode() {
+    int result = 17;
+    result = 31 * result + x;
+    result = 31 * result + y;
+    result = 31 * result + z;
+    return result;
+}
+</code></pre>
+
 <h3 id="toc_17">toString()</h3>
+
+<p>默认返回 ToStringExample@4554617c 这种形式，其中 @ 后面的数值为散列码的无符号十六进制表示。</p>
+
+<pre><code class="language-java">public class ToStringExample {
+
+    private int number;
+
+    public ToStringExample(int number) {
+        this.number = number;
+    }
+}
+</code></pre>
+
+<pre><code class="language-java">ToStringExample example = new ToStringExample(123);
+System.out.println(example.toString());
+</code></pre>
+
+<pre><code class="language-java">ToStringExample@4554617c
+</code></pre>
 
 <h3 id="toc_18">clone()</h3>
 
 <h4 id="toc_19">cloneable</h4>
 
+<p>clone() 是 Object 的 protected 方法，它不是 public，一个类不显式去重写 clone()，其它类就不能直接去调用该类实例的 clone() 方法。</p>
+
+<pre><code class="language-java">public class CloneExample {
+    private int a;
+    private int b;
+}
+</code></pre>
+
+<pre><code class="language-java">CloneExample e1 = new CloneExample();
+// CloneExample e2 = e1.clone(); // &#39;clone()&#39; has protected access in &#39;java.lang.Object&#39;
+</code></pre>
+
+<p>重写 clone() 得到以下实现：</p>
+
+<pre><code class="language-java">public class CloneExample {
+    private int a;
+    private int b;
+
+    @Override
+    public CloneExample clone() throws CloneNotSupportedException {
+        return (CloneExample)super.clone();
+    }
+}
+</code></pre>
+
+<pre><code class="language-java">CloneExample e1 = new CloneExample();
+try {
+    CloneExample e2 = e1.clone();
+} catch (CloneNotSupportedException e) {
+    e.printStackTrace();
+}
+</code></pre>
+
+<pre><code class="language-java">java.lang.CloneNotSupportedException: CloneExample
+</code></pre>
+
+<p>以上抛出了 CloneNotSupportedException，这是因为 CloneExample 没有实现 Cloneable 接口。</p>
+
+<p>应该注意的是，clone() 方法并不是 Cloneable 接口的方法，而是 Object 的一个 protected 方法。Cloneable 接口只是规定，如果一个类没有实现 Cloneable 接口又调用了 clone() 方法，就会抛出 CloneNotSupportedException。</p>
+
+<pre><code class="language-java">public class CloneExample implements Cloneable {
+    private int a;
+    private int b;
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+}
+</code></pre>
+
 <h4 id="toc_20">浅拷贝</h4>
+
+<p>拷贝对象和原始对象的引用类型引用同一个对象。</p>
+
+<pre><code class="language-java">public class ShallowCloneExample implements Cloneable {
+
+    private int[] arr;
+
+    public ShallowCloneExample() {
+        arr = new int[10];
+        for (int i = 0; i &lt; arr.length; i++) {
+            arr[i] = i;
+        }
+    }
+
+    public void set(int index, int value) {
+        arr[index] = value;
+    }
+
+    public int get(int index) {
+        return arr[index];
+    }
+
+    @Override
+    protected ShallowCloneExample clone() throws CloneNotSupportedException {
+        return (ShallowCloneExample) super.clone();
+    }
+}
+</code></pre>
+
+<pre><code class="language-java">ShallowCloneExample e1 = new ShallowCloneExample();
+ShallowCloneExample e2 = null;
+try {
+    e2 = e1.clone();
+} catch (CloneNotSupportedException e) {
+    e.printStackTrace();
+}
+e1.set(2, 222);
+System.out.println(e2.get(2)); // 222
+</code></pre>
 
 <h4 id="toc_21">深拷贝</h4>
 
-<h2 id="toc_22">关键字</h2>
+<p>拷贝对象和原始对象的引用类型引用不同对象。</p>
 
-<ul>
-<li><p><strong>final</strong></p>
-<ul>
-<li><strong>数据</strong></li>
-</ul>
+<pre><code class="language-java">public class DeepCloneExample implements Cloneable {
+
+    private int[] arr;
+
+    public DeepCloneExample() {
+        arr = new int[10];
+        for (int i = 0; i &lt; arr.length; i++) {
+            arr[i] = i;
+        }
+    }
+
+    public void set(int index, int value) {
+        arr[index] = value;
+    }
+
+    public int get(int index) {
+        return arr[index];
+    }
+
+    @Override
+    protected DeepCloneExample clone() throws CloneNotSupportedException {
+        DeepCloneExample result = (DeepCloneExample) super.clone();
+        result.arr = new int[arr.length];
+        for (int i = 0; i &lt; arr.length; i++) {
+            result.arr[i] = arr[i];
+        }
+        return result;
+    }
+}
+</code></pre>
+
+<pre><code class="language-java">DeepCloneExample e1 = new DeepCloneExample();
+DeepCloneExample e2 = null;
+try {
+    e2 = e1.clone();
+} catch (CloneNotSupportedException e) {
+    e.printStackTrace();
+}
+e1.set(2, 222);
+System.out.println(e2.get(2)); // 2
+</code></pre>
+
+<h4 id="toc_22">clone的替代方案</h4>
+
+<p>使用 clone() 方法来拷贝一个对象即复杂又有风险，它会抛出异常，并且还需要类型转换。Effective Java 书上讲到，最好不要去使用 clone()，可以使用拷贝构造函数或者拷贝工厂来拷贝一个对象。</p>
+
+<pre><code class="language-java">public class CloneConstructorExample {
+
+    private int[] arr;
+
+    public CloneConstructorExample() {
+        arr = new int[10];
+        for (int i = 0; i &lt; arr.length; i++) {
+            arr[i] = i;
+        }
+    }
+
+    public CloneConstructorExample(CloneConstructorExample original) {
+        arr = new int[original.arr.length];
+        for (int i = 0; i &lt; original.arr.length; i++) {
+            arr[i] = original.arr[i];
+        }
+    }
+
+    public void set(int index, int value) {
+        arr[index] = value;
+    }
+
+    public int get(int index) {
+        return arr[index];
+    }
+}
+</code></pre>
+
+<pre><code class="language-java">CloneConstructorExample e1 = new CloneConstructorExample();
+CloneConstructorExample e2 = new CloneConstructorExample(e1);
+e1.set(2, 222);
+System.out.println(e2.get(2)); // 2
+</code></pre>
+
+<h2 id="toc_23">关键字</h2>
+
+<h3 id="toc_24">final</h3>
+
+<h4 id="toc_25">数据</h4>
+
 <p>声明数据为常量，可以是编译时常量，也可以是在运行时被初始化后不能被改变的常量。</p>
+
 <ul>
 <li>对于基本类型，final 使数值不变；</li>
 <li>对于引用类型，final 使引用不变，也就不能引用其它对象，但是被引用的对象本身是可以修改的。</li>
 </ul>
+
 <pre><code class="language-java">final int x = 1;
-// x = 2;  // cannot assign value to final variable &#39;x&#39;<br/>
-final A y = new A();<br/>
+// x = 2;  // cannot assign value to final variable &#39;x&#39;
+final A y = new A();
 y.a = 1;
 </code></pre>
-<ul>
-<li><strong>方法</strong></li>
-</ul>
+
+<h4 id="toc_26">方法</h4>
+
 <p>声明方法不能被子类重写。</p>
+
 <p>private 方法隐式地被指定为 final，如果在子类中定义的方法和基类中的一个 private 方法签名相同，此时子类的方法不是重写基类方法，而是在子类中定义了一个新的方法。</p>
+
+<h4 id="toc_27">类</h4>
+
+<p>声明类不允许被继承。</p>
+
+<h3 id="toc_28">static</h3>
+
+<h4 id="toc_29">静态变量</h4>
+
 <ul>
-<li><strong>类</strong></li>
-</ul>
-<p>声明类不允许被继承。</p></li>
-<li><p><strong>static</strong></p></li>
+<li>静态变量：又称为类变量，也就是说这个变量属于类的，类所有的实例都共享静态变量，可以直接通过类名来访问它。静态变量在内存中只存在一份。</li>
+<li>实例变量：每创建一个实例就会产生一个实例变量，它与该实例同生共死。</li>
 </ul>
 
-<h2 id="toc_23">反射</h2>
+<pre><code class="language-java">public class A {
+
+    private int x;         // 实例变量
+    private static int y;  // 静态变量
+
+    public static void main(String[] args) {
+        // int x = A.x;  // Non-static field &#39;x&#39; cannot be referenced from a static context
+        A a = new A();
+        int x = a.x;
+        int y = A.y;
+    }
+}
+</code></pre>
+
+<h4 id="toc_30">静态方法</h4>
+
+<p>静态方法在类加载的时候就存在了，它不依赖于任何实例。所以静态方法必须有实现，也就是说它不能是抽象方法。</p>
+
+<pre><code class="language-java">public abstract class A {
+    public static void func1(){
+    }
+    // public abstract static void func2();  // Illegal combination of modifiers: &#39;abstract&#39; and &#39;static&#39;
+}
+</code></pre>
+
+<p>只能访问所属类的静态字段和静态方法，方法中不能有 this 和 super 关键字。</p>
+
+<pre><code class="language-java">public class A {
+
+    private static int x;
+    private int y;
+
+    public static void func1(){
+        int a = x;
+        // int b = y;  // Non-static field &#39;y&#39; cannot be referenced from a static context
+        // int b = this.y;     // &#39;A.this&#39; cannot be referenced from a static context
+    }
+}
+</code></pre>
+
+<h4 id="toc_31">静态语句块</h4>
+
+<p>静态语句块在类初始化时运行一次。</p>
+
+<pre><code class="language-java">public class A {
+    static {
+        System.out.println(&quot;123&quot;);
+    }
+
+    public static void main(String[] args) {
+        A a1 = new A();
+        A a2 = new A();
+    }
+}
+</code></pre>
+
+<pre><code class="language-java">123
+</code></pre>
+
+<h4 id="toc_32">静态内部类</h4>
+
+<p>非静态内部类依赖于外部类的实例，而静态内部类不需要。</p>
+
+<pre><code class="language-java">public class OuterClass {
+
+    class InnerClass {
+    }
+
+    static class StaticInnerClass {
+    }
+
+    public static void main(String[] args) {
+        // InnerClass innerClass = new InnerClass(); // &#39;OuterClass.this&#39; cannot be referenced from a static context
+        OuterClass outerClass = new OuterClass();
+        InnerClass innerClass = outerClass.new InnerClass();
+        StaticInnerClass staticInnerClass = new StaticInnerClass();
+    }
+}
+</code></pre>
+
+<p>静态内部类不能访问外部类的非静态的变量和方法。</p>
+
+<h4 id="toc_33">静态导包</h4>
+
+<p>在使用静态变量和方法时不用再指明 ClassName，从而简化代码，但可读性大大降低。</p>
+
+<pre><code class="language-java">import static com.xxx.ClassName.*
+</code></pre>
+
+<h4 id="toc_34">初始化顺序</h4>
+
+<p>静态变量和静态语句块优先于实例变量和普通语句块，静态变量和静态语句块的初始化顺序取决于它们在代码中的顺序。</p>
+
+<pre><code class="language-java">public static String staticField = &quot;静态变量&quot;;
+</code></pre>
+
+<pre><code class="language-java">static {
+    System.out.println(&quot;静态语句块&quot;);
+}
+</code></pre>
+
+<pre><code class="language-java">public String field = &quot;实例变量&quot;;
+</code></pre>
+
+<pre><code class="language-java">{
+    System.out.println(&quot;普通语句块&quot;);
+}
+</code></pre>
+
+<p>最后才是构造函数的初始化。</p>
+
+<pre><code class="language-java">public InitialOrderTest() {
+    System.out.println(&quot;构造函数&quot;);
+}
+</code></pre>
+
+<p>存在继承的情况下，初始化顺序为：</p>
+
+<ul>
+<li>父类（静态变量、静态语句块）</li>
+<li>子类（静态变量、静态语句块）</li>
+<li>父类（实例变量、普通语句块）</li>
+<li>父类（构造函数）</li>
+<li>子类（实例变量、普通语句块）</li>
+<li>子类（构造函数）</li>
+</ul>
+
+<h2 id="toc_35">反射</h2>
 
 <p>每个类都有一个 <strong>Class</strong> 对象，包含了与类有关的信息。当编译一个新类时，会产生一个同名的 .class 文件，该文件内容保存着 Class 对象。</p>
 
@@ -1103,7 +1501,7 @@ y.a = 1;
 <li><p><a href="http://www.sczyh30.com/posts/Java/java-reflection-1/">深入解析 Java 反射（1）- 基础</a></p></li>
 </ul>
 
-<h2 id="toc_24">异常</h2>
+<h2 id="toc_36">异常</h2>
 
 <p>Throwable 可以用来表示任何可以作为异常抛出的类，分为两种： <strong>Error</strong> 和 <strong>Exception</strong>。其中 Error 用来表示 JVM 无法处理的错误，Exception 分为两种：</p>
 
@@ -1119,7 +1517,7 @@ y.a = 1;
 <li><a href="http://www.importnew.com/7383.html">Java 异常的面试问题及答案 -Part 1</a></li>
 </ul>
 
-<h2 id="toc_25">泛型</h2>
+<h2 id="toc_37">泛型</h2>
 
 <pre><code class="language-java">public class Box&lt;T&gt; {
     // T stands for &quot;Type&quot;
@@ -1134,15 +1532,15 @@ y.a = 1;
 <li><a href="https://cloud.tencent.com/developer/article/1033693">10 道 Java 泛型面试题</a></li>
 </ul>
 
-<h2 id="toc_26">注解</h2>
+<h2 id="toc_38">注解</h2>
 
 <p>Java 注解是附加在代码中的一些元信息，用于一些工具在编译、运行时进行解析和使用，起到说明、配置的功能。注解不会也不能影响代码的实际逻辑，仅仅起到辅助性的作用。</p>
 
 <p><a href="https://www.cnblogs.com/acm-bingzi/p/javaAnnotation.html">注解 Annotation 实现原理与自定义注解例子</a></p>
 
-<h2 id="toc_27">特性</h2>
+<h2 id="toc_39">特性</h2>
 
-<h3 id="toc_28">Java 各版本的新特性</h3>
+<h3 id="toc_40">Java 各版本的新特性</h3>
 
 <p><strong>New highlights in Java SE 8</strong></p>
 
@@ -1176,7 +1574,7 @@ y.a = 1;
 <li><a href="http://www.importnew.com/19345.html">Java 8 特性</a></li>
 </ul>
 
-<h2 id="toc_29">Java 与 C++ 的区别</h2>
+<h2 id="toc_41">Java 与 C++ 的区别</h2>
 
 <ul>
 <li>Java 是纯粹的面向对象语言，所有的对象都继承自 java.lang.Object，C++ 为了兼容 C 即支持面向对象也支持面向过程。</li>
@@ -1189,21 +1587,21 @@ y.a = 1;
 <li>Java 不支持条件编译，C++ 通过 #ifdef #ifndef 等预处理命令从而实现条件编译。</li>
 </ul>
 
-<h2 id="toc_30">JRE or JDK</h2>
+<h2 id="toc_42">JRE or JDK</h2>
 
 <ul>
 <li>JRE is the JVM program, Java application need to run on JRE.</li>
 <li>JDK is a superset of JRE, JRE + tools for developing java programs. e.g, it provides the compiler &quot;javac&quot;</li>
 </ul>
 
-<h2 id="toc_31">参考资料</h2>
+<h2 id="toc_43">参考资料</h2>
 
 <ul>
 <li>Eckel B. Java 编程思想[M]. 机械工业出版社, 2002.</li>
 <li>Bloch J. Effective java[M]. Addison-Wesley Professional, 2017.</li>
 </ul>
 
-<h2 id="toc_32">进阶指南</h2>
+<h2 id="toc_44">进阶指南</h2>
 
 <p><a href="https://github.com/CyC2018/Backend-Interview-Guide">https://github.com/CyC2018/Backend-Interview-Guide</a></p>
 
