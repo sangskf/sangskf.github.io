@@ -4,13 +4,112 @@
   <title><![CDATA[见课就上的小婊砸]]></title>
   <link href="https://books.sangkf.cn/atom.xml" rel="self"/>
   <link href="https://books.sangkf.cn/"/>
-  <updated>2019-03-01T17:33:13+08:00</updated>
+  <updated>2019-03-05T11:11:05+08:00</updated>
   <id>https://books.sangkf.cn/</id>
   <author>
     <name><![CDATA[]]></name>
     
   </author>
   <generator uri="http://www.mweb.im/">MWeb</generator>
+  
+  <entry>
+    <title type="html"><![CDATA[JVM原理讲解]]></title>
+    <link href="https://books.sangkf.cn/15516889064939.html"/>
+    <updated>2019-03-04T16:41:46+08:00</updated>
+    <id>https://books.sangkf.cn/15516889064939.html</id>
+    <content type="html"><![CDATA[
+<blockquote>
+<p>本文从 JVM 结构入手，介绍了 Java 内存管理、对象创建、常量池等基础知识，对面试中 JVM 相关的基础题目进行了讲解。</p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_0">基本问题</h2>
+
+<ul>
+<li>介绍下Java内存区域（运行时数据区）</li>
+<li>Java对象的创建过程（五步，建议能默写出来并且要知道每一步虚拟机做了什么）</li>
+<li>对象的访问定位的两种方式（句柄和直接指针两种方式）</li>
+</ul>
+
+<h2 id="toc_1">拓展问题</h2>
+
+<ul>
+<li>String类和常量池</li>
+<li>8种基本类型的包装类和常量池</li>
+</ul>
+
+<h2 id="toc_2">概述</h2>
+
+<p>对于Java程序员来说，在虚拟机自动内存管理机制下，不再需要像C++程序员这样为每一个new操作去写对应的delete/free操作，不容易出现内存泄漏和内存溢出问题，正是因为Java程序员把内存控制权交给了Java虚拟机，一旦出现内存泄漏和溢出方面的问题，如果不了解虚拟机是怎样使用内存的，那么排查错误将会是一个非常艰巨的任务。</p>
+
+<h2 id="toc_3">运行时数据区</h2>
+
+<p>Java虚拟机在执行Java程序的过程中会把它管理的内存分成若干个不同的数据区域。</p>
+
+<p><img src="media/15516889064939/15516900494445.jpg" alt=""/></p>
+
+<p><strong>线程私有的</strong>：<em><u>程序计数器，虚拟机栈，本地方法栈</u></em><br/>
+<strong>线程共享的</strong>：<em><u>堆，方法区，直接内存</u></em></p>
+
+<h3 id="toc_4">程序计数器</h3>
+
+<p>程序计数器是一块较小的内存空间，可以看做是当前线程所执行的字节码的行号指示器。字节码解释器工作时通过改变这个计数器来选择去下一条需要执行的字节码指令，分支，循环，跳转，异常处理，线程恢复等功能都需要依赖这个计数器来完成。</p>
+
+<p>另外，为了线程切换后能恢复到正确的执行位置，每条线程都需要有一个独立的程序计数器，各线程之间计数器互不影响，独立存储，我们称这类内存区域为“线程私有”的内存。</p>
+
+<p>从上面的介绍中我们知道程序计数器主要有两个作用:</p>
+
+<ul>
+<li>字节码解释器通过改变程序计数器来一次读取指令，从而实现代码的流程控制，如顺序执行，选择，循环，异常处理</li>
+<li>在多线程的情况下，程序计数器用于记录当前线程执行的位置，从而当线程被切换回来的时候能够知道该线程上次运行到哪儿了</li>
+</ul>
+
+<p><strong>注意</strong>：程序计数器是唯一不会出现OutOfMemoryError的内存区域，它的生命周期随着线程的创建而创建，随着线程的结束而死亡。</p>
+
+<h3 id="toc_5">Java虚拟机栈</h3>
+
+<p>与程序计数器一样，Java虚拟机栈也是线程私有的，它的生命周期和线程相同，描述的是Java方法执行的内存模型。</p>
+
+<p>Java内存可以粗糙的区分为堆内存(Heap)和栈内存(Stack)，其中栈就是现在说的虚拟机栈，或者说是虚拟机栈中局部变量表部分。（实际上，Java虚拟机栈是由一个个栈帧组成，而每个栈帧中都拥有局部变量表，操作数栈，动态链接，方法出口信息）</p>
+
+<p>局部变量表主要存放可编译器可知的各种数据类型(boolean, byte, char, short, int, float, long, double)，对象引用（refrence类型，它不同于对象本身，可能是一个指向对象起始地址的引用指针，也可能是指向一个代表对象的句柄或其他与此对象相关的位置）。</p>
+
+<p>Java虚拟机栈会出现两种异常: StackOverFlowError 和 OutOfMemoryError。</p>
+
+<ul>
+<li>StackOverFlowEror：若Java虚拟机栈的内存大小不允许动态扩展，那么当线程请求栈的深度超过当前Java虚拟机栈的最大深度的时候，就抛出StackOverFlowError异常。</li>
+<li>OutOfMemoryError: 若Java虚拟机栈的内存大小允许动态扩展，且当线程请求栈时内存用完了，无法再动态扩展了，此时抛出OutOfMemoryError异常。</li>
+</ul>
+
+<p>Java虚拟机栈也是线程私有的，每个线程都有各自的Java虚拟栈，而且随着线程的创建而创建，随着线程的死亡而死亡。</p>
+
+<h3 id="toc_6">本地方法栈</h3>
+
+<p>和虚拟机栈发挥的作用非常相似，区别是：虚拟机栈为虚拟机执行Java方法（也就是字节码）服务，而本地方法栈则为虚拟机使用到的Native方法服务。在HotSpot虚拟机中和Java虚拟机栈合二为一。</p>
+
+<p>本地方法被执行的时候，在本地方法栈会创建一个栈桢，用于存放该本地方法的局部变量表，操作数栈，动态链接，出口信息。</p>
+
+<p>方法执行完毕后相应的栈桢也会出栈并释放内存空间，也会出现StackOverFlowError和OutOfMemoryError两种异常。</p>
+
+<h3 id="toc_7">堆</h3>
+
+<p>Java虚拟机所管理的内存中最大的一块，Java堆使所有线程共享的一块内存区域，在虚拟机启动时创建。此内存区域的唯一目的就是存放对象实例。几乎所有的对象实例以及数组都在这里分配内存。</p>
+
+<p>Java堆是垃圾收集管理器管理的主要区域，因此也被称为GC堆(Garbage Collected Heap)。从垃圾回收的角度，由于现在收集器基本采用的分代垃圾收集算法，所以Java堆还可以细分为: 新生代和老年代，再细致一点: Eden空间，From Survivor, To Survivor空间等。进一步划分的目的是更好的回收内存，或者更快的分配内存。</p>
+
+<p><img src="media/15516889064939/15517535928182.jpg" alt=""/></p>
+
+<p>在JDK1.8中移除了整个永久代，取而代之的是一个叫元空间(Metaspace)的区域（永久代使用的是JVM的堆内存空间，而元空间使用的是物理内存，直接受到本机的物理内存限制）。</p>
+
+<p>【参考】<a href="https://www.cnblogs.com/paddix/p/5309550.html">Java8内存模型--永久代(PermGen)和元空间(Metaspace)</a></p>
+
+<h3 id="toc_8">方法区</h3>
+
+<p>方法区与Java堆一样，是各个线程共享的内存区域，它用于存储已被虚拟机加载的类信息，常量，静态变量，即时编译器编译后的代码等数据。虽然Java虚拟机规范把方法区描述为堆的一个逻辑部分，但是他却有一个别名叫做 Non-Heap（非堆），目的应该是与 Java堆区分开来。</p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[消息队列]]></title>
@@ -6439,154 +6538,6 @@ ChronoLocalDate jpChronoLocalDate = jpChronology.dateNow();
 <p>在实际开发过程中建议使用<code>LocalDate</code>，包括存储、操作、业务规则的解读；除非需要将程序的输入或者输出本地化，这时可以使用<code>ChronoLocalDate</code>类。</p>
 
 <p>[<strong>转载出处</strong>]：<a href="https://lw900925.github.io/java/java8-newtime-api.html#more">https://lw900925.github.io/java/java8-newtime-api.html#more</a></p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[使用脚本快速部署Java项目]]></title>
-    <link href="https://books.sangkf.cn/15509338125902.html"/>
-    <updated>2019-02-23T22:56:52+08:00</updated>
-    <id>https://books.sangkf.cn/15509338125902.html</id>
-    <content type="html"><![CDATA[
-<blockquote>
-<p>本文主要介绍如何利用jenkins实现自动部署Java项目</p>
-</blockquote>
-
-<span id="more"></span><!-- more -->
-
-<ul>
-<li>
-<a href="#toc_0">背景</a>
-</li>
-<li>
-<a href="#toc_1">具体实现</a>
-</li>
-</ul>
-
-
-<h2 id="toc_0">背景</h2>
-
-<p>自己经常写一些小项目，有时候是自己写，更多时候是帮别人写。 一般都要部署到服务器上，最早使用的方法是本地 mvn clean package 打包好，上传到服务器上运行。有时候发现自己写了个bug，修复了，或者改了点/加了点需求，改完代码，又要重新打包，上传。 反反复复，很麻烦。之前在公司，用的是 jenkins，解决了这个痛点，<br/>
-jenkins 搭好了后，只需要在 jenkins 后台点击构建即可。后来，也用了一段时间公司自己开发的一个云产品，类似 EDAS 的一个东西，只需要把代码推到 GitLab上，  构建项目，运行项目全在后台操作，安全可靠。 但是这些东西，都是针对大型项目，项目复杂度高，服务器配置也高。自己一个人开发的小项目，通常都是单模块项目，客户的服务器配置可能也不高，2G内存，1G内存都有可能。 于是，直接用 shell 脚本启动项目不失为一种好方法。  </p>
-
-<h2 id="toc_1">具体实现</h2>
-
-<p>代码结构如下<br/>
- <img src="media/15509338125902/QQ20190117-222349@2x.png" alt=""/>   <br/>
-主要思路就是，通过 shell 脚本执行以下几个操作  </p>
-
-<ol>
-<li>git pull 拉取 git 仓库最新代码</li>
-<li>停止之前运行的项目</li>
-<li>mvn clean package -Dmaven.test.skip=true 打包项目</li>
-<li>cd target  进入 target 目录</li>
-<li>nohup java -jar sens-latest.jar &amp; 后台运行 jar 包</li>
-</ol>
-
-<p><strong>sens.sh</strong>    </p>
-
-<pre><code class="language-bash">#!/bin/bash
-APP_NAME=sens-latest.jar
-
-usage() {
-    echo &quot;用法: sh sens.sh [start(启动)|stop(停止)|restart(重启)|status(状态)]&quot;
-    exit 1
-}
-
-is_exist(){
-  pid=`ps -ef|grep $APP_NAME|grep -v grep|awk &#39;{print $2}&#39; `
-  if [ -z &quot;${pid}&quot; ]; then
-   return 1
-  else
-    return 0
-  fi
-}
-
-start(){
-  is_exist
-  if [ $? -eq &quot;0&quot; ]; then
-    echo &quot;${APP_NAME} 正在运行。 pid=${pid} .&quot;
-  else
-    nohup java -server -Xms256m -Xmx512m -jar $APP_NAME &gt; /dev/null 2&gt;&amp;1 &amp;
-    echo &quot;${APP_NAME}启动成功，请查看日志确保运行正常。&quot;
-    fi
-}
-
-stop(){
-  is_exist
-  if [ $? -eq &quot;0&quot; ]; then
-    kill -9 $pid
-    echo &quot;${pid} 进程已被杀死，程序停止运行&quot;
-  else
-    echo &quot;${APP_NAME} 没有运行。&quot;
-  fi
-}
-
-status(){
-  is_exist
-  if [ $? -eq &quot;0&quot; ]; then
-    echo &quot;${APP_NAME} 正在运行。Pid is ${pid}&quot;
-  else
-    echo &quot;${APP_NAME} 没有运行。&quot;
-  fi
-}
-
-restart(){
-  stop
-  start
-}
-
-case &quot;$1&quot; in
-  &quot;start&quot;)
-    start
-    ;;
-  &quot;stop&quot;)
-    stop
-    ;;
-  &quot;status&quot;)
-    status
-    ;;
-  &quot;restart&quot;)
-    restart
-    ;;
-  *)
-    usage
-    ;;
-esac
-</code></pre>
-
-<p><strong>deploy.sh</strong></p>
-
-<pre><code class="language-bash">#!/bin/bash
-
-# 指定SENS的根目录，请按实际修改
-SENS_DIR=&quot;/www/wwwroot/SENS&quot;
-# 拉取最新的源码
-# git pull
-echo &quot;代码拉取完毕！&quot;
-
-# 进入SENS根目录
-cd $SENS_DIR
-
-# 停止SENS
-sh $SENS_DIR/bin/sens.sh stop
-
-# 执行打包
-mvn clean package -Pprod -Dmaven.test.skip=true
-echo &quot;代码拉取完毕！&quot;
-
-# 进入打包好的SENS目录
-cd $SENS_DIR/target/dist/sens
-
-# 运行SENS
-nohup java -server -Xms256m -Xmx512m -jar `find ./ -name &quot;sens*.jar&quot;` &gt; /dev/null 2&gt;&amp;1 &amp;
-
-echo &quot;SENS部署完毕，Enjoy！&quot;
-</code></pre>
-
-<p> 启动项目：sh deploy.sh<br/>
- 停止项目：sh sens.sh stop</p>
 
 ]]></content>
   </entry>

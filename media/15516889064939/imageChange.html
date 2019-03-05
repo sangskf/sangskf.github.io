@@ -1,0 +1,185 @@
+<!doctype html>
+<html>
+<head>
+  <!-- <link rel="stylesheet" href="../src/layui/css/layui.css" /> -->
+  <style>
+    .imgItem {
+      padding-top: 50px;
+      position: relative;
+    }
+
+    .over{
+      overflow:auto !important;
+    }
+    .imgs ul li p{
+      color:#000;
+      margin-bottom: 15px;
+    }
+    .imgs ul li img{
+      width: 100%;
+    }
+    .ng-scope{
+      height: 100% !important;
+    }
+    .dataStyle{
+      height: 45px !important;
+      /* line-height: 30px; */
+      background-color: #e6efff;
+    }
+    .clearfloat{
+      clear:both;
+      height:0;
+      font-size: 1px;
+      line-height: 0px;
+    }
+    .bannertext{
+      position: absolute;
+      bottom:0;
+      left:0;
+      width:100%;
+      height:30px;
+      background-color:#d5d8df
+    }
+
+    .layui-icon .layui-carousel-arrow{
+      display: block !important;
+      opacity: 1 !important;
+    }
+    p{
+      color: black;
+      margin-top:7px;
+    }
+    /* .mui-slider,.mui-slider-group,.mui-slider-item{
+        max-height:90vw
+    } */
+    .wrap img{
+      height:90vw
+    }
+    .scrollable{
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      padding-top: 127px;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+    .layui-carousel-arrow{
+      opacity: 1 !important;
+    }
+    .btnStyle{
+      position: absolute;
+      top: 50%;
+      z-index: 99;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      /*background-color: rgba(0,0,0,0.7);*/
+      text-align: center;
+      line-height: 50px;
+
+    }
+    .rightBtn{
+      right: 0;
+      padding-left: 16px;
+      padding-top: 7px;
+      box-sizing: border-box;
+      background-color: aliceblue;
+    }
+    .leftBtn{
+      padding-right: 11px;
+      padding-top: 7px;
+      box-sizing: border-box;
+      background-color: aliceblue;
+
+    }
+    .rightBtn span{
+      display: block;
+      width: 80%;
+      height: 80%;
+      background: url(../examples/boult1.png) no-repeat;
+      background-size: contain;
+    }
+    .leftBtn span{
+      display: block;
+      background-color:#CCC;
+      width: 80%;
+      height: 80%;
+      background: url(../examples/boult1.png) no-repeat;
+      background-size: contain;
+      transform: rotate(180deg);
+      -webkit-transform: rotate(180deg);
+      -o-transform: rotate(180deg);
+      -ms-transform: rotate(180deg);
+      -moz-transform: rotate(180deg);
+    }
+
+    .dataStyle {
+      /*8.7*/
+      background-color: #e6efff;
+      position: fixed;
+      top: 5.3px;
+      /* color: white; */
+      z-index: 999;
+      text-align: center;
+    }
+
+
+
+  </style>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title></title>
+</head>
+
+<body   ng-controller="imageChangeCtrl">
+
+<!-- 8.8 -->
+<h3 class="page-header-date dataStyle">
+  <div>
+    <i  ng-click="leftboult()"></i>
+  </div>
+  <div>
+    <span class="set-center"> </span>
+    <input type="text" name="USER_AGE" id="USER_AGE" readonly class="input" ng-model="dataval"/>
+    <input type="hidden" name="userId" id="userId"  ng-model="userId"/>
+  </div>
+  <div>
+    <i  ng-click="rightboult()"></i>
+  </div>
+</h3>
+<div class="layui-carousel imgItem" id="test1">
+  <div class="btnStyle leftBtn" ng-click="leftboult()">
+    <span></span>
+  </div>
+  <div  class="btnStyle rightBtn" ng-click="rightboult()">
+    <span></span>
+  </div>
+  <div carousel-item class="over">
+    <div class="imgs">
+      <ul>
+        <li>
+          <img src="{{imgShow.G_5}}" alt="">
+          <p>{{imgShow.WZ1}}</p>
+        </li>
+        <li>
+          <img src="{{imgShow.G_7}}" alt="">
+          <p>{{imgShow.WZ2}}</p>
+
+        </li>
+        <li>
+          <img src="{{imgShow.G_9}}" alt="">
+          <p>{{imgShow.WZ3}}</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+</body>
+
+<script>
+
+
+
+</script>
+</html>
