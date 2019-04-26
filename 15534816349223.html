@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  😋 技术必备基础知识 - 见课就上的小婊砸
+  B树 - 见课就上的小婊砸
   
   </title>
   
@@ -134,10 +134,10 @@
       <div class="markdown-body article-wrap">
        <div class="article">
           
-          <h1>😋 技术必备基础知识</h1>
+          <h1>B树</h1>
      
         <div class="read-more clearfix">
-          <span class="date">2019/2/25 22:4 下午</span>
+          <span class="date">2019/3/25 10:40 上午</span>
 
           
            
@@ -153,93 +153,109 @@
 
       <div class="article-content">
       <blockquote>
-<p>本项目包含了技术面试必备的基础知识，浅显易懂，你不需要花很长的时间去阅读和理解成堆的技术书籍就可以快速掌握这些知识，从而节省宝贵的面试复习时间。</p>
+<p>B树的目的是为了硬盘快速读取数据(降低IO操作次数)而设计的一种平衡的多路查找树。目前大多数据库及文件索引，都是使用B树或者B树的变形来存储实现。</p>
 </blockquote>
 
 <span id="more"></span><!-- more -->
 
-<p>本项目包含了技术面试必备的基础知识，浅显易懂，你不需要花很长的时间去阅读和理解成堆的技术书籍就可以快速掌握这些知识，从而节省宝贵的面试复习时间。你也可以阅读 <a href="https://github.com/CyC2018/Backend-Interview-Guide">面试进阶指南</a>，包含了学习指导和面试技巧，让你更轻松拿到满意的 Offer。</p>
+<h2 id="toc_0">为什么B树效率高</h2>
 
-<h2 id="toc_0">✏️ 算法</h2>
+<p>在大规模数据存储操作中，由于无法一次性加载到内存里。所以避免不了发生内外存交换。所以次数越少，效率表现也越高。</p>
 
-<ul>
-<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E5%89%91%E6%8C%87%20offer%20%E9%A2%98%E8%A7%A3.md">剑指 Offer 题解</a></li>
-<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/Leetcode%20%E9%A2%98%E8%A7%A3.md">Leetcode 题解</a></li>
-<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E7%AE%97%E6%B3%95.md">算法</a></li>
-</ul>
+<p>来看下面这张图：</p>
 
-<h2 id="toc_1">💻 操作系统</h2>
+<p><img src="media/15534816349223/15534826634243.jpg" alt=""/></p>
 
-<ul>
-<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F.md">计算机操作系统</a></li>
-<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/Linux.md">Linux</a></li>
-</ul>
+<p>这是个典型的b树结构，初始因子为1000，高度仅为3的b树，就可以存储1002001000的数据了。</p>
 
-<h2 id="toc_2">☁️ 网络</h2>
+<p>假设要查询最后一个数据:</p>
 
 <ul>
-<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C.md">计算机网络</a></li>
-<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/HTTP.md">HTTP</a></li>
-<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/Socket.md">Socket</a></li>
+<li>从硬盘加载根节点搜索，IO一次。</li>
+<li>根据根节点的指针信息，去加载第二层的节点， IO一次。</li>
+<li>重复2，IO一次。</li>
 </ul>
 
-<h2 id="toc_3">🎨 面向对象</h2>
+<p>IO只用了3次，就查询了需要的数据，所以说B树效率是非常高的。</p>
 
-<ul>
-<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.md">设计模式</a></li>
-<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E6%83%B3.md">面向对象思想</a></li>
-</ul>
+<p>B树的节点，在硬盘里表现为：柱面里的页(page)或盘块(block) ，如果把索引持久化到内存，只需要一次就够了。</p>
 
-<h2 id="toc_4">💾 数据库</h2>
+<p>B树的高效的前提是数据已排序。</p>
 
-<ul>
-<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86.md">数据库系统原理</a></li>
-<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/SQL.md">SQL</a></li>
-<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/Leetcode-Database%20%E9%A2%98%E8%A7%A3.md">Leetcode-Database 题解</a></li>
-<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/MySQL.md">MySQL</a></li>
-<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/Redis.md">Redis</a></li>
-</ul>
+<h2 id="toc_1">B树结构</h2>
 
-<h2 id="toc_5">☕️ Java</h2>
+<p><img src="media/15534816349223/15534828070934.jpg" alt=""/></p>
 
-<ul>
-<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/Java%20%E5%9F%BA%E7%A1%80.md">Java 基础</a></li>
-<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/Java%20%E5%AE%B9%E5%99%A8.md">Java 容器</a></li>
-<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/Java%20%E5%B9%B6%E5%8F%91.md">Java 并发</a></li>
-<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/Java%20%E8%99%9A%E6%8B%9F%E6%9C%BA.md">Java 虚拟机</a></li>
-<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/Java%20IO.md">Java I/O</a></li>
-</ul>
+<p>这是B树存储在硬盘的逻辑结构图。</p>
 
-<h2 id="toc_6">💡 系统设计</h2>
+<p>其中根节点中17，35在称为关键字(key) ，实际中往往附带更多复杂类型数据。</p>
 
-<ul>
-<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%80.md">系统设计基础</a></li>
-<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E5%88%86%E5%B8%83%E5%BC%8F.md">分布式</a></li>
-<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E9%9B%86%E7%BE%A4.md">集群</a></li>
-<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E6%94%BB%E5%87%BB%E6%8A%80%E6%9C%AF.md">攻击技术</a></li>
-<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E7%BC%93%E5%AD%98.md">缓存</a></li>
-<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97.md">消息队列</a></li>
-</ul>
+<p>可以看出一个节点包含 keys  ChildNotePointer  2部分信息。</p>
 
-<h2 id="toc_7">🔧 工具</h2>
+<p><img src="media/15534816349223/15534831629323.jpg" alt=""/></p>
 
-<ul>
-<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/Git.md">Git</a></li>
-<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/Docker.md">Docker</a></li>
-<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E6%9E%84%E5%BB%BA%E5%B7%A5%E5%85%B7.md">构建工具</a></li>
-<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F.md">正则表达式</a></li>
-</ul>
+<p>根据这张图介绍下b树的基础定义：</p>
 
-<h2 id="toc_8">🍉 编码实践</h2>
+<p>这是颗5阶B树的图，阶简写m。</p>
 
-<ul>
-<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E4%BB%A3%E7%A0%81%E5%8F%AF%E8%AF%BB%E6%80%A7.md">代码可读性</a></li>
-<li><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E4%BB%A3%E7%A0%81%E9%A3%8E%E6%A0%BC%E8%A7%84%E8%8C%83.md">代码风格规范</a></li>
-</ul>
+<ol>
+<li>树中每个结点最多含有m个子节点（m&gt;=2）。 </li>
+<li>每个内节点至少 [ceil(m / 2)] 个子节点。  内节点即非根节点非页子节点，也可以叫中间节点。</li>
+<li>关键字key的数量   [ceil(m / 2)-1]&lt;= n &lt;= m-1，关键字按递增排序。</li>
+<li>每个叶节点具有相同的深度，即树的高度h，而且不包含关键字信息。</li>
+</ol>
 
-<blockquote>
-<p>原文地址 <a href="https://github.com/CyC2018/CS-Notes">https://github.com/CyC2018/CS-Notes</a></p>
-</blockquote>
+<p>上图也可称为最小度数为3的b树，(degree) ，简写t。<br/><br/>
+t其实是上面第二条定义中 [ceil(m / 2)] 的值，即t=[ceil(m/2)], 3=ceil(5/2) 。</p>
+
+<ol>
+<li>每个非根节点至少有t-1个关键字，非根内节点至少有t个子节点。 t称为度数(degree)，t&gt;=2  。</li>
+<li>每个节点至多有2t-1关键字，每个内节点最多有2t个子节点。</li>
+<li>每个叶节点具有相同的深度，即树的高度h，而且不包含关键字信息。</li>
+</ol>
+
+<p>度和阶都是描述子节点的数量的。</p>
+
+<p>算法导论译版中是用度来描述的。</p>
+
+<p>数据结构与算法分析是用阶来描述，网上大多也是。</p>
+
+<p>下面简单的描述实现逻辑。</p>
+
+<p>搜索：从根节点搜索，找到返回，找不到递归子节点。一直搜索到叶子节点，找到返回，找不到则说明key不存在。</p>
+
+<pre><code class="language-java">//伪代码
+entry BTreeSearch(node, key) {
+    if(node == null)
+           return null;
+    for(int i = 0; i &lt; node.keys.length; i++)
+    {
+        if(node.keys[i] == key)
+               return node.data[i];
+    }
+    return BTreeSearch(ChildrenNode[i].node,key);
+}
+ 
+var  entry = BTreeSearch(root, my_key);
+</code></pre>
+
+<p>插入：根节点插入，不满直接插入。节点满进行分裂，再满递归分裂。</p>
+
+<p><img src="media/15534816349223/15534844258361.jpg" alt=""/></p>
+
+<p>删除：查询到节点，然后进行删除操作，不满足B数节点的定义则进行节点合并。</p>
+
+<p><img src="media/15534816349223/15534844510809.jpg" alt=""/></p>
+
+<p>更新：查询到子节点，更新数据。</p>
+
+<h2 id="toc_2">B树缺点</h2>
+
+<p>从上面的得知，在查询单条数据是非常快的。但如果范围查的话，b树每次都要从根节点查询一遍。</p>
+
+<p>所以在实际应用中，往往采用b树的变形，b+树来存储，只有叶子节点存储数据，每个叶子节点都指向下一个。</p>
+
+<p>【转载】<a href="https://www.cnblogs.com/mushroom/p/4100087.html">https://www.cnblogs.com/mushroom/p/4100087.html</a></p>
 
 
     
@@ -250,16 +266,13 @@
         <div class="large-6 columns">
         <p class="text-left" style="padding:15px 0px;">
       
-          <a href="15511041776834.html" 
-          title="Previous Post: 分布式系统常见的事务处理机制">&laquo; 分布式系统常见的事务处理机制</a>
-      
         </p>
         </div>
         <div class="large-6 columns">
       <p class="text-right" style="padding:15px 0px;">
       
-          <a  href="15510945917129.html" 
-          title="Next Post: 分布式事务">分布式事务 &raquo;</a>
+          <a  href="15516889064939.html" 
+          title="Next Post: JVM原理讲解">JVM原理讲解 &raquo;</a>
       
       </p>
         </div>

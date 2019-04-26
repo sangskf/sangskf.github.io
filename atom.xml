@@ -4,13 +4,127 @@
   <title><![CDATA[见课就上的小婊砸]]></title>
   <link href="https://books.sangkf.cn/atom.xml" rel="self"/>
   <link href="https://books.sangkf.cn/"/>
-  <updated>2019-03-05T15:01:35+08:00</updated>
+  <updated>2019-04-26T15:19:32+08:00</updated>
   <id>https://books.sangkf.cn/</id>
   <author>
     <name><![CDATA[]]></name>
     
   </author>
   <generator uri="http://www.mweb.im/">MWeb</generator>
+  
+  <entry>
+    <title type="html"><![CDATA[B树]]></title>
+    <link href="https://books.sangkf.cn/15534816349223.html"/>
+    <updated>2019-03-25T10:40:34+08:00</updated>
+    <id>https://books.sangkf.cn/15534816349223.html</id>
+    <content type="html"><![CDATA[
+<blockquote>
+<p>B树的目的是为了硬盘快速读取数据(降低IO操作次数)而设计的一种平衡的多路查找树。目前大多数据库及文件索引，都是使用B树或者B树的变形来存储实现。</p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_0">为什么B树效率高</h2>
+
+<p>在大规模数据存储操作中，由于无法一次性加载到内存里。所以避免不了发生内外存交换。所以次数越少，效率表现也越高。</p>
+
+<p>来看下面这张图：</p>
+
+<p><img src="media/15534816349223/15534826634243.jpg" alt=""/></p>
+
+<p>这是个典型的b树结构，初始因子为1000，高度仅为3的b树，就可以存储1002001000的数据了。</p>
+
+<p>假设要查询最后一个数据:</p>
+
+<ul>
+<li>从硬盘加载根节点搜索，IO一次。</li>
+<li>根据根节点的指针信息，去加载第二层的节点， IO一次。</li>
+<li>重复2，IO一次。</li>
+</ul>
+
+<p>IO只用了3次，就查询了需要的数据，所以说B树效率是非常高的。</p>
+
+<p>B树的节点，在硬盘里表现为：柱面里的页(page)或盘块(block) ，如果把索引持久化到内存，只需要一次就够了。</p>
+
+<p>B树的高效的前提是数据已排序。</p>
+
+<h2 id="toc_1">B树结构</h2>
+
+<p><img src="media/15534816349223/15534828070934.jpg" alt=""/></p>
+
+<p>这是B树存储在硬盘的逻辑结构图。</p>
+
+<p>其中根节点中17，35在称为关键字(key) ，实际中往往附带更多复杂类型数据。</p>
+
+<p>可以看出一个节点包含 keys  ChildNotePointer  2部分信息。</p>
+
+<p><img src="media/15534816349223/15534831629323.jpg" alt=""/></p>
+
+<p>根据这张图介绍下b树的基础定义：</p>
+
+<p>这是颗5阶B树的图，阶简写m。</p>
+
+<ol>
+<li>树中每个结点最多含有m个子节点（m&gt;=2）。 </li>
+<li>每个内节点至少 [ceil(m / 2)] 个子节点。  内节点即非根节点非页子节点，也可以叫中间节点。</li>
+<li>关键字key的数量   [ceil(m / 2)-1]&lt;= n &lt;= m-1，关键字按递增排序。</li>
+<li>每个叶节点具有相同的深度，即树的高度h，而且不包含关键字信息。</li>
+</ol>
+
+<p>上图也可称为最小度数为3的b树，(degree) ，简写t。<br/><br/>
+t其实是上面第二条定义中 [ceil(m / 2)] 的值，即t=[ceil(m/2)], 3=ceil(5/2) 。</p>
+
+<ol>
+<li>每个非根节点至少有t-1个关键字，非根内节点至少有t个子节点。 t称为度数(degree)，t&gt;=2  。</li>
+<li>每个节点至多有2t-1关键字，每个内节点最多有2t个子节点。</li>
+<li>每个叶节点具有相同的深度，即树的高度h，而且不包含关键字信息。</li>
+</ol>
+
+<p>度和阶都是描述子节点的数量的。</p>
+
+<p>算法导论译版中是用度来描述的。</p>
+
+<p>数据结构与算法分析是用阶来描述，网上大多也是。</p>
+
+<p>下面简单的描述实现逻辑。</p>
+
+<p>搜索：从根节点搜索，找到返回，找不到递归子节点。一直搜索到叶子节点，找到返回，找不到则说明key不存在。</p>
+
+<pre><code class="language-java">//伪代码
+entry BTreeSearch(node, key) {
+    if(node == null)
+           return null;
+    for(int i = 0; i &lt; node.keys.length; i++)
+    {
+        if(node.keys[i] == key)
+               return node.data[i];
+    }
+    return BTreeSearch(ChildrenNode[i].node,key);
+}
+ 
+var  entry = BTreeSearch(root, my_key);
+</code></pre>
+
+<p>插入：根节点插入，不满直接插入。节点满进行分裂，再满递归分裂。</p>
+
+<p><img src="media/15534816349223/15534844258361.jpg" alt=""/></p>
+
+<p>删除：查询到节点，然后进行删除操作，不满足B数节点的定义则进行节点合并。</p>
+
+<p><img src="media/15534816349223/15534844510809.jpg" alt=""/></p>
+
+<p>更新：查询到子节点，更新数据。</p>
+
+<h2 id="toc_2">B树缺点</h2>
+
+<p>从上面的得知，在查询单条数据是非常快的。但如果范围查的话，b树每次都要从根节点查询一遍。</p>
+
+<p>所以在实际应用中，往往采用b树的变形，b+树来存储，只有叶子节点存储数据，每个叶子节点都指向下一个。</p>
+
+<p>【转载】<a href="https://www.cnblogs.com/mushroom/p/4100087.html">https://www.cnblogs.com/mushroom/p/4100087.html</a></p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[JVM原理讲解]]></title>
@@ -23,39 +137,6 @@
 </blockquote>
 
 <span id="more"></span><!-- more -->
-
-<ul>
-<li>
-<a href="#toc_0">基本问题</a>
-</li>
-<li>
-<a href="#toc_1">拓展问题</a>
-</li>
-<li>
-<a href="#toc_2">概述</a>
-</li>
-<li>
-<a href="#toc_3">运行时数据区</a>
-<ul>
-<li>
-<a href="#toc_4">程序计数器</a>
-</li>
-<li>
-<a href="#toc_5">Java虚拟机栈</a>
-</li>
-<li>
-<a href="#toc_6">本地方法栈</a>
-</li>
-<li>
-<a href="#toc_7">堆</a>
-</li>
-<li>
-<a href="#toc_8">方法区</a>
-</li>
-</ul>
-</li>
-</ul>
-
 
 <h2 id="toc_0">基本问题</h2>
 
@@ -154,32 +235,6 @@
 <p>简单介绍了消息队列的优缺点，以及使用场景，如何保证消息的幂等性和高可用<br/>
 <span id="more"></span><!-- more --></p>
 </blockquote>
-
-<ul>
-<li>
-<a href="#toc_0">为什么使用消息队列</a>
-<ul>
-<li>
-<a href="#toc_1">解耦</a>
-</li>
-<li>
-<a href="#toc_2">异步</a>
-</li>
-<li>
-<a href="#toc_3">削峰</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_4">消息队列有什么优缺点</a>
-<ul>
-<li>
-<a href="#toc_5">Kafka、ActiveMQ、RabbitMQ、RocketMQ 有什么优缺点？</a>
-</li>
-</ul>
-</li>
-</ul>
-
 
 <h2 id="toc_0">为什么使用消息队列</h2>
 
@@ -333,58 +388,6 @@ A 系统处理完了直接返回成功了，人都以为你这个请求就成功
 </blockquote>
 
 <span id="more"></span><!-- more -->
-
-<ul>
-<li>
-<a href="#toc_0">内存模型的相关概念</a>
-<ul>
-<li>
-<a href="#toc_1">高速缓存</a>
-</li>
-<li>
-<a href="#toc_2">缓存一致性协议</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_3">并发编程中的三个概念</a>
-</li>
-<li>
-<a href="#toc_4">Java内存模型</a>
-</li>
-<li>
-<a href="#toc_5">深入剖析volatile关键字</a>
-<ul>
-<li>
-<a href="#toc_6">volatile关键字的两层语义</a>
-</li>
-<li>
-<a href="#toc_7">volatile保证原子性吗</a>
-</li>
-<li>
-<a href="#toc_8">volatile能保证有序性吗</a>
-</li>
-<li>
-<a href="#toc_9">volatile的原理和实现机制</a>
-</li>
-<li>
-<a href="#toc_10">使用volatile关键字的场景</a>
-<ul>
-<li>
-<a href="#toc_11">volatile使用场景</a>
-</li>
-<li>
-<a href="#toc_12">正确使用volatile关键字</a>
-</li>
-<li>
-<a href="#toc_13">volatile 与 synchronized 的比较</a>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
 
 <h2 id="toc_0">内存模型的相关概念</h2>
 
@@ -829,40 +832,6 @@ doSomethingwithconfig(context);
 
 <span id="more"></span><!-- more -->
 
-<ul>
-<li>
-<a href="#toc_0">什么是哈希表</a>
-<ul>
-<li>
-<a href="#toc_1">数据结构</a>
-</li>
-<li>
-<a href="#toc_2">哈希冲突</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_3">HashMap实现原理</a>
-<ul>
-<li>
-<a href="#toc_4">hash函数</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_5">为何HashMap的数组长度一定是2的次幂？</a>
-<ul>
-<li>
-<a href="#toc_6">get方法</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_7">重写equals方法需同时重写hashCode方法</a>
-</li>
-</ul>
-
-
 <p>哈希表（hash table）也叫散列表，是一种非常重要的数据结构，应用场景及其丰富，许多缓存技术（比如memcached）的核心其实就是在内存中维护一张大的哈希表，而HashMap的实现原理也常常出现在各类的面试题中，重要性可见一斑。本文会对java集合框架中的对应实现HashMap的实现原理进行讲解，然后会对JDK7的HashMap源码进行分析。</p>
 
 <h2 id="toc_0">什么是哈希表</h2>
@@ -1223,70 +1192,6 @@ public class MyTest {
 </blockquote>
 
 <span id="more"></span><!-- more -->
-
-<ul>
-<li>
-<a href="#toc_0">概述</a>
-</li>
-<li>
-<a href="#toc_1">涉及到的数据结构：处理hash冲突的链表和红黑树以及位桶</a>
-<ul>
-<li>
-<a href="#toc_2">链表的实现</a>
-</li>
-<li>
-<a href="#toc_3">红黑树</a>
-</li>
-<li>
-<a href="#toc_4">位桶</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_5">HashMap源码分析</a>
-<ul>
-<li>
-<a href="#toc_6">类的继承关系</a>
-</li>
-<li>
-<a href="#toc_7">类的属性</a>
-</li>
-<li>
-<a href="#toc_8">类的构造函数</a>
-<ul>
-<li>
-<a href="#toc_9">HashMap(int, float)型构造函数</a>
-</li>
-<li>
-<a href="#toc_10">HashMap(int)型构造函数</a>
-</li>
-<li>
-<a href="#toc_11">HashMap()型构造函数</a>
-</li>
-<li>
-<a href="#toc_12">HashMap(Map)型构造函数</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_13">hash算法</a>
-</li>
-<li>
-<a href="#toc_14">重要方法分析</a>
-<ul>
-<li>
-<ul>
-<li>
-<a href="#toc_15">HashMap的数据存储实现原理</a>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
 
 <h2 id="toc_0">概述</h2>
 
@@ -1686,166 +1591,6 @@ System.out.println(map.put(&quot;a&quot;, &quot;AB&quot;)); // 打印AA
 </blockquote>
 
 <span id="more"></span><!-- more -->
-
-<ul>
-<li>
-<a href="#toc_0">数据类型</a>
-</li>
-<li>
-<a href="#toc_1">String</a>
-</li>
-<li>
-<a href="#toc_2">运算</a>
-</li>
-<li>
-<a href="#toc_3">继承</a>
-<ul>
-<li>
-<a href="#toc_4">访问权限</a>
-</li>
-<li>
-<a href="#toc_5">抽象类与接口</a>
-</li>
-<li>
-<a href="#toc_6">super</a>
-</li>
-<li>
-<a href="#toc_7">重写与重载</a>
-<ul>
-<li>
-<a href="#toc_8">重写</a>
-</li>
-<li>
-<a href="#toc_9">重载</a>
-</li>
-<li>
-<a href="#toc_10">实例</a>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_11">Object 通用方法</a>
-<ul>
-<li>
-<a href="#toc_12">概览</a>
-</li>
-<li>
-<a href="#toc_13">equals()</a>
-<ul>
-<li>
-<a href="#toc_14">等价关系</a>
-</li>
-<li>
-<a href="#toc_15">等价与相等</a>
-</li>
-<li>
-<a href="#toc_16">实现</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_17">hashCode()</a>
-</li>
-<li>
-<a href="#toc_18">toString()</a>
-</li>
-<li>
-<a href="#toc_19">clone()</a>
-<ul>
-<li>
-<a href="#toc_20">cloneable</a>
-</li>
-<li>
-<a href="#toc_21">浅拷贝</a>
-</li>
-<li>
-<a href="#toc_22">深拷贝</a>
-</li>
-<li>
-<a href="#toc_23">clone的替代方案</a>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_24">关键字</a>
-<ul>
-<li>
-<a href="#toc_25">final</a>
-<ul>
-<li>
-<a href="#toc_26">数据</a>
-</li>
-<li>
-<a href="#toc_27">方法</a>
-</li>
-<li>
-<a href="#toc_28">类</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_29">static</a>
-<ul>
-<li>
-<a href="#toc_30">静态变量</a>
-</li>
-<li>
-<a href="#toc_31">静态方法</a>
-</li>
-<li>
-<a href="#toc_32">静态语句块</a>
-</li>
-<li>
-<a href="#toc_33">静态内部类</a>
-</li>
-<li>
-<a href="#toc_34">静态导包</a>
-</li>
-<li>
-<a href="#toc_35">初始化顺序</a>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_36">反射</a>
-</li>
-<li>
-<a href="#toc_37">异常</a>
-</li>
-<li>
-<a href="#toc_38">泛型</a>
-</li>
-<li>
-<a href="#toc_39">注解</a>
-</li>
-<li>
-<a href="#toc_40">特性</a>
-<ul>
-<li>
-<a href="#toc_41">Java 各版本的新特性</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_42">Java 与 C++ 的区别</a>
-</li>
-<li>
-<a href="#toc_43">JRE or JDK</a>
-</li>
-<li>
-<a href="#toc_44">参考资料</a>
-</li>
-<li>
-<a href="#toc_45">进阶指南</a>
-</li>
-</ul>
-
 
 <h2 id="toc_0">数据类型</h2>
 
@@ -3151,33 +2896,6 @@ y.a = 1;
 
 <span id="more"></span><!-- more -->
 
-<ul>
-<li>
-<a href="#toc_0">引述</a>
-</li>
-<li>
-<a href="#toc_1">一致性理论</a>
-</li>
-<li>
-<a href="#toc_2">分布式事务解决方案</a>
-<ul>
-<li>
-<a href="#toc_3">2PC方案——强一致性</a>
-</li>
-<li>
-<a href="#toc_4">eBay 事件队列方案——最终一致性</a>
-</li>
-<li>
-<a href="#toc_5">TCC （Try-Confirm-Cancel）补偿模式——最终一致性</a>
-</li>
-<li>
-<a href="#toc_6">缓存数据最终一致性</a>
-</li>
-</ul>
-</li>
-</ul>
-
-
 <h2 id="toc_0">引述</h2>
 
 <p>根据微服务架构的鼻祖Martin Fowler的忠告，微服务架构中应当尽量避免分布式事务。然而，在某些领域，分布式事务如同宿命中的对手无法避免。在工程领域，分布式事务的讨论主要聚焦于强一致性和最终一致性的解决方案。典型方案包括：</p>
@@ -3318,70 +3036,6 @@ y.a = 1;
 </blockquote>
 
 <span id="more"></span><!-- more -->
-
-<ul>
-<li>
-<a href="#toc_0">引述</a>
-</li>
-<li>
-<a href="#toc_1">CAP 定理</a>
-</li>
-<li>
-<a href="#toc_2">一致性模型</a>
-</li>
-<li>
-<a href="#toc_3">事务的作用</a>
-</li>
-<li>
-<a href="#toc_4">常见的事务处理机制</a>
-<ul>
-<li>
-<a href="#toc_5">Master-Slave 复制</a>
-</li>
-<li>
-<a href="#toc_6">Master-Master 多主复制</a>
-</li>
-<li>
-<a href="#toc_7">两阶段提交</a>
-<ul>
-<li>
-<a href="#toc_8">第一阶段（准备阶段）</a>
-</li>
-<li>
-<a href="#toc_9">第二阶段（提交阶段）</a>
-</li>
-<li>
-<a href="#toc_10">三阶段提交</a>
-</li>
-<li>
-<a href="#toc_11">CanCommit 阶段</a>
-</li>
-<li>
-<a href="#toc_12">PreCommit 阶段</a>
-</li>
-<li>
-<a href="#toc_13">doCommit 阶段</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_14">Paxos 算法</a>
-<ul>
-<li>
-<a href="#toc_15">阶段1</a>
-</li>
-<li>
-<a href="#toc_16">阶段2</a>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_17">参考文献</a>
-</li>
-</ul>
-
 
 <h2 id="toc_0">引述</h2>
 
@@ -3611,37 +3265,6 @@ y.a = 1;
 
 <span id="more"></span><!-- more -->
 
-<ul>
-<li>
-<a href="#toc_0">✏️ 算法</a>
-</li>
-<li>
-<a href="#toc_1">💻 操作系统</a>
-</li>
-<li>
-<a href="#toc_2">☁️ 网络</a>
-</li>
-<li>
-<a href="#toc_3">🎨 面向对象</a>
-</li>
-<li>
-<a href="#toc_4">💾 数据库</a>
-</li>
-<li>
-<a href="#toc_5">☕️ Java</a>
-</li>
-<li>
-<a href="#toc_6">💡 系统设计</a>
-</li>
-<li>
-<a href="#toc_7">🔧 工具</a>
-</li>
-<li>
-<a href="#toc_8">🍉 编码实践</a>
-</li>
-</ul>
-
-
 <p>本项目包含了技术面试必备的基础知识，浅显易懂，你不需要花很长的时间去阅读和理解成堆的技术书籍就可以快速掌握这些知识，从而节省宝贵的面试复习时间。你也可以阅读 <a href="https://github.com/CyC2018/Backend-Interview-Guide">面试进阶指南</a>，包含了学习指导和面试技巧，让你更轻松拿到满意的 Offer。</p>
 
 <h2 id="toc_0">✏️ 算法</h2>
@@ -3739,43 +3362,6 @@ y.a = 1;
 </blockquote>
 
 <span id="more"></span><!-- more -->
-
-<ul>
-<li>
-<a href="#toc_0">概述</a>
-<ul>
-<li>
-<ul>
-<li>
-<a href="#toc_1">What’s 事务</a>
-</li>
-<li>
-<a href="#toc_2">典型场景：银行转账业务</a>
-</li>
-<li>
-<a href="#toc_3">电商场景：流量充值业务</a>
-</li>
-<li>
-<a href="#toc_4">分布式事务</a>
-</li>
-<li>
-<a href="#toc_5">场景一：</a>
-</li>
-<li>
-<a href="#toc_6">场景二：</a>
-</li>
-<li>
-<a href="#toc_7">场景三：</a>
-</li>
-<li>
-<a href="#toc_8">场景四：</a>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
 
 <h2 id="toc_0">概述</h2>
 
@@ -3917,19 +3503,6 @@ y.a = 1;
 </blockquote>
 
 <span id="more"></span><!-- more -->
-
-<ul>
-<li>
-<a href="#toc_0">事务特性</a>
-</li>
-<li>
-<a href="#toc_1">分布式事务</a>
-</li>
-<li>
-<a href="#toc_2">开源框架</a>
-</li>
-</ul>
-
 
 <h2 id="toc_0">事务特性</h2>
 
@@ -6182,395 +5755,6 @@ $$  x = \dfrac{-b \pm \sqrt{b^2 - 4ac}}{2a} $$
 </code></pre>
 
 <p><img src="media/15509800202549/15510634028669.jpg" alt="" style="width:500px;"/></p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Java 8新特性：新的时间和日期API]]></title>
-    <link href="https://books.sangkf.cn/15509784083382.html"/>
-    <updated>2019-02-24T11:20:08+08:00</updated>
-    <id>https://books.sangkf.cn/15509784083382.html</id>
-    <content type="html"><![CDATA[
-<blockquote>
-<p>Java 8另一个新增的重要特性就是引入了新的时间和日期API，它们被包含在<code>java.time</code>包中。借助新的时间和日期API可以以更简洁的方法处理时间和日期。<br/>
-<span id="more"></span><!-- more --></p>
-</blockquote>
-
-<ul>
-<li>
-<a href="#toc_0">引述</a>
-</li>
-<li>
-<a href="#toc_1">Java 8日期/时间类</a>
-<ul>
-<li>
-<a href="#toc_2">LocalDate和LocalTime</a>
-</li>
-<li>
-<a href="#toc_3">LocalDateTime</a>
-</li>
-<li>
-<a href="#toc_4">Instant</a>
-</li>
-<li>
-<a href="#toc_5">Duration</a>
-</li>
-<li>
-<a href="#toc_6">Period</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_7">日期的操作和格式化</a>
-<ul>
-<li>
-<a href="#toc_8">增加和减少日期</a>
-</li>
-<li>
-<a href="#toc_9">格式化日期</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#toc_10">时区</a>
-</li>
-<li>
-<a href="#toc_11">其他历法</a>
-</li>
-</ul>
-
-
-<h2 id="toc_0">引述</h2>
-
-<p>在介绍本篇文章内容之前，我们先来讨论Java 8为什么要引入新的日期API，与之前的时间和日期处理方式有什么不同？</p>
-
-<p>在Java 8之前，所有关于时间和日期的API都存在各种使用方面的缺陷，主要有：</p>
-
-<ol>
-<li>Java的<code>java.util.Date</code>和<code>java.util.Calendar</code>类易用性差，不支持时区，而且他们都不是线程安全的；</li>
-<li>用于格式化日期的类<code>DateFormat</code>被放在<code>java.text</code>包中，它是一个抽象类，所以我们需要实例化一个<code>SimpleDateFormat</code>对象来处理日期格式化，并且<code>DateFormat</code>也是非线程安全，这意味着如果你在多线程程序中调用同一个<code>DateFormat</code>对象，会得到意想不到的结果。</li>
-<li>对日期的计算方式繁琐，而且容易出错，因为月份是从0开始的，从<code>Calendar</code>中获取的月份需要加一才能表示当前月份。</li>
-</ol>
-
-<p>由于以上这些问题，出现了一些三方的日期处理框架，例如Joda-Time，date4j等开源项目。但是，Java需要一套标准的用于处理时间和日期的框架，于是Java 8中引入了新的日期API。新的日期API是<a href="https://jcp.org/en/jsr/detail?id=310">JSR-310</a>规范的实现，Joda-Time框架的作者正是JSR-310的规范的倡导者，所以能从Java 8的日期API中看到很多Joda-Time的特性。</p>
-
-<h2 id="toc_1">Java 8日期/时间类</h2>
-
-<p>Java 8的日期和时间类包含<code>LocalDate</code>、<code>LocalTime</code>、<code>Instant</code>、<code>Duration</code>以及<code>Period</code>，这些类都包含在<code>java.time</code>包中，下面我们看看这些类的用法。</p>
-
-<h3 id="toc_2">LocalDate和LocalTime</h3>
-
-<p><code>LocalDate</code>类表示一个具体的日期，但不包含具体时间，也不包含时区信息。可以通过<code>LocalDate</code>的静态方法<code>of()</code>创建一个实例，<code>LocalDate</code>也包含一些方法用来获取年份，月份，天，星期几等：</p>
-
-<pre><code class="language-java">LocalDate localDate = LocalDate.of(2017, 1, 4);     // 初始化一个日期：2017-01-04
-int year = localDate.getYear();                     // 年份：2017
-Month month = localDate.getMonth();                 // 月份：JANUARY
-int dayOfMonth = localDate.getDayOfMonth();         // 月份中的第几天：4
-DayOfWeek dayOfWeek = localDate.getDayOfWeek();     // 一周的第几天：WEDNESDAY
-int length = localDate.lengthOfMonth();             // 月份的天数：31
-boolean leapYear = localDate.isLeapYear();          // 是否为闰年：false
-</code></pre>
-
-<p>也可以调用静态方法<code>now()</code>来获取当前日期：</p>
-
-<p>LocalDate now = LocalDate.now();</p>
-
-<p><code>LocalTime</code>和<code>LocalDate</code>类似，他们之间的区别在于<code>LocalDate</code>不包含具体时间，而<code>LocalTime</code>包含具体时间，例如：</p>
-
-<pre><code class="language-java">LocalTime localTime = LocalTime.of(17, 23, 52);     // 初始化一个时间：17:23:52
-int hour = localTime.getHour();                     // 时：17
-int minute = localTime.getMinute();                 // 分：23
-int second = localTime.getSecond();                 // 秒：52
-</code></pre>
-
-<h3 id="toc_3">LocalDateTime</h3>
-
-<p><code>LocalDateTime</code>类是<code>LocalDate</code>和<code>LocalTime</code>的结合体，可以通过<code>of()</code>方法直接创建，也可以调用<code>LocalDate</code>的<code>atTime()</code>方法或<code>LocalTime</code>的<code>atDate()</code>方法将<code>LocalDate</code>或<code>LocalTime</code>合并成一个<code>LocalDateTime</code>：</p>
-
-<pre><code class="language-java">LocalDateTime ldt1 = LocalDateTime.of(2017, Month.JANUARY, 4, 17, 23, 52);
-
-LocalDate localDate = LocalDate.of(2017, Month.JANUARY, 4);
-LocalTime localTime = LocalTime.of(17, 23, 52);
-LocalDateTime ldt2 = localDate.atTime(localTime);
-
-</code></pre>
-
-<p><code>LocalDateTime</code>也提供用于向<code>LocalDate</code>和<code>LocalTime</code>的转化：</p>
-
-<pre><code class="language-java">LocalDate date = ldt1.toLocalDate();
-LocalTime time = ldt1.toLocalTime();
-</code></pre>
-
-<h3 id="toc_4">Instant</h3>
-
-<p><code>Instant</code>用于表示一个时间戳，它与我们常使用的<code>System.currentTimeMillis()</code>有些类似，不过<code>Instant</code>可以精确到纳秒（Nano-Second），<code>System.currentTimeMillis()</code>方法只精确到毫秒（Milli-Second）。如果查看<code>Instant</code>源码，发现它的内部使用了两个常量，<code>seconds</code>表示从1970-01-01 00:00:00开始到现在的秒数，<code>nanos</code>表示纳秒部分（<code>nanos</code>的值不会超过<code>999,999,999</code>）。<code>Instant</code>除了使用<code>now()</code>方法创建外，还可以通过<code>ofEpochSecond</code>方法创建：</p>
-
-<pre><code class="language-java">Instant instant = Instant.ofEpochSecond(120, 100000);
-</code></pre>
-
-<p><code>ofEpochSecond()</code>方法的第一个参数为秒，第二个参数为纳秒，上面的代码表示从1970-01-01 00:00:00开始后两分钟的10万纳秒的时刻，控制台上的输出为：</p>
-
-<pre><code class="language-java">1970-01-01T00:02:00.000100Z
-</code></pre>
-
-<h3 id="toc_5">Duration</h3>
-
-<p><code>Duration</code>的内部实现与<code>Instant</code>类似，也是包含两部分：<code>seconds</code>表示秒，<code>nanos</code>表示纳秒。两者的区别是<code>Instant</code>用于表示一个时间戳（或者说是一个时间点），而<code>Duration</code>表示一个时间段，所以<code>Duration</code>类中不包含<code>now()</code>静态方法。可以通过<code>Duration.between()</code>方法创建<code>Duration</code>对象：</p>
-
-<pre><code class="language-java">LocalDateTime from = LocalDateTime.of(2017, Month.JANUARY, 5, 10, 7, 0);    // 2017-01-05 10:07:00
-LocalDateTime to = LocalDateTime.of(2017, Month.FEBRUARY, 5, 10, 7, 0);     // 2017-02-05 10:07:00
-Duration duration = Duration.between(from, to);     // 表示从 2017-01-05 10:07:00 到 2017-02-05 10:07:00 这段时间
-
-long days = duration.toDays();              // 这段时间的总天数
-long hours = duration.toHours();            // 这段时间的小时数
-long minutes = duration.toMinutes();        // 这段时间的分钟数
-long seconds = duration.getSeconds();       // 这段时间的秒数
-long milliSeconds = duration.toMillis();    // 这段时间的毫秒数
-long nanoSeconds = duration.toNanos();      // 这段时间的纳秒数
-</code></pre>
-
-<p><code>Duration</code>对象还可以通过<code>of()</code>方法创建，该方法接受一个时间段长度，和一个时间单位作为参数：</p>
-
-<pre><code class="language-java">Duration duration1 = Duration.of(5, ChronoUnit.DAYS);       // 5天
-Duration duration2 = Duration.of(1000, ChronoUnit.MILLIS);  // 1000毫秒
-
-</code></pre>
-
-<h3 id="toc_6">Period</h3>
-
-<p><code>Period</code>在概念上和<code>Duration</code>类似，区别在于<code>Period</code>是以年月日来衡量一个时间段，比如2年3个月6天：</p>
-
-<pre><code class="language-java">Period period = Period.of(2, 3, 6);
-</code></pre>
-
-<p><code>Period</code>对象也可以通过<code>between()</code>方法创建，值得注意的是，由于<code>Period</code>是以年月日衡量时间段，所以between()方法只能接收LocalDate类型的参数：</p>
-
-<pre><code class="language-java">// 2017-01-05 到 2017-02-05 这段时间
-Period period = Period.between(
- LocalDate.of(2017, 1, 5),
- LocalDate.of(2017, 2, 5));
-</code></pre>
-
-<h2 id="toc_7">日期的操作和格式化</h2>
-
-<h3 id="toc_8">增加和减少日期</h3>
-
-<p>Java 8中的日期/时间类都是不可变的，这是为了保证线程安全。当然，新的日期/时间类也提供了方法用于创建对象的可变版本，比如增加一天或者减少一天：</p>
-
-<pre><code class="language-java">LocalDate date = LocalDate.of(2017, 1, 5);          // 2017-01-05
-
-LocalDate date1 = date.withYear(2016);              // 修改为 2016-01-05
-LocalDate date2 = date.withMonth(2);                // 修改为 2017-02-05
-LocalDate date3 = date.withDayOfMonth(1);           // 修改为 2017-01-01
-
-LocalDate date4 = date.plusYears(1);                // 增加一年 2018-01-05
-LocalDate date5 = date.minusMonths(2);              // 减少两个月 2016-11-05
-LocalDate date6 = date.plus(5, ChronoUnit.DAYS);    // 增加5天 2017-01-10
-</code></pre>
-
-<p>上面例子中对于日期的操作比较简单，但是有些时候我们要面临更复杂的时间操作，比如将时间调到下一个工作日，或者是下个月的最后一天，这时候我们可以使用<code>with()</code>方法的另一个重载方法，它接收一个<code>TemporalAdjuster</code>参数，可以使我们更加灵活的调整日期：</p>
-
-<pre><code class="language-java">LocalDate date7 = date.with(nextOrSame(DayOfWeek.SUNDAY));      // 返回下一个距离当前时间最近的星期日
-LocalDate date9 = date.with(lastInMonth(DayOfWeek.SATURDAY));   // 返回本月最后一个星期六
-</code></pre>
-
-<p>要使上面的代码正确编译，你需要使用静态导入<code>TemporalAdjusters</code>对象：</p>
-
-<pre><code class="language-java">import static java.time.temporal.TemporalAdjusters.*;
-</code></pre>
-
-<p><code>TemporalAdjusters</code>类中包含了很多静态方法可以直接使用，下面的表格列出了一些方法：</p>
-
-<table>
-<thead>
-<tr>
-<th style="text-align: left">方法名</th>
-<th style="text-align: left">描述</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td style="text-align: left"><code>dayOfWeekInMonth</code></td>
-<td style="text-align: left">返回同一个月中每周的第几天</td>
-</tr>
-<tr>
-<td style="text-align: left"><code>firstDayOfMonth</code></td>
-<td style="text-align: left">返回当月的第一天</td>
-</tr>
-<tr>
-<td style="text-align: left"><code>firstDayOfNextMonth</code></td>
-<td style="text-align: left">返回下月的第一天</td>
-</tr>
-<tr>
-<td style="text-align: left"><code>firstDayOfNextYear</code></td>
-<td style="text-align: left">返回下一年的第一天</td>
-</tr>
-<tr>
-<td style="text-align: left"><code>firstDayOfYear</code></td>
-<td style="text-align: left">返回本年的第一天</td>
-</tr>
-<tr>
-<td style="text-align: left"><code>firstInMonth</code></td>
-<td style="text-align: left">返回同一个月中第一个星期几</td>
-</tr>
-<tr>
-<td style="text-align: left"><code>lastDayOfMonth</code></td>
-<td style="text-align: left">返回当月的最后一天</td>
-</tr>
-<tr>
-<td style="text-align: left"><code>lastDayOfNextMonth</code></td>
-<td style="text-align: left">返回下月的最后一天</td>
-</tr>
-<tr>
-<td style="text-align: left"><code>lastDayOfNextYear</code></td>
-<td style="text-align: left">返回下一年的最后一天</td>
-</tr>
-<tr>
-<td style="text-align: left"><code>lastDayOfYear</code></td>
-<td style="text-align: left">返回本年的最后一天</td>
-</tr>
-<tr>
-<td style="text-align: left"><code>lastInMonth</code></td>
-<td style="text-align: left">返回同一个月中最后一个星期几</td>
-</tr>
-<tr>
-<td style="text-align: left"><code>next / previous</code></td>
-<td style="text-align: left">返回后一个/前一个给定的星期几</td>
-</tr>
-<tr>
-<td style="text-align: left"><code>nextOrSame / previousOrSame</code></td>
-<td style="text-align: left">返回后一个/前一个给定的星期几，如果这个值满足条件，直接返回</td>
-</tr>
-</tbody>
-</table>
-
-<p>如果上面表格中列出的方法不能满足你的需求，你还可以创建自定义的<code>TemporalAdjuster</code>接口的实现，<code>TemporalAdjuster</code>也是一个函数式接口，所以我们可以使用Lambda表达式：</p>
-
-<pre><code class="language-java">@FunctionalInterface
-public interface TemporalAdjuster {
- Temporal adjustInto(Temporal temporal);
-}
-</code></pre>
-
-<p>比如给定一个日期，计算该日期的下一个工作日（不包括星期六和星期天）：</p>
-
-<pre><code class="language-java">LocalDate date = LocalDate.of(2017, 1, 5);
-date.with(temporal -&gt; {
- // 当前日期
- DayOfWeek dayOfWeek = DayOfWeek.of(temporal.get(ChronoField.DAY_OF_WEEK));
-
- // 正常情况下，每次增加一天
- int dayToAdd = 1;
-
- // 如果是星期五，增加三天
- if (dayOfWeek == DayOfWeek.FRIDAY) {
- dayToAdd = 3;
- }
-
- // 如果是星期六，增加两天
- if (dayOfWeek == DayOfWeek.SATURDAY) {
- dayToAdd = 2;
- }
-
- return temporal.plus(dayToAdd, ChronoUnit.DAYS);
-});
-</code></pre>
-
-<h3 id="toc_9">格式化日期</h3>
-
-<p>新的日期API中提供了一个<code>DateTimeFormatter</code>类用于处理日期格式化操作，它被包含在<code>java.time.format</code>包中，Java 8的日期类有一个<code>format()</code>方法用于将日期格式化为字符串，该方法接收一个<code>DateTimeFormatter</code>类型参数：</p>
-
-<pre><code class="language-java">LocalDateTime dateTime = LocalDateTime.now();
-String strDate1 = dateTime.format(DateTimeFormatter.BASIC_ISO_DATE);    // 20170105
-String strDate2 = dateTime.format(DateTimeFormatter.ISO_LOCAL_DATE);    // 2017-01-05
-String strDate3 = dateTime.format(DateTimeFormatter.ISO_LOCAL_TIME);    // 14:20:16.998
-String strDate4 = dateTime.format(DateTimeFormatter.ofPattern(&quot;yyyy-MM-dd&quot;));   // 2017-01-05
-String strDate5 = dateTime.format(DateTimeFormatter.ofPattern(&quot;今天是：YYYY年 MMMM DD日 E&quot;, Locale.CHINESE)); // 今天是：2017年 一月 05日 星期四
-</code></pre>
-
-<p>同样，日期类也支持将一个字符串解析成一个日期对象，例如：</p>
-
-<pre><code class="language-java">String strDate6 = &quot;2017-01-05&quot;;
-String strDate7 = &quot;2017-01-05 12:30:05&quot;;
-
-LocalDate date = LocalDate.parse(strDate6, DateTimeFormatter.ofPattern(&quot;yyyy-MM-dd&quot;));
-LocalDateTime dateTime1 = LocalDateTime.parse(strDate7, DateTimeFormatter.ofPattern(&quot;yyyy-MM-dd HH:mm:ss&quot;));
-</code></pre>
-
-<h2 id="toc_10">时区</h2>
-
-<p>Java 8中的时区操作被很大程度上简化了，新的时区类<code>java.time.ZoneId</code>是原有的<code>java.util.TimeZone</code>类的替代品。<code>ZoneId</code>对象可以通过<code>ZoneId.of()</code>方法创建，也可以通过<code>ZoneId.systemDefault()</code>获取系统默认时区：</p>
-
-<pre><code class="language-java">ZoneId shanghaiZoneId = ZoneId.of(&quot;Asia/Shanghai&quot;);
-ZoneId systemZoneId = ZoneId.systemDefault();
-
-</code></pre>
-
-<p><code>of()</code>方法接收一个“区域/城市”的字符串作为参数，你可以通过<code>getAvailableZoneIds()</code>方法获取所有合法的“区域/城市”字符串：</p>
-
-<pre><code class="language-java">Set zoneIds = ZoneId.getAvailableZoneIds();
-</code></pre>
-
-<p>对于老的时区类<code>TimeZone</code>，Java 8也提供了转化方法：</p>
-
-<pre><code class="language-java">ZoneId oldToNewZoneId = TimeZone.getDefault().toZoneId();
-</code></pre>
-
-<p>有了<code>ZoneId</code>，我们就可以将一个<code>LocalDate</code>、<code>LocalTime</code>或<code>LocalDateTime</code>对象转化为<code>ZonedDateTime</code>对象：</p>
-
-<pre><code class="language-java">LocalDateTime localDateTime = LocalDateTime.now();
-ZonedDateTime zonedDateTime = ZonedDateTime.of(localDateTime, shanghaiZoneId);
-</code></pre>
-
-<p>将<code>zonedDateTime</code>打印到控制台为：</p>
-
-<pre><code class="language-java">2017-01-05T15:26:56.147+08:00[Asia/Shanghai]
-</code></pre>
-
-<p><code>ZonedDateTime</code>对象由两部分构成，<code>LocalDateTime</code>和<code>ZoneId</code>，其中<code>2017-01-05T15:26:56.147</code>部分为<code>LocalDateTime</code>，<code>+08:00[Asia/Shanghai]</code>部分为<code>ZoneId</code>。</p>
-
-<p>另一种表示时区的方式是使用<code>ZoneOffset</code>，它是以当前时间和<strong>世界标准时间（UTC）/格林威治时间（GMT）</strong>的偏差来计算，例如：</p>
-
-<pre><code class="language-java">ZoneOffset zoneOffset = ZoneOffset.of(&quot;+09:00&quot;);
-LocalDateTime localDateTime = LocalDateTime.now();
-OffsetDateTime offsetDateTime = OffsetDateTime.of(localDateTime, zoneOffset);
-</code></pre>
-
-<h2 id="toc_11">其他历法</h2>
-
-<p>Java中使用的历法是ISO 8601日历系统，它是世界民用历法，也就是我们所说的公历。平年有365天，闰年是366天。闰年的定义是：非世纪年，能被4整除；世纪年能被400整除。为了计算的一致性，公元1年的前一年被当做公元0年，以此类推。</p>
-
-<p>此外Java 8还提供了4套其他历法（很奇怪为什么没有汉族人使用的农历），每套历法都包含一个日期类，分别是：</p>
-
-<ul>
-<li><code>ThaiBuddhistDate</code>：泰国佛教历</li>
-<li><code>MinguoDate</code>：中华民国历</li>
-<li><code>JapaneseDate</code>：日本历</li>
-<li><code>HijrahDate</code>：伊斯兰历</li>
-</ul>
-
-<p>每个日期类都继承<code>ChronoLocalDate</code>类，所以可以在不知道具体历法的情况下也可以操作。不过这些历法一般不常用，除非是有某些特殊需求情况下才会使用。</p>
-
-<p>这些不同的历法也可以用于向公历转换：</p>
-
-<pre><code class="language-java">LocalDate date = LocalDate.now();
-JapaneseDate jpDate = JapaneseDate.from(date);
-</code></pre>
-
-<p>由于它们都继承<code>ChronoLocalDate</code>类，所以在不知道具体历法情况下，可以通过<code>ChronoLocalDate</code>类操作日期：</p>
-
-<pre><code class="language-java">Chronology jpChronology = Chronology.ofLocale(Locale.JAPANESE);
-ChronoLocalDate jpChronoLocalDate = jpChronology.dateNow();
-
-</code></pre>
-
-<p>我们在开发过程中应该尽量避免使用<code>ChronoLocalDate</code>，尽量用与历法无关的方式操作时间，因为不同的历法计算日期的方式不一样，比如开发者会在程序中做一些假设，假设一年中有12个月，如果是中国农历中包含了闰月，一年有可能是13个月，但开发者认为是12个月，多出来的一个月属于明年的。再比如假设年份是累加的，过了一年就在原来的年份上加一，但日本天皇在换代之后需要重新纪年，所以过了一年年份可能会从1开始计算。</p>
-
-<p>在实际开发过程中建议使用<code>LocalDate</code>，包括存储、操作、业务规则的解读；除非需要将程序的输入或者输出本地化，这时可以使用<code>ChronoLocalDate</code>类。</p>
-
-<p>[<strong>转载出处</strong>]：<a href="https://lw900925.github.io/java/java8-newtime-api.html#more">https://lw900925.github.io/java/java8-newtime-api.html#more</a></p>
 
 ]]></content>
   </entry>
