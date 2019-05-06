@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  Gitment：使用 GitHub Issues 搭建评论系统 - 见课就上的小婊砸
+  设计模式 - 见课就上的小婊砸
   
   </title>
-  
-  
+  <meta name="keywords" content="设计模式,六大原则" />
+  <meta name="description" content="Java设计模式" />
   <link href="atom.xml" rel="alternate" title="见课就上的小婊砸" type="application/atom+xml">
     <link rel="stylesheet" href="asset/css/foundation.min.css" />
     <link rel="stylesheet" href="asset/css/docs.css" />
@@ -135,10 +135,10 @@
       <div class="markdown-body article-wrap">
        <div class="article">
           
-          <h1>Gitment：使用 GitHub Issues 搭建评论系统</h1>
+          <h1>设计模式</h1>
      
         <div class="read-more clearfix">
-          <span class="date">2019/2/23 21:44 下午</span>
+          <span class="date">2019/5/6 9:37 上午</span>
 
           <span>发布于分类&nbsp;</span> 
           
@@ -156,110 +156,92 @@
 
       <div class="article-content">
       <blockquote>
-<p>[<strong>转载</strong>]<a href="https://imsun.net/posts/gitment-introduction/">https://imsun.net/posts/gitment-introduction/</a></p>
+<p>[转载] <a href="https://www.cnblogs.com/dolphin0520/p/3919839.html">https://www.cnblogs.com/dolphin0520/p/3919839.html</a></p>
+
+<p>设计模式（Design Pattern）是一套被反复使用、多数人知晓的、经过分类的、代码设计经验的总结。</p>
 </blockquote>
+
+<p>使用设计模式的目的：为了代码可重用性、让代码更容易被他人理解、保证代码可靠性。 设计模式使代码编写真正工程化；设计模式是软件工程的基石脉络，如同大厦的结构一样。</p>
 
 <span id="more"></span><!-- more -->
 
-<p><a href="https://github.com/imsun/gitment">Gitment</a> 是作者实现的一款基于 GitHub Issues 的评论系统。支持在前端直接引入，不需要任何后端代码。可以在页面进行登录、查看、评论、点赞等操作，同时有完整的 Markdown / GFM 和代码高亮支持。尤为适合各种基于 GitHub Pages 的静态博客或项目页面。</p>
+<h2 id="toc_0">六大原则</h2>
 
-<p>本博客评论系统已迁移至 Gitment。虽然 Gitment 只能使用 GitHub 账号进行评论，但考虑到博客受众，这是可以接受的。</p>
-
-<ul>
-<li><a href="https://github.com/imsun/gitment">项目地址</a></li>
-<li><a href="https://imsun.github.io/gitment/">示例页面</a></li>
-</ul>
-
-<h2 id="toc_0"><a href="https://imsun.net/posts/gitment-introduction/#%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8" title="基础使用"></a>基础使用</h2>
-
-<h3 id="toc_1"><a href="https://imsun.net/posts/gitment-introduction/#1-%E6%B3%A8%E5%86%8C-OAuth-Application" title="1\. 注册 OAuth Application"></a>1. 注册 OAuth Application</h3>
-
-<p><a href="https://github.com/settings/applications/new">点击此处</a> 来注册一个新的 OAuth Application。其他内容可以随意填写，但要确保填入正确的 callback URL（一般是评论页面对应的域名，如 <code>https://imsun.net</code>）。</p>
-
-<p>你会得到一个 client ID 和一个 client secret，这个将被用于之后的用户登录。</p>
-
-<h3 id="toc_2"><a href="https://imsun.net/posts/gitment-introduction/#2-%E5%BC%95%E5%85%A5-Gitment" title="2\. 引入 Gitment"></a>2. 引入 Gitment</h3>
-
-<p>将下面的代码添加到你的页面：</p>
-
-<pre><code class="language-javascript">&lt;div id=&quot;container&quot;&gt;&lt;/div&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;https://imsun.github.io/gitment/style/default.css&quot;&gt;
-&lt;script src=&quot;https://imsun.github.io/gitment/dist/gitment.browser.js&quot;&gt;&lt;/script&gt;
-&lt;script&gt;
-var gitment = new Gitment({
-  id: &#39;页面 ID&#39;, // 可选。默认为 location.href
-  owner: &#39;你的 GitHub ID&#39;,
-  repo: &#39;存储评论的 repo&#39;,
-  oauth: {
-    client_id: &#39;你的 client ID&#39;,
-    client_secret: &#39;你的 client secret&#39;,
-  },
-})
-gitment.render(&#39;container&#39;)
-&lt;/script&gt;
-</code></pre>
-
-<p>注意，上述代码引用的 Gitment 将会随着开发变动。如果你希望始终使用最新的界面与特性即可引入上述代码。</p>
-
-<p>如果你希望引用确定版本的 Gitment，则应该使用 npm 进行安装。</p>
-
-<pre><code class="language-javascript">$ npm install --save gitment
-</code></pre>
-
-<p>关于构造函数中的更多可用参数请查看 <a href="https://github.com/imsun/gitment#options">Gitment Options</a></p>
-
-<h3 id="toc_3"><a href="https://imsun.net/posts/gitment-introduction/#3-%E5%88%9D%E5%A7%8B%E5%8C%96%E8%AF%84%E8%AE%BA" title="3\. 初始化评论"></a>3. 初始化评论</h3>
-
-<p>页面发布后，你需要访问页面并使用你的 GitHub 账号登录（请确保你的账号是第二步所填 repo 的 owner），点击初始化按钮。</p>
-
-<p>之后其他用户即可在该页面发表评论。</p>
-
-<h2 id="toc_4"><a href="https://imsun.net/posts/gitment-introduction/#%E8%87%AA%E5%AE%9A%E4%B9%89" title="自定义"></a>自定义</h2>
-
-<p>Gitment 很容易进行自定义，你可以写一份自定义的 CSS 或者使用一个新的主题。（主题可以改变 DOM 结构而自定义 CSS 不能）</p>
-
-<p>比如你可以通过自定义主题将评论框放在评论列表前面：</p>
-
-<pre><code class="language-javascript">const myTheme = {
-  render(state, instance) {
-    const container = document.createElement(&#39;div&#39;)
-    container.lang = &quot;en-US&quot;
-    container.className = &#39;gitment-container gitment-root-container&#39;
-    container.appendChild(instance.renderHeader(state, instance))
-    container.appendChild(instance.renderEditor(state, instance))
-    container.appendChild(instance.renderComments(state, instance))
-    container.appendChild(instance.renderFooter(state, instance))
-    return container
-  },
-}
-const gitment = new Gitment({
-  // ...
-  theme: myTheme,
-})
-gitment.render(&#39;container&#39;)
-</code></pre>
-
-<p>更多自定义内容请查看<a href="https://github.com/imsun/gitment#customize">文档</a>。</p>
-
-<h2 id="toc_5"><a href="https://imsun.net/posts/gitment-introduction/#%E5%85%B6%E4%BB%96%E9%97%AE%E9%A2%98" title="其他问题"></a>其他问题</h2>
-
-<h3 id="toc_6"><a href="https://imsun.net/posts/gitment-introduction/#%E8%AF%AD%E8%A8%80%E9%97%AE%E9%A2%98" title="语言问题"></a>语言问题</h3>
-
-<p>考虑到 GitHub 本身使用英文，而本项目面向用户均为 GitHub 用户，所以作者没有提供中文支持的打算。实在有需求的可以通过自定义主题支持中文。</p>
-
-<h3 id="toc_7"><a href="https://imsun.net/posts/gitment-introduction/#%E8%AF%B7%E5%8B%BF%E6%BB%A5%E7%94%A8" title="请勿滥用"></a>请勿滥用</h3>
-
-<p>在开发这个项目时我就一直有一个疑虑：我这样做有没有滥用 GitHub？为此我仔细读了 <a href="https://help.github.com/articles/github-terms-of-service/#g-api-terms">GitHub Terms of Service</a> 中 API Terms 的部分，认为自己并没有违反协议。之后我向 GitHub 发邮件询问了这一问题。GitHub 给出的回复是：</p>
+<h3 id="toc_1">单一职责原则</h3>
 
 <blockquote>
-<p>We’re pleased to see you making use of the tools and resources available on GitHub.</p>
+<p>一个类只负责一个功能领域中的相应职责,或者可以定义为: 就一个类而言，应该只有一个引起它变化的原因.</p>
 </blockquote>
 
-<p>因此本项目的确没有违反 GitHub 使用协议。但我还是想提醒使用本项目的用户，请保持克制，切勿滥用。</p>
+<p>单一职责原则告诉我们：一个类不能太“累”！在软件系统中，一个类（大到模块，小到方法）承担的职责越多，它被复用的可能性就越小，而且一个类承担的职责过多，就相当于将这些职责耦合在一起，当其中一个职责变化时，可能会影响其他职责的运作，因此要将这些职责进行分离，将不同的职责封装在不同的类中，即将不同的变化原因封装在不同的类中，如果多个职责总是同时发生改变则可将它们封装在同一类中。</p>
 
-<h3 id="toc_8"><a href="https://imsun.net/posts/gitment-introduction/#%E6%A0%B7%E5%BC%8F%E7%89%88%E6%9D%83" title="样式版权"></a>样式版权</h3>
+<p><strong>单一职责原则是实现高内聚，低耦合的指导方针</strong></p>
 
-<p>在项目开源前作者曾实现了一个像素级抄袭 GitHub Issues 样式的界面，但在阅读 ToS 时发现违反了 <a href="https://help.github.com/articles/github-terms-of-service/#f-intellectual-property-notice">Section F</a>，并在和 GitHub 邮件沟通的过程中确认了这一行为是侵权的。因此便改成了现在的样式。请其他想要自定义样式的用户也留意版权问题。</p>
+<h3 id="toc_2">开闭原则</h3>
+
+<blockquote>
+<p>一个软件实体应当对扩展开放，对修改关闭. 即软件实体应尽量在不修改原有代码的情况下进行扩展.</p>
+</blockquote>
+
+<p>在开闭原则的定义中，<strong>软件实体可以指一个软件模块，一个由多个类组成的局部结构或者一个独立的类</strong></p>
+
+<p>任何软件都需要面临一个很重要的问题，即它们的需求会随时间的推移而发生变化。当软件系统需要面对新的需求时，我们应该尽量保证系统的设计框架是稳定的。如果一个软件设计符合开闭原则，那么可以非常方便地对系统进行扩展，而且在扩展时无须修改现有代码，使得软件系统在拥有适应性和灵活性的同时具备较好的稳定性和延续性。随着软件规模越来越大，软件寿命越来越长，软件维护成本越来越高，设计满足开闭原则的软件系统也变得越来越重要。</p>
+
+<p>为了满足开闭原则，需要对系统进行抽象化设计，<strong>抽象化是开闭原则的关键</strong>.在Java、C#等编程语言中，可以为系统定义一个相对稳定的抽象层，而将不同的实现行为移至具体的实现层中完成。在很多面向对象编程语言中都提供了接口、抽象类等机制，可以通过它们定义系统的抽象层，再通过具体类来进行扩展。如果需要修改系统的行为，无须对抽象层进行任何改动，只需要增加新的具体类来实现新的业务功能即可，实现在不修改已有代码的基础上扩展系统的功能，达到开闭原则的要求。</p>
+
+<h3 id="toc_3">里氏代换原则</h3>
+
+<blockquote>
+<p>所有引用基类(父类)的地方必须能够透明地使用其子类的对象.</p>
+</blockquote>
+
+<p>在软件中将一个基类对象替换成它的子类对象，程序将不会产生任何错误和异常，反过来则不成立，如果一个软件实体使用的是一个子类对象的话，那么他一定能够使用基类对象。</p>
+
+<p>里氏代换原则是实现开闭原则的重要方式之一，由于使用基类对象的地方都可以使用子类对象，因此<strong>在程序中尽量使用基类类型来对对象进行定义，而在运行时再确定其子类类型，用子类对象来替换父类对象。</strong></p>
+
+<p>在使用里氏代换原则时需要注意如下几个问题：</p>
+
+<p>(1)子类的所有方法必须在父类中声明，或子类必须实现父类中声明的所有方法。根据里氏代换原则，为了保证系统的扩展性，在程序中通常使用父类来进行定义，如果一个方法只存在子类中，在父类中不提供相应的声明，则无法在以父类定义的对象中使用该方法。</p>
+
+<p>(2) 我们在运用里氏代换原则时，尽量把父类设计为抽象类或者接口，让子类继承父类或实现父接口，并实现在父类中声明的方法，运行时，子类实例替换父类实例，我们可以很方便地扩展系统的功能，同时无须修改原有子类的代码，增加新的功能可以通过增加一个新的子类来实现。里氏代换原则是开闭原则的具体实现手段之一。</p>
+
+<p>(3) Java语言中，在编译阶段，Java编译器会检查一个程序是否符合里氏代换原则，这是一个与实现无关的、纯语法意义上的检查，但Java编译器的检查是有局限的。</p>
+
+<h3 id="toc_4">依赖倒转原则</h3>
+
+<blockquote>
+<p>抽象不应该依赖于细节，细节应当依赖于抽象。换言之，要针对接口编程，而不是针对实现编程</p>
+</blockquote>
+
+<p><strong>依赖倒转原则要求我们在程序中传递参数或在关联关系中, 尽量引用层次高的抽象层类，即使用接口和抽象类进行变量类型声明, 参数类型声明，方法返回类型声明，以及数据类型转换等，而不要用具体类来做这些事情。为了确保该原则的应用，一个具体类应当只实现接口或抽象类中声明过的方法，而不要给出多余的方法，否则将无法调用在子类中增加的新方法。</strong></p>
+
+<p>在引入抽象层后，系统将具有很好的灵活性，在程序中尽量使用抽象层进行编程，而将具体类写在配置文件中，这样一来，如果系统行为发生变化，只需要对抽象层进行扩展，并修改配置文件，而无须修改原有系统的源代码，在不修改的情况下来扩展系统的功能，满足开闭原则的要求。</p>
+
+<p>在实现依赖倒转原则时，我们需要针对抽象层编程，而将具体类的对象通过<strong>依赖注入(DependencyInjection, DI)的方式注入到其他对象中，依赖注入是指当一个对象要与其他对象发生依赖关系时，通过抽象来注入所依赖的对象。常用的注入方式有三种，分别是：构造注入，设值注入（Setter注入）和接口注入。构造注入是指通过构造函数来传入具体类的对象，设值注入是指通过Setter方法来传入具体类的对象，而接口注入是指通过在接口中声明的业务方法来传入具体类的对象。这些方法在定义时使用的是抽象类型，在运行时再传入具体类型的对象，由子类对象来覆盖父类对象。</strong></p>
+
+<h3 id="toc_5">接口隔离原则</h3>
+
+<blockquote>
+<p>使用多个专门的接口，而不使用单一的总接口，即客户端不应该依赖那些它不需要的接口</p>
+</blockquote>
+
+<p>根据接口隔离原则，当一个接口太大时，我们需要将它分割成一些更细小的接口，使用该接口的客户端仅需知道与之相关的方法即可。<strong>每一个接口应该承担一种相对独立的角色，不干不该干的事，该干的事都要干。</strong>这里的“接口”往往有两种不同的含义：一种是指一个类型所具有的方法特征的集合，仅仅是一种逻辑上的抽象；另外一种是指某种语言具体的“接口”定义，有严格的定义和结构，比如Java语言中的interface。对于这两种不同的含义，ISP的表达方式以及含义都有所不同：</p>
+
+<p>(1) 当把“接口”理解成一个类型所提供的所有方法特征的集合的时候，这就是一种逻辑上的概念，接口的划分将直接带来类型的划分。可以把接口理解成角色，一个接口只能代表一个角色，每个角色都有它特定的一个接口，此时，这个原则可以叫做“角色隔离原则”。</p>
+
+<p>(2) 如果把“接口”理解成狭义的特定语言的接口，那么ISP表达的意思是指<strong>接口仅仅提供客户端需要的行为，客户端不需要的行为则隐藏起来，应当为客户端提供尽可能小的单独的接口，而不要提供大的总接口。在面向对象编程语言中，实现一个接口就需要实现该接口中定义的所有方法，因此大的总接口使用起来不一定很方便，为了使接口的职责单一，需要将大接口中的方法根据其职责不同分别放在不同的小接口中，以确保每个接口使用起来都较为方便，并都承担某一单一角色。接口应该尽量细化，同时接口中的方法应该尽量少，每个接口中只包含一个客户端（如子模块或业务逻辑类）所需的方法即可，这种机制也称为“定制服务”，即为不同的客户端提供宽窄不同的接口</strong>。</p>
+
+<p><strong>在使用接口隔离原则时，我们需要注意控制接口的粒度，接口不能太小，如果太小会导致系统中接口泛滥，不利于维护；接口也不能太大，太大的接口将违背接口隔离原则，灵活性较差，使用起来很不方便。一般而言，接口中仅包含为某一类用户定制的方法即可，不应该强迫客户依赖于那些它们不用的方法。</strong></p>
+
+<h3 id="toc_6">迪米特法则</h3>
+
+<blockquote>
+<p>一个软件实体应当尽可能少地与其他实体发生相互作用。</p>
+</blockquote>
+
+<p>迪米特法则要求我们在设计系统时，应该尽量减少对象之间的交互，如果两个对象之间不必彼此直接通信，那么这两个对象就不应当发生任何直接的相互作用，如果其中的一个对象需要调用另一个对象的某一个方法的话，可以通过第三者转发这个调用。简言之，就是通过引入一个合理的第三者来降低现有对象之间的耦合度。</p>
+
+<p>在将迪米特法则运用到系统设计中时，要注意下面的几点：在类的划分上，应当尽量创建松耦合的类，类之间的耦合度越低，就越有利于复用，一个处在松耦合中的类一旦被修改，不会对关联的类造成太大波及；在类的结构设计上，每一个类都应当尽量降低其成员变量和成员函数的访问权限；在类的设计上，只要有可能，一个类型应当设计成不变类；在对其他类的引用上，一个对象对其他对象的引用应当降到最低。</p>
 
 
     
@@ -270,16 +252,13 @@ gitment.render(&#39;container&#39;)
         <div class="large-6 columns">
         <p class="text-left" style="padding:15px 0px;">
       
-          <a href="15509336304684.html" 
-          title="Previous Post: 优秀博客地址收藏">&laquo; 优秀博客地址收藏</a>
-      
         </p>
         </div>
         <div class="large-6 columns">
       <p class="text-right" style="padding:15px 0px;">
       
-          <a  href="15509249440186.html" 
-          title="Next Post: 如何使用“发布脚本”功能发布静态网站">如何使用“发布脚本”功能发布静态网站 &raquo;</a>
+          <a  href="15570460893713.html" 
+          title="Next Post: Git 常用命令">Git 常用命令 &raquo;</a>
       
       </p>
         </div>
