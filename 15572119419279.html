@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  限流设计 - 见课就上的小婊砸
+  基础 - 见课就上的小婊砸
   
   </title>
   
@@ -135,14 +135,12 @@
       <div class="markdown-body article-wrap">
        <div class="article">
           
-          <h1>限流设计</h1>
+          <h1>基础</h1>
      
         <div class="read-more clearfix">
-          <span class="date">2019/2/25 16:8 下午</span>
+          <span class="date">2019/5/7 14:52 下午</span>
 
-          <span>发布于分类&nbsp;</span> 
           
-              <span class="posted-in"><a href='microservice.html'>微服务</a></span>
            
          
           <span class="comments">
@@ -155,174 +153,99 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <blockquote>
-<p>限流，书面意思和作用一致，就是为了限制，通过对并发访问或者请求进行限速或者一个时间窗口内的请求进行限速来保护系统。一旦达到了限制的临界点，可以用拒绝服务、排队、或者等待的方式来保护现有系统，不至于发生雪崩现象。</p>
-</blockquote>
-
-<span id="more"></span><!-- more -->
-
-<p>限流就像做帝都的地铁一般，如果你住在西二旗或者天通苑也许会体会的更深刻一些。我更习惯在技术角度用消费者的角度来阐述，需要限流的一般原因是消费者能力有限，目的为了避免超过消费者能力而出现系统故障。当然也有其他类似的情况也可以用限流来解决。</p>
-
-<p>限流的表现形式上大部分可以分为两大类：</p>
+      <h2 id="toc_0">String不可变的好处</h2>
 
 <ul>
-<li>限制消费者数量。也可以说消费的最大能力值。比如：数据库的连接池是侧重的是总的连接数，本质上也是限制了消费者的最大消费能力。</li>
-<li>可以被消费的请求数量。这里的数量可以是瞬时并发数，也可以是一段时间内的总并发数。</li>
+<li>可以缓存hash值</li>
+<li>String Pool的需要</li>
+<li>线程安全</li>
+<li>安全性(网络传输安全性)</li>
 </ul>
 
-<p>除此之外，限流还有别的表现形式，例如按照网络流量来限流，按照cpu使用率来限流等。按照限流的范围又可以分为分布式限流，应用限流，接口限流等。无论怎么变化，限流都可以用以下图来表示：</p>
+<h3 id="toc_1">String字符串用 <code>+</code> 拼接和用 <code>StringBuilder</code> 拼接的差别</h3>
 
-<p><img src="media/15510821177382/15510824198802.jpg" alt="" class="mw_img_center" style="width:400px;display: block; clear:both; margin: 0 auto;"/></p>
+<h3 id="toc_2">JDK6 和 JDK7 中String调用intern()方法的差别</h3>
 
-<h2 id="toc_0">常用技术实现</h2>
+<p><a href="">https://tech.meituan.com/2014/03/06/in-depth-understanding-string-intern.html</a></p>
+
+<h2 id="toc_3">抽象类和接口的区别</h2>
 
 <ul>
-<li>令牌桶算法<br/>
-令牌桶是一个存放固定容量令牌的桶，按照固定速率往桶里添加令牌，填满了就丢弃令牌，请求是否被处理要看桶中令牌是否足够，当令牌数减为零时则拒绝新的请求。令牌桶允许一定程度突发流量，只要有令牌就可以处理，支持一次拿多个令牌。令牌桶中装的是令牌。
-<img src="media/15510821177382/15510825111049.jpg" alt="" class="mw_img_center" style="width:400px;display: block; clear:both; margin: 0 auto;"/></li>
-<li><p>漏桶算法<br/>
-漏桶一个固定容量的漏桶，按照固定常量速率流出请求，流入请求速率任意，当流入的请求数累积到漏桶容量时，则新流入的请求被拒绝。漏桶可以看做是一个具有固定容量、固定流出速率的队列，漏桶限制的是请求的流出速率。漏桶中装的是请求。</p></li>
-<li><p>计数器<br/>
- 有时我们还会使用计数器来进行限流，主要用来限制一定时间内的总并发数，比如数据库连接池、线程池、秒杀的并发数；计数器限流只要一定时间内的总请求数超过设定的阀值则进行限流，是一种简单粗暴的总数量限流，而不是平均速率限流。</p></li>
+<li>从设计层面上看，抽象类提供了一种 IS-A 关系，那么就必须满足里式替换原则，即子类对象必须能够替换掉所有父类对象。而接口更像是一种 LIKE-A 关系，它只是提供一种方法实现契约，并不要求接口和实现接口的类具有 IS-A 关系。</li>
+<li>从使用上来看，一个类可以实现多个接口，但是不能继承多个抽象类。</li>
+<li>接口的字段只能是 static 和 final 类型的，而抽象类的字段没有这种限制。</li>
+<li>接口的成员只能是 public 的，而抽象类的成员可以有多种访问权限。</li>
 </ul>
 
-<h2 id="toc_1">不用算法的解决方案</h2>
+<h2 id="toc_4">Exception 和 Error</h2>
 
-<p>我们可以用一个按照时间段限制请求总数的方式来限流。 总体思路是这样：</p>
+<p>Throwable<br/>
+Exception Error </p>
+
+<h2 id="toc_5">运行时数据区</h2>
+
+<p><img src="media/15572119419279/15574558914736.jpg" alt=""/></p>
+
+<h3 id="toc_6">堆</h3>
+
+<p>所有对象都在这里分配内存，是垃圾收集的主要区域（&quot;GC 堆&quot;）。</p>
+
+<h3 id="toc_7">方法区(包含运行时常量池)</h3>
+
+<p>用于存储已被加载的类信息，常量，静态变量，即时编译器编译后的代码等数据。<br/>
+对这块区域进行垃圾回收的主要目标是对常量池的回收和对类的卸载，但是一般比较难实现。<br/>
+JDK 1.7 之前，HotSpot 虚拟机把它当成永久代来进行垃圾回收。但是从 JDK 1.7 开始，已经把原本放在永久代的字符串常量池移到 Native Method 中。</p>
+
+<h3 id="toc_8">程序计数器</h3>
+
+<p>记录正在执行的虚拟机字节码指令的地址（如果执行的是本地方法则为空）</p>
+
+<h3 id="toc_9">虚拟机栈</h3>
+
+<p>每个Java方法在执行的同时会创建一个栈桢用于存储局部变量表，操作数栈，常量池引用信息，从调用直至执行完成的过程，就对应着一个栈桢在Java虚拟机栈中入栈和出栈的过程。<br/>
+<img src="media/15572119419279/15573949164151.jpg" alt="" style="width:490px;"/></p>
+
+<h3 id="toc_10">本地方法栈</h3>
+
+<h2 id="toc_11">垃圾收集算法</h2>
+
+<p>如何判断一个对象是否可以被回收</p>
+
+<h3 id="toc_12">引用计数法</h3>
+
+<p>给对象添加一个引用计数器，当对象增加一个引用，计数器加1，引用失效时计数器减1，引用计数为0时，该对象可回收。</p>
+
+<p>两个对象出现循环引用的情况下，此时对象的计数器永不为0,导致无法对他们进行回收</p>
+
+<h3 id="toc_13">可达性分析算法</h3>
+
+<p>通过GC Roots作为起始点进行搜索，能够到达的对象都是存活的，不可达的对象被回收。</p>
+
+<p>GC Roots包括如下4种:</p>
 
 <ul>
-<li>用一个环形来代表通过的请求容器。</li>
-<li>用一个指针指向当前请求所到的位置索引，来判断当前请求时间和当前位置上次请求的时间差，依此来判断是否被限制。</li>
-<li>如果请求通过，则当前指针向前移动一个位置，不通过则不移动位置</li>
-<li>重复以上步骤 直到永远.......</li>
+<li>虚拟机栈中引用的对象</li>
+<li>本地方法栈中引用的对象</li>
+<li>方法区中类静态属性引用的对象</li>
+<li>方法区中常量引用的对象</li>
 </ul>
 
-<p><img src="media/15510821177382/15510827864849.jpg" alt="" class="mw_img_center" style="width:400px;display: block; clear:both; margin: 0 auto;"/></p>
+<h2 id="toc_14">方法区的回收</h2>
 
-<h2 id="toc_2">核心代码</h2>
+<p>主要是对常量池的回收和对类的卸载。</p>
 
-<blockquote>
-<p>以下代码的核心思路是这样的：指针当前位置的时间元素和当前时间的差来决定是否允许此次请求，这样通过的请求在时间上表现的比较平滑。</p>
-</blockquote>
+<h2 id="toc_15">引用类型</h2>
 
-<pre><code class="language-java">//限流组件,采用数组做为一个环
-    class LimitService
-    {
-        //当前指针的位置
-        int currentIndex = 0;
-        //限制的时间的秒数，即：x秒允许多少请求
-        int limitTimeSencond = 1;
-        //请求环的容器数组
-        DateTime?[] requestRing = null;
-        //容器改变或者移动指针时候的锁
-        object objLock = new object();
+<p>判断对象是否可被回收与引用有关。</p>
 
-        public LimitService(int countPerSecond,int  _limitTimeSencond)
-        {
-            requestRing = new DateTime?[countPerSecond];
-            limitTimeSencond= _limitTimeSencond;
-        }
+<ul>
+<li>被强引用关联的对象不会被回收 (new 建立的强引用)</li>
+<li>被软引用关联的对象只有在内存不够的情况下才会被回收 (使用 SoftReference类来创建软引用)</li>
+<li>被弱引用关联的对象一定会被回收，也就是说它只能存活到下一次垃圾回收发生之前 (WeakReference)</li>
+<li>一个对象是否有虚引用的存在，完全不会对其生存时间构成影响，也无法通过虚引用取得一个对象 (PhantomReference,为一个对象设置虚引用关联的唯一目的就是能在这个对象被回收时收到一个系统通知)</li>
+</ul>
 
-        //程序是否可以继续
-        public bool IsContinue()
-        {
-            lock (objLock)
-            {
-                var currentNode = requestRing[currentIndex];
-                //如果当前节点的值加上设置的秒 超过当前时间，说明超过限制
-                if (currentNode != null&amp;&amp; currentNode.Value.AddSeconds(limitTimeSencond) &gt;DateTime.Now)
-                {
-                    return false;
-                }
-                //当前节点设置为当前时间
-                requestRing[currentIndex] = DateTime.Now;
-                //指针移动一个位置
-                MoveNextIndex(ref currentIndex);
-            }            
-            return true;
-        }
-        //改变每秒可以通过的请求数
-        public bool ChangeCountPerSecond(int countPerSecond)
-        {
-            lock (objLock)
-            {
-                requestRing = new DateTime?[countPerSecond];
-                currentIndex = 0;
-            }
-            return true;
-        }
-
-        //指针往前移动一个位置
-        private void MoveNextIndex(ref int currentIndex)
-        {
-            if (currentIndex != requestRing.Length - 1)
-            {
-                currentIndex = currentIndex + 1;
-            }
-            else
-            {
-                currentIndex = 0;
-            }
-        }
-    }
-</code></pre>
-
-<p>测试程序如下：</p>
-
-<pre><code class="language-java">static  LimitService l = new LimitService(1000, 1);
-        static void Main(string[] args)
-        {
-            int threadCount = 50;
-            while (threadCount &gt;= 0)
-            {
-                Thread t = new Thread(s =&gt;
-                {
-                    Limit();
-                });
-                t.Start();
-                threadCount--;
-            }           
-
-            Console.Read();
-        }
-
-        static void Limit()
-        {
-            int i = 0;
-            int okCount = 0;
-            int noCount = 0;
-            Stopwatch w = new Stopwatch();
-            w.Start();
-            while (i &lt; 1000000)
-            {
-                var ret = l.IsContinue();
-                if (ret)
-                {
-                    okCount++;
-                }
-                else
-                {
-                    noCount++;
-                }
-                i++;
-            }
-            w.Stop();
-            Console.WriteLine($&quot;共用{w.ElapsedMilliseconds},允许：{okCount},  拦截：{noCount}&quot;);
-        }
-</code></pre>
-
-<p>测试结果如下：</p>
-
-<p><img src="media/15510821177382/15510829240788.jpg" alt=""/><br/>
-<img src="media/15510821177382/15510829535558.jpg" alt=""/><br/>
-最大用时15秒,共处理请求1000000*50=50000000 次</p>
-
-<p>并未发生GC操作，内存使用率非常低，每秒处理 300万次+请求 。以上程序修改为10个线程，大约用时4秒之内<br/>
-<img src="media/15510821177382/15510829711440.jpg" alt=""/></p>
-
-<p>如果是强劲的服务器或者线程数较少情况下处理速度将会更快</p>
-
-<p>[<strong>转载</strong>]<a href="https://www.cnblogs.com/zhanlang/p/10424757.html">https://www.cnblogs.com/zhanlang/p/10424757.html</a></p>
+<h2 id="toc_16">垃圾回收算法</h2>
 
 
     
@@ -333,16 +256,16 @@
         <div class="large-6 columns">
         <p class="text-left" style="padding:15px 0px;">
       
-          <a href="15510844326202.html" 
-          title="Previous Post: Java 生态圈知识汇总">&laquo; Java 生态圈知识汇总</a>
+          <a href="15582712510625.html" 
+          title="Previous Post: java同步系列之JMM（Java Memory Model）">&laquo; java同步系列之JMM（Java Memory Model）</a>
       
         </p>
         </div>
         <div class="large-6 columns">
       <p class="text-right" style="padding:15px 0px;">
       
-          <a  href="15510682951931.html" 
-          title="Next Post: JDK动态代理">JDK动态代理 &raquo;</a>
+          <a  href="15571066386287.html" 
+          title="Next Post: 设计模式">设计模式 &raquo;</a>
       
       </p>
         </div>
